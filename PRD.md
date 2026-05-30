@@ -32,7 +32,9 @@ Hang's Portfolio — 个人项目作品集网站
 | 语言 | TypeScript 5 | 类型安全 |
 | 样式 | Tailwind CSS 4 | 暗色主题, 响应式 |
 | 3D渲染 | Three.js + @react-three/fiber + @react-three/drei | 全站3D场景 |
+| 后处理 | @react-three/postprocessing (Bloom, Vignette) | 3D场景视觉增强 |
 | 动画 | Framer Motion + GSAP | 页面过渡, 交互动画 |
+| 内容 | @next/mdx + @mdx-js/loader | 项目思路链长文本内容 |
 | 部署 | Vercel | CI/CD, 子域名 show.vercel.app |
 
 ### 架构模式
@@ -50,19 +52,68 @@ Hang's Portfolio — 个人项目作品集网站
 │  │          Three.js 渲染层 (R3F)              │  │
 │  │  StarField | SolarSystem | WarpTransition  │  │
 │  │  TechSphere | SkillRadar | ProjectScenes   │  │
+│  │  ParticleBackground | DataFlowGrid         │  │
+│  │  FloatingCard3D | ProjectPlanet            │  │
+│  ├────────────────────────────────────────────┤  │
+│  │     Postprocessing (Bloom + Vignette)       │  │
 │  └────────────────┬───────────────────────────┘  │
 │                   │                               │
 │  ┌────────────────▼───────────────────────────┐  │
 │  │           UI 组件层                          │  │
-│  │  Navbar | Card | CodeBlock | Gallery | ...  │  │
+│  │  Navbar | Footer | Card | CodeBlock | ...   │  │
+│  │  SkeletonLoader | ImageGallery | ...        │  │
+│  │  ArchitectureDiagram | SectionTitle | ...   │  │
 │  └────────────────┬───────────────────────────┘  │
 │                   │                               │
 │  ┌────────────────▼───────────────────────────┐  │
-│  │         数据层 (projects.ts)                │  │
-│  │  32+ 项目完整数据 + 思路链 + 元信息          │  │
+│  │      数据层（混合方案）                       │  │
+│  │  projects.ts — 项目元数据（类型安全）         │  │
+│  │  src/content/projects/{slug}.mdx — 思路链    │  │
 │  └────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────┘
 ```
+
+**[审查反馈修复 C2: 3D 技术规格详细参数]**
+
+### 3D 场景技术规格
+
+#### 太阳系场景参数
+- **相机**: PerspectiveCamera, FOV 50°, near 0.1, far 250, 初始位置 `[0, 10, 18]`
+- **太阳核心**: 使用 Simplex Noise 生成动态表面纹理，warm amber/orange 色调（`#ff8c00` ~ `#ff6600`）
+- **太阳日冕 (Corona)**: BackSide MeshBasicMaterial + AdditiveBlending，产生外围光晕效果
+- **行星轨道**: EllipseCurve 绘制轨道线，半透明白色 (opacity 0.1)
+- **行星大气层**: BackSide MeshBasicMaterial + AdditiveBlending, opacity 0.08，模拟大气散射
+
+#### 粒子系统参数
+- **星空背景**: 3000 粒子，使用 BufferGeometry + PointsMaterial
+- **材质配置**: AdditiveBlending, transparent, depthWrite false
+- **粒子大小**: 随机分布 0.01 ~ 0.05，产生远近层次感
+- **颜色范围**: 暖白 `#ffffff` ~ 淡蓝 `#aaccff`，模拟真实星空色温
+
+#### 后处理参数
+- **Bloom**: EffectComposer + BloomPass, intensity 0.6, luminanceThreshold 0.2, luminanceSmoothing 0.9
+- **Vignette**: offset 0.3, darkness 0.6，增加太空深邃感
+- **后处理链**: `Bloom → Vignette`，通过 @react-three/postprocessing 的 EffectComposer 组合
+
+**[审查反馈修复 C3: 移动端 3D 降级策略]**
+
+#### 移动端 3D 降级策略
+
+| 设备类型 | 断点 | 后处理 | 粒子数 | 太阳系 | DPR |
+|---------|------|--------|--------|--------|-----|
+| 移动端 | < 768px | 关闭 Bloom 和 Vignette | 1500 | 简化为 2D 图示 + 标签 | [1, 1.5] |
+| 平板 | 768-1024px | 保留 Bloom, intensity 降至 0.3 | 2000 | 完整 3D，降低精度 | [1, 1.5] |
+| 桌面 | > 1024px | 完整 Bloom + Vignette | 3000 | 完整 3D 体验 | [1, 2] |
+
+**3D 场景懒加载策略**:
+- 所有 3D Canvas 使用 `next/dynamic` + `{ ssr: false }` 按需加载
+- Three.js chunk 通过 dynamic import 独立分包，不影响首屏渲染
+- 项目详情页的专属 3D 场景仅在进入视口时加载
+
+**低端设备检测**:
+- 检测 `navigator.hardwareConcurrency < 4` 时自动降级到移动端配置
+- 检测 WebGL 支持失败时回退到 CSS 动画背景
+- 使用 `useMemo` 缓存降级判断结果，避免重复计算
 
 ---
 
@@ -79,7 +130,7 @@ Hang's Portfolio — 个人项目作品集网站
 - 每颗行星周围有小型卫星代表具体项目
 - 鼠标悬停星球显示项目名称 tooltip
 - 点击星球/卫星飞入对应详情页（带 warp 过渡动画）
-- 1000+ 星空粒子背景
+- 3000 星空粒子背景（桌面端），移动端降至 1500
 - 鼠标视差效果
 - 相机自动缓慢旋转，支持鼠标拖拽控制
 
@@ -184,6 +235,55 @@ Hang's Portfolio — 个人项目作品集网站
 - 在线 Demo 地址
 - 相关文档
 
+**[审查反馈修复 C1: 思路链内容策略]**
+
+#### 思路链内容来源与生成策略
+
+32 个项目的思路链内容无法凭空编写，需要系统化的内容采集和生成流程。
+
+**内容来源**（按项目类型分）:
+
+| 项目类型 | 主要内容来源 | 辅助来源 |
+|---------|------------|---------|
+| 有 GitHub 仓库的项目 | README.md, 代码结构分析, git log 提交历史 | 项目截图, package.json/requirements.txt |
+| 桌面软件/工具类 | 使用手册, 功能截图, 代码入口文件 | git log --oneline, 目录结构 |
+| 设计/内容类项目 | 原始设计文件, 成品截图 | 项目需求文档 |
+| 研究类项目 | 论文/PDF, 研究笔记 | 参考文献列表 |
+
+**每个思路链字段的最小字数要求**:
+
+| 字段 | 最小字数 | 说明 |
+|------|---------|------|
+| 一句话定位 | 15 字 | 项目是做什么的 |
+| 项目背景与动机 | 100 字 | 为什么做这个 |
+| 原始问题/痛点 | 80 字 | 思路链 Step 1 |
+| 需求拆解 | 100 字 | 功能性 + 非功能性 |
+| 技术选型理由 | 80 字 | 为什么选 A 不选 B |
+| 系统架构描述 | 60 字 | 配合架构图 |
+| 核心代码片段 | 30 行代码 | 带注释 |
+| 技术决策记录 | 60 字/条 | 至少 2 条 |
+| 技术难点 | 80 字/条 | 至少 1 条，附解决方案 |
+| 项目成果 | 60 字 | 最终产出 |
+
+**内容生成流程**（3 阶段）:
+
+1. **自动化扫描阶段**:
+   - 对有 GitHub 仓库的项目，自动抓取 README.md, package.json/requirements.txt, 目录结构
+   - 使用 `git log --oneline --graph` 获取开发时间线
+   - 生成项目基本信息摘要（技术栈、规模、开发周期）
+
+2. **AI 辅助生成阶段**:
+   - 基于扫描结果，AI 生成思路链初稿
+   - 代码片段从实际项目中提取，不做虚构
+   - 架构图根据目录结构自动生成骨架，人工补充
+
+3. **人工审核阶段**:
+   - 逐项目审核 AI 生成内容的事实准确性
+   - 补充 AI 无法获取的上下文（业务背景、团队协作等）
+   - 确保每个项目的思路链有差异化的叙事角度
+
+**内容存储**: 思路链长文本存储在 MDX 文件中（`src/content/projects/{slug}.mdx`），支持 Markdown 格式和代码高亮。
+
 ---
 
 ### F4: 关于我页面
@@ -221,6 +321,22 @@ Hang's Portfolio — 个人项目作品集网站
 - **滚动指示**: 3D 彗星/箭头动画
 - **鼠标跟随**: 微弱粒子跟随效果（仅桌面端）
 - **暗色主题**: 深蓝/深紫为主色调，亮色文字
+
+**[审查反馈修复 M3: 错误边界和加载状态设计]**
+
+### F7: 错误边界与加载状态
+
+**优先级**: P0 | **复杂度**: 中
+
+**功能描述**:
+- **3D 错误边界**: 每个独立 3D Canvas 使用 React ErrorBoundary 包裹
+- **3D 加载失败降级**: 当 WebGL 初始化失败或 3D 渲染崩溃时，自动降级为 CSS 动画背景（渐变 + 星星动画）
+- **加载状态**: 使用 React Suspense + 骨架屏 (SkeletonLoader)
+  - 3D 场景加载时显示对应区域的骨架占位
+  - 页面内容加载时显示内容骨架
+- **全局错误边界**: 顶层 ErrorBoundary 捕获未预期的渲染错误，显示友好的错误提示页面
+- **网络错误处理**: fetch 失败时显示 Toast 提示，不阻断用户操作
+- **错误恢复**: 提供重试按钮，允许用户重新初始化 3D 场景
 
 ---
 
@@ -288,37 +404,123 @@ Hang's Portfolio — 个人项目作品集网站
 ## 非功能需求
 
 ### 性能
-| 指标 | 目标 |
-|------|------|
-| First Contentful Paint | < 1.5s |
-| Largest Contentful Paint | < 3s |
-| 3D 渲染帧率 | > 30fps |
-| Lighthouse Performance | > 80 |
-| Bundle Size (首屏 JS) | < 200KB gzipped |
+
+**[审查反馈修复 C4: 修正 bundle 目标]**
+
+| 指标 | 目标 | 说明 |
+|------|------|------|
+| First Contentful Paint | < 1.5s | 纯 HTML/CSS 首次渲染 |
+| Largest Contentful Paint | < 3s on 4G | 包含主要内容加载 |
+| 3D 渲染帧率 | > 30fps | 桌面端目标 |
+| Lighthouse Performance | > 80 | 综合性能评分 |
+| 首屏 HTML + CSS | < 50KB gzipped | 初始文档 + 样式 |
+| 首屏 JS（不含 Three.js） | < 100KB gzipped | React + Next.js runtime + 组件 |
+| Three.js chunk（懒加载） | < 300KB gzipped | 通过 dynamic import 按需加载 |
+| LCP 总页面加载 | < 3s on 4G | 包含主要内容 |
+| Three.js 加载 | 不影响首屏 | 通过 dynamic import 独立分包 |
+
+**Bundle 分包策略**:
+- Three.js 及相关库（@react-three/fiber, @react-three/drei, @react-three/postprocessing）全部通过 `next/dynamic` + `{ ssr: false }` 懒加载
+- Three.js chunk 独立为一个 vendor chunk，仅在用户浏览到含 3D 的页面时加载
+- 首屏不包含任何 Three.js 代码，确保 FCP 不受 3D 库体积影响
 
 ### 响应式
-| 断点 | 策略 |
-|------|------|
-| Mobile (< 768px) | 单列布局，简化3D效果，减少粒子数 |
-| Tablet (768-1024px) | 双列布局，适度3D |
-| Desktop (> 1024px) | 完整3D体验 |
+
+| 断点 | 布局策略 | 3D 策略 |
+|------|---------|---------|
+| Mobile (< 768px) | 单列布局 | 关闭 Bloom/Vignette 后处理，粒子 1500，太阳系简化为 2D 图示 + 标签，DPR [1, 1.5] |
+| Tablet (768-1024px) | 双列布局 | 保留 Bloom (intensity 0.3)，粒子 2000，降低 3D 精度，DPR [1, 1.5] |
+| Desktop (> 1024px) | 完整多列 | 完整 Bloom + Vignette，粒子 3000，完整 3D 体验，DPR [1, 2] |
 
 ### 可访问性
-- Lighthouse Accessibility > 85
-- 语义化 HTML5
-- 键盘导航支持
-- ARIA 标签
-- 高对比度文字
 
-### SEO
-- 每个页面独立 meta title/description
-- Open Graph 标签
-- sitemap.xml
-- robots.txt
+**[审查反馈修复 M4: SEO 和可访问性规格]**
+
+#### 可访问性规格
+- Lighthouse Accessibility > 85
+- **语义化 HTML5**: 使用 `header`, `main`, `section`, `article`, `nav`, `footer` 等语义标签
+- **ARIA 标签**: 所有 3D Canvas 添加 `aria-hidden="true"`（3D 内容为装饰性，不需要屏幕阅读器访问）
+- **键盘导航**: Tab 键可到达所有交互元素（按钮、链接、表单），Enter 键触发操作
+- **颜色对比度**: 文字与背景至少 4.5:1 (WCAG AA 标准)
+- **焦点指示器**: 所有可交互元素有可见的 focus ring
+- **跳过导航**: 提供 "Skip to main content" 链接
+- **图片替代文本**: 所有装饰性图片 `alt=""`，所有信息性图片提供描述性 alt
+
+#### SEO 规格
+
+**页面 Metadata**:
+- 每个页面通过 Next.js `generateMetadata()` 导出独立的 `title`, `description`
+- Open Graph 标签: `og:title`, `og:description`, `og:image`, `og:url`
+- Twitter Card: `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
+
+**自动生成文件**:
+- `sitemap.xml`: 通过 `next-sitemap` 包在构建后自动生成，包含所有静态页面
+- `robots.txt`: 允许所有爬虫，指向 sitemap.xml
+- `manifest.json`: PWA manifest（可选）
+
+**结构化数据** (JSON-LD):
+- 首页: `WebSite` + `Person` schema
+- 项目详情页: `WebPage` + `SoftwareSourceCode` schema
+- 关于页: `Person` schema
+
+---
+
+## 数据架构
+
+**[审查反馈修复 M1: 混合数据架构 MDX + TypeScript]**
+
+### 混合数据架构设计
+
+项目数据采用**元数据与内容分离**的混合方案：
+
+#### 元数据层: `src/data/projects.ts`
+保留 TypeScript 文件存储结构化元数据，确保类型安全和编译时检查：
+- 项目 ID, 名称, slug
+- 业务线分类
+- 技术栈标签列表
+- 项目类别（用于匹配 3D 场景）
+- 排序权重
+- 外部链接（GitHub, Demo）
+
+```typescript
+// projects.ts 中的数据结构示例
+interface ProjectMeta {
+  id: string;
+  name: string;
+  slug: string;
+  category: ProjectCategory;
+  techStack: string[];
+  sceneType: SceneType;
+  links: { github?: string; demo?: string };
+  order: number;
+}
+```
+
+#### 内容层: `src/content/projects/{slug}.mdx`
+使用 MDX 文件存储思路链长文本内容：
+- 项目概述（背景、动机）
+- 思路链 Step 1-5 的完整文本
+- 代码片段（MDX 原生支持语法高亮）
+- 架构图描述
+- 支持嵌入 React 组件（如 CodeBlock, ImageGallery）
+
+#### MDX 配置
+- 安装依赖: `@next/mdx`, `@mdx-js/loader`, `@mdx-js/react`
+- `next.config.ts` 中配置 MDX 支持
+- 构建时从 MDX 文件读取内容，按 slug 合并到对应项目的元数据中
+- MDX frontmatter 包含: `title`, `date`, `status`（draft/published）
+
+#### 构建流程
+1. `projects.ts` 导出完整的项目元数据列表
+2. 构建时扫描 `src/content/projects/*.mdx`，按文件名匹配 slug
+3. 合并元数据和 MDX 内容，生成完整的项目数据对象
+4. 未找到 MDX 文件的项目标记为 `contentMissing: true`，详情页显示占位内容
 
 ---
 
 ## 质量保障：Codex Review + 回退 + 接管
+
+**[审查反馈修复 M2: Codex Review 具体实现]**
 
 ### 流程
 ```
@@ -332,12 +534,26 @@ Codex Review (独立审查)
                                               └── 3次失败 → Codex 接管修复
 ```
 
-### Review 维度
-1. TypeScript 类型完整（无 any）
-2. Three.js 最佳实践（内存回收、Geometry 复用）
-3. 性能（懒加载、无冗余渲染）
-4. 响应式（移动端适配）
-5. 一致性（命名规范、代码风格统一）
+### Review 触发机制
+- 每次 `git commit` 前自动运行: `tsc --noEmit && eslint src/`
+- Review 在独立 Codex 会话中执行，不共享编码 Agent 的上下文
+- Review 结果输出为结构化 JSON: `{ pass: boolean, issues: Issue[], suggestions: string[] }`
+
+### Review 维度 Checklist
+
+| 维度 | 检查项 | 失败条件 |
+|------|--------|---------|
+| 1. TypeScript | `tsc --noEmit` 通过，零 `any` | 存在 `any` 类型或编译错误 |
+| 2. Three.js 资源 | `geometry.dispose()` + `material.dispose()` 在 `useEffect` cleanup 中 | 3D 组件缺少资源清理 |
+| 3. 性能 | 无冗余 `useFrame`，使用 `useMemo` 缓存 geometry/material | 每帧创建新对象或未缓存 |
+| 4. 响应式 | 移动端降级逻辑存在（断点检查或 useMediaQuery） | 3D 组件无移动端适配 |
+| 5. 一致性 | 命名遵循文件规范（PascalCase 组件, camelCase 工具函数） | 命名不合规 |
+
+### 回退与接管机制
+- **第 1 次失败**: `git stash` → 携带 Review 反馈重写 → 再次 Review
+- **第 2 次失败**: 同上，增加更详细的错误上下文
+- **第 3 次失败**: Codex 直接接管，全量重写问题文件
+- **回退流程**: `git stash` → 修复 → Review 通过 → `git stash pop` → 解决冲突（如有）
 
 ---
 
@@ -354,6 +570,18 @@ Codex Review (独立审查)
 | M7 | 集成测试 + 优化 | 生产就绪 |
 | M8 | 部署 Vercel | 线上可访问 |
 
+### 部署流程
+
+**Vercel 部署步骤**:
+1. 连接 GitHub 仓库到 Vercel 项目
+2. 配置构建命令: `next build`
+3. 配置输出目录: `.next`（默认）
+4. 环境变量: 无需额外环境变量（纯静态站点）
+5. 域名: `show.vercel.app` 或自定义域名
+6. 构建后自动执行 `next-sitemap` 生成 `sitemap.xml`
+7. CDN 缓存策略: 静态资源 immutable 缓存，HTML 页面 1 小时缓存
+8. 性能监控: Vercel Analytics + Web Vitals
+
 ---
 
 ## 文件结构
@@ -365,6 +593,7 @@ portfolio/
 │   │   ├── layout.tsx              # 根布局
 │   │   ├── page.tsx                # 首页（太阳系）
 │   │   ├── globals.css             # 全局样式
+│   │   ├── not-found.tsx           # 404 页面
 │   │   ├── about/page.tsx          # 关于我
 │   │   ├── projects/
 │   │   │   ├── page.tsx            # 项目列表
@@ -374,6 +603,7 @@ portfolio/
 │   │   ├── three/
 │   │   │   ├── SolarSystem.tsx     # 太阳系场景
 │   │   │   ├── StarField.tsx       # 星空粒子
+│   │   │   ├── ParticleBackground.tsx  # 全局粒子背景
 │   │   │   ├── ProjectPlanet.tsx   # 项目星球
 │   │   │   ├── WarpTransition.tsx  # 页面穿梭
 │   │   │   ├── DataFlowGrid.tsx    # 数据流网格
@@ -389,27 +619,35 @@ portfolio/
 │   │   │       ├── FilmReel.tsx
 │   │   │       ├── MusicBox.tsx
 │   │   │       ├── TaiChi.tsx
-│   │   │       ├── Gallery3D.tsx
-│   │   │       └── RadarScan.tsx
+│   │   │       └── Gallery3D.tsx
 │   │   ├── ui/
 │   │   │   ├── Navbar.tsx
 │   │   │   ├── Footer.tsx
-│   │   │   ├── ProjectCard.tsx
+│   │   │   ├── SkeletonLoader.tsx  # 骨架屏加载状态
 │   │   │   ├── TechBadge.tsx
 │   │   │   ├── SectionTitle.tsx
-│   │   │   ├── CodeBlock.tsx
 │   │   │   ├── ImageGallery.tsx
 │   │   │   └── ArchitectureDiagram.tsx
+│   │   ├── about/
+│   │   │   └── AboutContent.tsx    # 关于页内容
+│   │   ├── contact/
+│   │   │   └── ContactContent.tsx  # 联系页内容
 │   │   ├── Hero.tsx
 │   │   ├── ProjectFilter.tsx
 │   │   └── PageTransition.tsx
+│   ├── content/
+│   │   └── projects/               # [审查反馈修复 M1] MDX 项目内容
+│   │       ├── campus-health.mdx
+│   │       ├── kefu-stats.mdx
+│   │       └── ...                 # 32 个项目的 MDX 文件
 │   └── data/
-│       └── projects.ts             # 32个项目完整数据
+│       └── projects.ts             # 项目元数据（类型安全）
 ├── public/
 │   └── projects/                   # 项目截图
 ├── PRD.md
 ├── SPEC.md
 ├── next.config.ts
+├── next-sitemap.config.js          # [审查反馈修复 M4] sitemap 配置
 ├── tailwind.config.ts
 ├── package.json
 └── tsconfig.json
