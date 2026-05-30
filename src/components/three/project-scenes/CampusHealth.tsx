@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -18,6 +18,10 @@ function Building({ position, scale }: { position: [number, number, number]; sca
       }),
     []
   );
+
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
 
   return (
     <mesh ref={meshRef} position={position} scale={scale} geometry={geometry} material={material} />
@@ -39,6 +43,10 @@ function Roof({ position, scale }: { position: [number, number, number]; scale: 
     []
   );
 
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
+
   return <mesh position={position} scale={scale} geometry={geometry} material={material} rotation={[0, Math.PI / 4, 0]} />;
 }
 
@@ -53,6 +61,9 @@ function Ground() {
       }),
     []
   );
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
   return <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.5, 0]} geometry={geometry} material={material} />;
 }
 

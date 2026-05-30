@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -31,6 +31,10 @@ function FloatingWindow({ position, color, rotationSpeed }: { position: [number,
       }),
     []
   );
+
+  useEffect(() => {
+    return () => { geometry.dispose(); frameGeometry.dispose(); material.dispose(); frameMaterial.dispose(); };
+  }, [geometry, frameGeometry, material, frameMaterial]);
 
   useFrame((state) => {
     if (meshRef.current) {

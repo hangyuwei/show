@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -25,6 +25,10 @@ function Reel({ position }: { position: [number, number, number] }) {
     () => new THREE.MeshStandardMaterial({ color: new THREE.Color('#6b7280'), roughness: 0.3, metalness: 0.8 }),
     []
   );
+
+  useEffect(() => {
+    return () => { outerGeometry.dispose(); innerGeometry.dispose(); hubGeometry.dispose(); spokeGeometry.dispose(); outerMaterial.dispose(); innerMaterial.dispose(); hubMaterial.dispose(); };
+  }, [outerGeometry, innerGeometry, hubGeometry, spokeGeometry, outerMaterial, innerMaterial, hubMaterial]);
 
   useFrame((_, delta) => {
     if (groupRef.current) {
@@ -63,6 +67,10 @@ function FilmStrip() {
     []
   );
 
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
+
   return <mesh ref={meshRef} position={[0, 0, 0]} rotation={[0, 0, 0]} geometry={geometry} material={material} />;
 }
 
@@ -79,6 +87,10 @@ function SprocketHoles() {
       }),
     []
   );
+
+  useEffect(() => {
+    return () => { holeGeo.dispose(); holeMat.dispose(); };
+  }, [holeGeo, holeMat]);
 
   return (
     <group ref={groupRef}>

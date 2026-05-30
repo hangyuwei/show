@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useRef, useMemo } from 'react';
+import { Suspense, useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -34,6 +34,10 @@ function GridLine({ points, color, speed }: GridLineProps) {
 
   // Sync material ref
   materialRef.current = lineObj.material as THREE.LineBasicMaterial;
+
+  useEffect(() => {
+    return () => { lineObj.geometry.dispose(); (lineObj.material as THREE.Material).dispose(); };
+  }, [lineObj]);
 
   return <primitive object={lineObj} />;
 }

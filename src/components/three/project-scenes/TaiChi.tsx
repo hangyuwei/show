@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -18,6 +18,9 @@ function YinHemisphere() {
       }),
     []
   );
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
   return <mesh ref={meshRef} geometry={geometry} material={material} />;
 }
 
@@ -33,6 +36,9 @@ function YangHemisphere() {
       }),
     []
   );
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
   return <mesh ref={meshRef} geometry={geometry} material={material} />;
 }
 
@@ -47,6 +53,9 @@ function YinDot() {
       }),
     []
   );
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
   return <mesh position={[0, 0.5, 0]} geometry={geometry} material={material} />;
 }
 
@@ -61,6 +70,9 @@ function YangDot() {
       }),
     []
   );
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
   return <mesh position={[0, -0.5, 0]} geometry={geometry} material={material} />;
 }
 
@@ -85,6 +97,10 @@ function GlowRing() {
       material.opacity = 0.4 + Math.sin(t * 2) * 0.2;
     }
   });
+
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
 
   return <mesh ref={meshRef} geometry={geometry} material={material} />;
 }

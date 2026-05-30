@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -39,6 +39,10 @@ function Frame({ angle, index }: { angle: number; index: number }) {
     []
   );
 
+  useEffect(() => {
+    return () => { backGeometry.dispose(); borderGeometry.dispose(); backMaterial.dispose(); borderMaterial.dispose(); };
+  }, [backGeometry, borderGeometry, backMaterial, borderMaterial]);
+
   const x = Math.cos(angle) * RADIUS;
   const z = Math.sin(angle) * RADIUS;
 
@@ -72,6 +76,10 @@ function CenterPiece() {
       }),
     []
   );
+
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
 
   useFrame((state) => {
     if (meshRef.current) {

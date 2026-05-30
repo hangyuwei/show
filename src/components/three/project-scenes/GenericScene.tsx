@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -24,6 +24,14 @@ function FloatingCubes({ primaryColor, secondaryColor }: { primaryColor: string;
     () => new THREE.MeshStandardMaterial({ color: new THREE.Color(secondaryColor), roughness: 0.3, metalness: 0.5 }),
     [secondaryColor]
   );
+
+  useEffect(() => {
+    return () => {
+      cubeGeo.dispose();
+      mat1.dispose();
+      mat2.dispose();
+    };
+  }, [cubeGeo, mat1, mat2]);
 
   const positions = useMemo(() => {
     const result: [number, number, number][] = [];
@@ -70,6 +78,10 @@ function CentralSphere({ color }: { color: string }) {
     [color]
   );
 
+  useEffect(() => {
+    return () => { geo.dispose(); mat.dispose(); };
+  }, [geo, mat]);
+
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.x += 0.005;
@@ -103,6 +115,10 @@ function RingParticles({ color }: { color: string }) {
     });
     return { geometry: geo, material: mat };
   }, [color]);
+
+  useEffect(() => {
+    return () => { geometry.dispose(); material.dispose(); };
+  }, [geometry, material]);
 
   useFrame((_, delta) => {
     if (pointsRef.current) {

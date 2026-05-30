@@ -1,70 +1,75 @@
-# SPEC: Hang's Portfolio -- 技术规格文档
+# SPEC: Hang's Portfolio -- Technical Specification
 
-> 基于 PRD.md v1 生成，反映当前代码库实际实现状态。
-
----
-
-## 1. 技术栈版本锁定
-
-| 依赖 | 版本 | 用途 |
-|------|------|------|
-| Next.js | 16.2.6 | SSG/App Router/SSR 框架 |
-| React | 19.2.4 | UI 渲染 |
-| React DOM | 19.2.4 | DOM 渲染 |
-| TypeScript | ^5 | 类型安全 |
-| Tailwind CSS | ^4 | 暗色主题 + 响应式样式 (via @tailwindcss/postcss) |
-| Three.js | ^0.184.0 | 3D 渲染核心 |
-| @react-three/fiber | ^9.6.1 | React Three.js 绑定 |
-| @react-three/drei | ^10.7.7 | R3F 辅助组件 (OrbitControls, Html 等) |
-| @react-three/postprocessing | ^3.0.4 | Bloom, Vignette 后处理 |
-| postprocessing | ^6.39.1 | 后处理底层库 |
-| Framer Motion | ^12.40.0 | 页面过渡 + 交互动画 |
-| ESLint | ^9 | 代码规范 |
-| eslint-config-next | 16.2.6 | Next.js ESLint 规则 |
-
-**未安装但 PRD 提及的依赖**:
-- GSAP -- PRD 列出但未安装，当前所有动画由 Framer Motion 驱动
-- @next/mdx / @mdx-js/loader / @mdx-js/react -- PRD 计划用于思路链内容，尚未安装，当前内容直接存储在 `projects.ts`
-- next-sitemap -- PRD 计划用于 sitemap 生成，尚未安装
+> Generated from PRD.md v1. Reflects actual codebase state as of 2026-05-31.
 
 ---
 
-## 2. 目录结构
+## 1. Tech Stack Versions
+
+| Dependency | Version | Purpose |
+|------------|---------|---------|
+| Next.js | 16.2.6 | SSG / App Router / SSR framework |
+| React | 19.2.4 | UI rendering |
+| React DOM | 19.2.4 | DOM rendering |
+| TypeScript | ^5 | Type safety |
+| Tailwind CSS | ^4 | Dark theme + responsive styling (via @tailwindcss/postcss) |
+| Three.js | ^0.184.0 | 3D rendering core |
+| @react-three/fiber | ^9.6.1 | React Three.js bindings (R3F) |
+| @react-three/drei | ^10.7.7 | R3F helper components (OrbitControls, Html, etc.) |
+| @react-three/postprocessing | ^3.0.4 | Bloom, Vignette post-processing |
+| postprocessing | ^6.39.1 | Post-processing lower-level library |
+| Framer Motion | ^12.40.0 | Page transitions + interaction animations |
+| ESLint | ^9 | Code linting |
+| eslint-config-next | 16.2.6 | Next.js ESLint rules |
+
+**Not installed but listed in PRD:**
+
+| Dependency | PRD Purpose | Status |
+|------------|-------------|--------|
+| GSAP | Animation | Not installed; Framer Motion covers all current animation needs |
+| @next/mdx | MDX content | Not installed; thought-chain content currently stored in `projects.ts` |
+| @mdx-js/loader | MDX loading | Not installed |
+| @mdx-js/react | MDX rendering | Not installed |
+| next-sitemap | sitemap.xml generation | Not installed |
+
+---
+
+## 2. Directory Structure
 
 ```
 portfolio/
 ├── src/
-│   ├── app/                            # Next.js App Router 页面
-│   │   ├── layout.tsx                  # 根布局: 字体、StarField、Navbar、PageTransition
-│   │   ├── page.tsx                    # 首页: Hero + 精选项目占位
-│   │   ├── globals.css                 # CSS 变量 + Tailwind theme + 全局样式
-│   │   ├── not-found.tsx               # 404: 太空迷失主题
+│   ├── app/                            # Next.js App Router pages
+│   │   ├── layout.tsx                  # Root layout: fonts, StarFieldWrapper, Navbar, PageTransition, Footer
+│   │   ├── page.tsx                    # Home page: Hero + featured projects placeholder
+│   │   ├── globals.css                 # CSS variables + Tailwind @theme + global styles
+│   │   ├── not-found.tsx               # 404: space-lost theme
 │   │   ├── favicon.ico
 │   │   ├── about/
-│   │   │   └── page.tsx                # 关于页
+│   │   │   └── page.tsx                # About page
 │   │   ├── contact/
-│   │   │   └── page.tsx                # 联系页
+│   │   │   └── page.tsx                # Contact page
 │   │   └── projects/
-│   │       ├── page.tsx                # 项目列表页 (client component)
+│   │       ├── page.tsx                # Project list (client component)
 │   │       └── [slug]/
-│   │           ├── page.tsx            # 项目详情 (server, SSG + generateMetadata)
-│   │           └── ProjectDetailClient.tsx  # 详情页客户端组件
+│   │           ├── page.tsx            # Project detail (server, SSG + generateMetadata)
+│   │           └── ProjectDetailClient.tsx  # Detail page client component
 │   ├── components/
-│   │   ├── Hero.tsx                    # 首屏英雄区: SolarSystem + 打字机标语
-│   │   ├── PageTransition.tsx          # Warp 速度线页面过渡
-│   │   ├── ProjectFilter.tsx           # 业务线筛选栏
-│   │   ├── three/                      # 3D 组件
-│   │   │   ├── SolarSystem.tsx         # 太阳系主场景
-│   │   │   ├── StarField.tsx           # 全局星空背景粒子
-│   │   │   ├── StarFieldWrapper.tsx    # 条件渲染 (首页不显示)
-│   │   │   ├── ParticleBackground.tsx  # 联系页粒子背景
-│   │   │   ├── ProjectPlanet.tsx       # 可复用行星+卫星组件
-│   │   │   ├── DataFlowGrid.tsx        # 矩阵数据流网格
-│   │   │   ├── TechSphere.tsx          # 技术标签 3D 球
-│   │   │   ├── SkillRadar3D.tsx        # 能力雷达图
-│   │   │   ├── FloatingCard3D.tsx      # 项目 3D 翻转卡片
-│   │   │   ├── ProjectSceneContainer.tsx  # 项目详情 3D 场景路由器
-│   │   │   └── project-scenes/         # 项目专属 3D 场景
+│   │   ├── Hero.tsx                    # Full-screen hero: SolarSystem (lazy) + typewriter tagline
+│   │   ├── PageTransition.tsx          # Warp-speed line page transition
+│   │   ├── ProjectFilter.tsx           # Business line filter bar
+│   │   ├── three/                      # 3D components
+│   │   │   ├── SolarSystem.tsx         # Solar system main scene
+│   │   │   ├── StarField.tsx           # Global starfield particle background
+│   │   │   ├── StarFieldWrapper.tsx    # Conditional render (hidden on home page)
+│   │   │   ├── ParticleBackground.tsx  # Contact page particle background
+│   │   │   ├── ProjectPlanet.tsx       # Reusable planet + satellite component
+│   │   │   ├── DataFlowGrid.tsx        # Matrix data flow grid
+│   │   │   ├── TechSphere.tsx          # Tech tag 3D sphere
+│   │   │   ├── SkillRadar3D.tsx        # Skill radar chart
+│   │   │   ├── FloatingCard3D.tsx      # Project 3D tilt card
+│   │   │   ├── ProjectSceneContainer.tsx  # Project detail 3D scene router
+│   │   │   └── project-scenes/         # Project-specific 3D scenes
 │   │   │       ├── CampusHealth.tsx
 │   │   │       ├── DataDashboard.tsx
 │   │   │       ├── DesktopApp.tsx
@@ -75,27 +80,27 @@ portfolio/
 │   │   │       ├── TaiChi.tsx
 │   │   │       ├── Gallery3D.tsx
 │   │   │       ├── RadarScan.tsx
-│   │   │       └── GenericScene.tsx     # 默认通用 3D 场景
-│   │   ├── ui/                         # UI 基础组件
-│   │   │   ├── Navbar.tsx              # 玻璃拟态导航栏
-│   │   │   ├── Footer.tsx              # 页脚
-│   │   │   ├── SkeletonLoader.tsx      # 骨架屏加载
-│   │   │   ├── TechBadge.tsx           # 技术标签徽章
-│   │   │   ├── SectionTitle.tsx        # 段落标题
-│   │   │   ├── ImageGallery.tsx        # 图片画廊 + Lightbox
-│   │   │   ├── CodeBlock.tsx           # 代码块 (终端风格)
-│   │   │   └── ArchitectureDiagram.tsx # 架构图 (水平/垂直)
+│   │   │       └── GenericScene.tsx     # Default fallback 3D scene
+│   │   ├── ui/                         # UI base components
+│   │   │   ├── Navbar.tsx              # Glass-morphism navigation bar
+│   │   │   ├── Footer.tsx              # Page footer
+│   │   │   ├── SkeletonLoader.tsx      # Skeleton loading states
+│   │   │   ├── TechBadge.tsx           # Tech tag badge
+│   │   │   ├── SectionTitle.tsx        # Section heading
+│   │   │   ├── ImageGallery.tsx        # Image gallery + lightbox
+│   │   │   ├── CodeBlock.tsx           # Code block (terminal style)
+│   │   │   └── ArchitectureDiagram.tsx # Architecture diagram (horizontal/vertical)
 │   │   ├── about/
-│   │   │   └── AboutContent.tsx        # 关于页内容编排
+│   │   │   └── AboutContent.tsx        # About page content layout
 │   │   └── contact/
-│   │       └── ContactContent.tsx      # 联系页内容编排
+│   │       └── ContactContent.tsx       # Contact page content layout
 │   └── data/
-│       └── projects.ts                 # 32 项目元数据 + 类型定义
+│       └── projects.ts                 # 32 project metadata + type definitions
 ├── public/
-│   └── projects/                       # 项目截图资源
-├── next.config.ts                      # Next.js 配置
-├── tsconfig.json                       # TypeScript 配置
-├── eslint.config.mjs                   # ESLint 配置
+│   └── projects/                       # Project screenshot assets
+├── next.config.ts                      # Next.js configuration
+├── tsconfig.json                       # TypeScript configuration
+├── eslint.config.mjs                   # ESLint configuration
 ├── postcss.config.mjs                  # PostCSS (Tailwind)
 ├── package.json
 ├── PRD.md
@@ -104,24 +109,24 @@ portfolio/
 
 ---
 
-## 3. 路由表
+## 3. Route Table
 
-| 路由 | 文件 | 渲染模式 | Metadata |
-|------|------|---------|----------|
-| `/` | `src/app/page.tsx` | SSG (default) | `title: "Hang's Portfolio - ..."`, `description: "探索Hang的项目宇宙..."` |
-| `/projects` | `src/app/projects/page.tsx` | Client Component | 页面级未导出 metadata，继承根布局 |
-| `/projects/[slug]` | `src/app/projects/[slug]/page.tsx` | SSG (`generateStaticParams`) | `generateMetadata` 动态生成 `title: "{name} \| Portfolio"` |
-| `/about` | `src/app/about/page.tsx` | SSG (default) | 继承根布局 |
-| `/contact` | `src/app/contact/page.tsx` | Client Component | 继承根布局 |
-| `/not-found` | `src/app/not-found.tsx` | Static | 无独立 metadata |
+| Route | File | Render Mode | Metadata |
+|-------|------|-------------|----------|
+| `/` | `src/app/page.tsx` | SSG (default) | `title: "Hang's Portfolio - ..."`, `description: "全栈开发 · AI应用 · 大健康行业 - 探索项目宇宙"` |
+| `/projects` | `src/app/projects/page.tsx` | Client Component | No page-level metadata; inherits root layout |
+| `/projects/[slug]` | `src/app/projects/[slug]/page.tsx` | SSG (`generateStaticParams`) | `generateMetadata()` produces `title: "{name} \| Portfolio"` |
+| `/about` | `src/app/about/page.tsx` | SSG (default) | Inherits root layout |
+| `/contact` | `src/app/contact/page.tsx` | Client Component | Inherits root layout |
+| `/not-found` | `src/app/not-found.tsx` | Static | No independent metadata |
 
-**`generateStaticParams`**: 项目详情页预渲染所有 32 个 slug，构建时静态生成。
+**`generateStaticParams`**: Project detail pages pre-render all 32 slugs at build time.
 
 ---
 
-## 4. 数据模型
+## 4. Data Models
 
-### 4.1 核心类型
+### 4.1 Core TypeScript Types
 
 ```typescript
 // src/data/projects.ts
@@ -129,46 +134,46 @@ portfolio/
 type BusinessLine = 'health' | 'ai' | 'web' | 'creative' | 'research';
 
 interface ThoughtChain {
-  problem: string;        // 原始问题/痛点
-  analysis: string;       // 需求分析
-  design: string;         // 方案设计
-  development: string;    // 开发过程
+  problem: string;        // Original problem / pain point
+  analysis: string;       // Requirements analysis
+  design: string;         // Solution design
+  development: string;    // Development process
   challenges: Array<{
     title: string;
     description: string;
     solution: string;
   }>;
-  outcome: string;        // 项目成果
+  outcome: string;        // Project outcome
 }
 
 interface Project {
   id: number;
   slug: string;           // URL slug (kebab-case)
-  name: string;           // 中文名称
-  nameEn: string;         // 英文名称
+  name: string;           // Chinese name
+  nameEn: string;         // English name
   businessLine: BusinessLine;
-  tagline: string;        // 一句话描述
-  description: string;    // 详细描述 (含 \n 换行)
-  techStack: string[];    // 技术栈标签
-  scene3d: string;        // 3D 场景类型标识 (映射到 ProjectSceneContainer)
+  tagline: string;        // One-line description
+  description: string;    // Detailed description (newline-separated)
+  techStack: string[];    // Tech stack tags
+  scene3d: string;        // 3D scene type identifier (mapped in ProjectSceneContainer)
   thoughtChain: ThoughtChain;
-  screenshots: string[];  // 截图路径数组
+  screenshots: string[];  // Screenshot path array
   githubUrl?: string;
   demoUrl?: string;
-  featured: boolean;      // 是否精选
-  year: string;           // 年份
+  featured: boolean;      // Whether project is featured
+  year: string;           // Year
   status: 'completed' | 'active' | 'planning';
 }
 ```
 
-### 4.2 业务线标签映射
+### 4.2 Business Line Label Mapping
 
 ```typescript
 const businessLineLabels: Record<BusinessLine, {
-  name: string;     // 中文名
-  nameEn: string;   // 英文名
-  emoji: string;    // 图标
-  color: string;    // 主题色 (hex)
+  name: string;     // Chinese name
+  nameEn: string;   // English name
+  emoji: string;    // Icon
+  color: string;    // Theme color (hex)
 }> = {
   health:    { name: '大健康行业', nameEn: 'Health Industry', emoji: '🏥', color: '#06b6d4' },
   ai:        { name: 'AI/大模型',  nameEn: 'AI & LLM',        emoji: '🤖', color: '#8b5cf6' },
@@ -178,44 +183,47 @@ const businessLineLabels: Record<BusinessLine, {
 };
 ```
 
-### 4.3 数据查询函数
+### 4.3 Data Query Functions
 
-| 函数 | 签名 | 返回 |
-|------|------|------|
-| `getProjectsByBusinessLine` | `(line: BusinessLine) => Project[]` | 按业务线筛选 |
-| `getFeaturedProjects` | `() => Project[]` | 精选项目 |
-| `getProjectBySlug` | `(slug: string) => Project \| undefined` | 按 slug 查找 |
-| `getAllSlugs` | `() => string[]` | 所有 slug 列表 |
+| Function | Signature | Returns |
+|----------|-----------|---------|
+| `getProjectsByBusinessLine` | `(line: BusinessLine) => Project[]` | Filter by business line |
+| `getFeaturedProjects` | `() => Project[]` | Featured projects only |
+| `getProjectBySlug` | `(slug: string) => Project \| undefined` | Find by slug |
+| `getAllSlugs` | `() => string[]` | All slug list |
 
-### 4.4 数据规模
+### 4.4 Data Scale
 
-- 总项目数: 32
-- 大健康: 17, AI: 7, Web: 4, 创意: 1, 学术: 3
-- 精选项目: campus-health, kefu-stats, feasibility-report, medical-ocr, competitor-intel, my-agent, vimax, starry-music-box
+- Total projects: 32
+- Health: 17, AI: 7, Web: 4, Creative: 1, Research: 3
+- Featured: campus-health, kefu-stats, feasibility-report, medical-ocr, competitor-intel, my-agent, vimax, starry-music-box
 
 ---
 
-## 5. 组件 API 规格
+## 5. Component API Specifications
 
-### 5.1 页面组件
+### 5.1 Page Components
 
 #### `Hero` (`src/components/Hero.tsx`)
-- **导出**: `export default function Hero()`
-- **Props**: 无
-- **行为**: 全屏 hero 区域，`next/dynamic` 懒加载 SolarSystem，打字机效果轮播标语，"探索项目宇宙" 按钮滚动到 `#featured-projects`
+
+- **Export**: `export default function Hero()`
+- **Props**: None
+- **Behavior**: Full-screen hero area; lazy-loads SolarSystem via `next/dynamic`; typewriter effect cycles taglines; "Explore Project Universe" button scrolls to `#featured-projects`
 
 #### `PageTransition` (`src/components/PageTransition.tsx`)
-- **导出**: `export default function PageTransition({ children }: PageTransitionProps)`
+
+- **Export**: `export default function PageTransition({ children }: PageTransitionProps)`
 - **Props**:
   ```typescript
   interface PageTransitionProps {
     children: ReactNode;
   }
   ```
-- **行为**: `AnimatePresence mode="wait"` 包裹，key 为 `pathname`，enter/exit 缩放 + warp lines 动画
+- **Behavior**: `AnimatePresence mode="wait"` wrapper; key is `pathname`; enter/exit uses scale + warp lines animation
 
 #### `ProjectFilter` (`src/components/ProjectFilter.tsx`)
-- **导出**: `export default function ProjectFilter({ activeFilter, onFilterChange }: ProjectFilterProps)`
+
+- **Export**: `export default function ProjectFilter({ activeFilter, onFilterChange }: ProjectFilterProps)`
 - **Props**:
   ```typescript
   type FilterOption = '全部' | BusinessLine;
@@ -224,22 +232,24 @@ const businessLineLabels: Record<BusinessLine, {
     onFilterChange: (filter: FilterOption) => void;
   }
   ```
-- **行为**: 水平滚动筛选栏，6 个选项 (全部 + 5 业务线)，Framer Motion `layoutId` 指示器动画
+- **Behavior**: Horizontal scrollable filter bar with 6 options (all + 5 business lines); Framer Motion `layoutId` indicator animation
 
-### 5.2 3D 组件
+### 5.2 3D Components
 
 #### `SolarSystem` (`src/components/three/SolarSystem.tsx`)
-- **导出**: `export default function SolarSystem()`
-- **Props**: 无 (自包含完整太阳系场景)
-- **内部子组件**: `Sun`, `PlanetBody`, `Satellite`, `OrbitRing`, `CosmicDust`, `NebulaClouds`, `PlanetSystem`
-- **3D 数据**: 5 个行星配置硬编码在 `PLANETS` 常量中
-- **加载方式**: 在 Hero 中通过 `next/dynamic` + `{ ssr: false }` 懒加载
+
+- **Export**: `export default function SolarSystem()`
+- **Props**: None (self-contained complete solar system scene)
+- **Internal sub-components**: `Sun`, `PlanetBody`, `Satellite`, `OrbitRing`, `CosmicDust`, `NebulaClouds`, `PlanetSystem`, `LoadingFallback`
+- **3D data**: 5 planet configurations hardcoded in `PLANETS` constant
+- **Loading**: Lazy-loaded via `next/dynamic` + `{ ssr: false }` in Hero component
 
 #### `StarField` (`src/components/three/StarField.tsx`)
-- **导出**: `export default function StarField()`
-- **Props**: 无
-- **行为**: 全局星空粒子背景，`position: fixed, inset: 0, z-index: -10`，移动端 500 粒子 / 桌面 1200 粒子
-- **内部接口**:
+
+- **Export**: `export default function StarField()`
+- **Props**: None
+- **Behavior**: Fixed-position starfield particle background (`position: fixed, inset: 0, z-index: -10`); mobile 500 particles / desktop 1200 particles
+- **Internal interface**:
   ```typescript
   interface StarParticlesProps {
     count: number;
@@ -247,17 +257,20 @@ const businessLineLabels: Record<BusinessLine, {
   ```
 
 #### `StarFieldWrapper` (`src/components/three/StarFieldWrapper.tsx`)
-- **导出**: `export default function StarFieldWrapper()`
-- **Props**: 无
-- **行为**: 条件渲染 StarField，首页 (`/`) 不显示
+
+- **Export**: `export default function StarFieldWrapper()`
+- **Props**: None
+- **Behavior**: Conditional render of StarField; hidden on home page (`/`)
 
 #### `ParticleBackground` (`src/components/three/ParticleBackground.tsx`)
-- **导出**: `export default function ParticleBackground()`
-- **Props**: 无
-- **行为**: 固定定位粒子背景，移动端 200 粒子 / 桌面 500 粒子
+
+- **Export**: `export default function ParticleBackground()`
+- **Props**: None
+- **Behavior**: Fixed-position particle background; mobile 200 particles / desktop 500 particles
 
 #### `ProjectPlanet` (`src/components/three/ProjectPlanet.tsx`)
-- **导出**: `export default function ProjectPlanet({ ... }: ProjectPlanetProps)`
+
+- **Export**: `export default function ProjectPlanet({ ... }: ProjectPlanetProps)`
 - **Props**:
   ```typescript
   interface SatelliteConfig {
@@ -277,28 +290,31 @@ const businessLineLabels: Record<BusinessLine, {
     satellites?: SatelliteConfig[];
   }
   ```
-- **行为**: 带大气层和卫星的行星组件，hover 放大 + 发光增强 + Html tooltip
+- **Behavior**: Planet component with atmosphere and satellites; hover enlarges + glow increases + Html tooltip
 
 #### `DataFlowGrid` (`src/components/three/DataFlowGrid.tsx`)
-- **导出**: `export default function DataFlowGrid({ lowPerformance }: DataFlowGridProps)`
+
+- **Export**: `export default function DataFlowGrid({ lowPerformance }: DataFlowGridProps)`
 - **Props**:
   ```typescript
   interface DataFlowGridProps {
     lowPerformance?: boolean;  // default: false
   }
   ```
-- **行为**: 矩阵数据流网格，`lowPerformance` 时网格 8x8，否则 14x14
+- **Behavior**: Matrix data flow grid; `lowPerformance` = 8x8 grid, otherwise 14x14
 
 #### `TechSphere` (`src/components/three/TechSphere.tsx`)
-- **导出**: `export default function TechSphere()`
-- **Props**: 无 (内置 18 个技术标签)
-- **行为**: Fibonacci 球面分布的技术标签，自动旋转 + OrbitControls 交互
+
+- **Export**: `export default function TechSphere()`
+- **Props**: None (built-in 18 tech labels)
+- **Behavior**: Fibonacci sphere distribution of tech labels; auto-rotate + OrbitControls interaction
 
 #### `SkillRadar3D` (`src/components/three/SkillRadar3D.tsx`)
-- **导出**: `export default function SkillRadar3D()`
-- **Props**: 无 (内置 6 维度技能数据)
-- **行为**: 6 边形雷达图，缓慢旋转，显示百分比标签
-- **内部接口**:
+
+- **Export**: `export default function SkillRadar3D()`
+- **Props**: None (built-in 6-dimension skill data)
+- **Behavior**: 6-sided radar chart; slow rotation; percentage labels
+- **Internal interface**:
   ```typescript
   interface SkillDimension {
     label: string;
@@ -307,7 +323,8 @@ const businessLineLabels: Record<BusinessLine, {
   ```
 
 #### `FloatingCard3D` (`src/components/three/FloatingCard3D.tsx`)
-- **导出**: `export default function FloatingCard3D({ project, index }: FloatingCard3DProps)`
+
+- **Export**: `export default function FloatingCard3D({ project, index }: FloatingCard3DProps)`
 - **Props**:
   ```typescript
   interface FloatingCard3DProps {
@@ -315,32 +332,36 @@ const businessLineLabels: Record<BusinessLine, {
     index: number;
   }
   ```
-- **行为**: CSS perspective 3D 倾斜卡片，鼠标跟踪光泽效果，hover 浮起，链接到项目详情页
+- **Behavior**: CSS perspective 3D tilt card; mouse-tracking gloss effect; hover lifts; links to project detail page
 
 #### `ProjectSceneContainer` (`src/components/three/ProjectSceneContainer.tsx`)
-- **导出**: `export default function ProjectSceneContainer({ sceneType }: SceneContainerProps)`
+
+- **Export**: `export default function ProjectSceneContainer({ sceneType }: SceneContainerProps)`
 - **Props**:
   ```typescript
   interface SceneContainerProps {
     sceneType: string;
   }
   ```
-- **行为**: 根据 `sceneType` 动态加载命名 3D 场景或 GenericScene，Canvas + OrbitControls 包裹
+- **Behavior**: Dynamically loads named 3D scene by `sceneType` or falls back to GenericScene; wrapped in Canvas + OrbitControls
 
-### 5.3 UI 组件
+### 5.3 UI Components
 
 #### `Navbar` (`src/components/ui/Navbar.tsx`)
-- **导出**: `export default function Navbar()`
-- **Props**: 无
-- **行为**: 固定顶部玻璃拟态导航，4 个链接 (首页/项目/关于/联系)，`md:` 断点切换桌面/移动菜单
+
+- **Export**: `export default function Navbar()`
+- **Props**: None
+- **Behavior**: Fixed-top glass-morphism nav; 4 links (Home/Projects/About/Contact); `md:` breakpoint switches desktop/mobile menu
 
 #### `Footer` (`src/components/ui/Footer.tsx`)
-- **导出**: `export default function Footer()`
-- **Props**: 无
-- **行为**: 底部栏，版权 / GitHub 链接 / 回到顶部
+
+- **Export**: `export default function Footer()`
+- **Props**: None
+- **Behavior**: Bottom bar with copyright / GitHub link / back-to-top
 
 #### `SkeletonLoader` (`src/components/ui/SkeletonLoader.tsx`)
-- **导出**: `export default function SkeletonLoader({ variant, count, className }: SkeletonLoaderProps)`
+
+- **Export**: `export default function SkeletonLoader({ variant, count, className }: SkeletonLoaderProps)`
 - **Props**:
   ```typescript
   interface SkeletonLoaderProps {
@@ -351,17 +372,19 @@ const businessLineLabels: Record<BusinessLine, {
   ```
 
 #### `TechBadge` (`src/components/ui/TechBadge.tsx`)
-- **导出**: `export default function TechBadge({ name, color }: TechBadgeProps)`
+
+- **Export**: `export default function TechBadge({ name, color }: TechBadgeProps)`
 - **Props**:
   ```typescript
   interface TechBadgeProps {
     name: string;
-    color?: string;  // 可选自定义颜色
+    color?: string;  // optional custom color
   }
   ```
 
 #### `SectionTitle` (`src/components/ui/SectionTitle.tsx`)
-- **导出**: `export default function SectionTitle({ title, subtitle, align }: SectionTitleProps)`
+
+- **Export**: `export default function SectionTitle({ title, subtitle, align }: SectionTitleProps)`
 - **Props**:
   ```typescript
   interface SectionTitleProps {
@@ -372,7 +395,8 @@ const businessLineLabels: Record<BusinessLine, {
   ```
 
 #### `ImageGallery` (`src/components/ui/ImageGallery.tsx`)
-- **导出**: `export default function ImageGallery({ images }: ImageGalleryProps)`
+
+- **Export**: `export default function ImageGallery({ images }: ImageGalleryProps)`
 - **Props**:
   ```typescript
   interface GalleryImage {
@@ -383,10 +407,11 @@ const businessLineLabels: Record<BusinessLine, {
     images: GalleryImage[];
   }
   ```
-- **行为**: 响应式网格 + 全屏 Lightbox，支持键盘/按钮前后翻页
+- **Behavior**: Responsive grid + fullscreen lightbox; keyboard/button previous/next navigation
 
 #### `CodeBlock` (`src/components/ui/CodeBlock.tsx`)
-- **导出**: `export default function CodeBlock({ code, language }: CodeBlockProps)`
+
+- **Export**: `export default function CodeBlock({ code, language }: CodeBlockProps)`
 - **Props**:
   ```typescript
   interface CodeBlockProps {
@@ -396,7 +421,8 @@ const businessLineLabels: Record<BusinessLine, {
   ```
 
 #### `ArchitectureDiagram` (`src/components/ui/ArchitectureDiagram.tsx`)
-- **导出**: `export default function ArchitectureDiagram({ items }: ArchitectureDiagramProps)`
+
+- **Export**: `export default function ArchitectureDiagram({ items }: ArchitectureDiagramProps)`
 - **Props**:
   ```typescript
   interface ArchitectureItem {
@@ -408,428 +434,442 @@ const businessLineLabels: Record<BusinessLine, {
     items: ArchitectureItem[];
   }
   ```
-- **行为**: 桌面水平排列 + 移动端垂直排列，彩色边框 + 发光效果
+- **Behavior**: Desktop horizontal layout / mobile vertical layout; colored borders + glow effect
 
-### 5.4 页面编排组件
+### 5.4 Page Layout Components
 
 #### `AboutContent` (`src/components/about/AboutContent.tsx`)
-- **导出**: `export default function AboutContent()`
-- **Props**: 无
-- **行为**: 编排 SkillRadar3D + 个人简介 + TechSphere + 职业时间线四个 section
+
+- **Export**: `export default function AboutContent()`
+- **Props**: None
+- **Behavior**: Layouts SkillRadar3D + personal bio + TechSphere + career timeline in four sections
 
 #### `ContactContent` (`src/components/contact/ContactContent.tsx`)
-- **导出**: `export default function ContactContent()`
-- **Props**: 无
-- **行为**: ParticleBackground + GitHub 卡片 + Email 卡片
+
+- **Export**: `export default function ContactContent()`
+- **Props**: None
+- **Behavior**: Layouts ParticleBackground + GitHub card + Email card
 
 ---
 
-## 6. 3D 场景规格
+## 6. 3D Scene Specifications
 
-### 6.1 SolarSystem 太阳系场景
+### 6.1 SolarSystem
 
-#### Canvas 配置
-| 参数 | 值 |
-|------|-----|
+#### Canvas Configuration
+
+| Parameter | Value |
+|-----------|-------|
 | Camera position | `[0, 10, 18]` |
 | FOV | 50 deg |
 | Near / Far | 0.1 / 250 |
 | DPR | `[1, 1.5]` |
 | Antialias | `true` |
+| Alpha | `false` |
 | Tone Mapping | `ACESFilmicToneMapping`, exposure 1.0 |
-| Background | `radial-gradient(ellipse, #0a0a1a -> #000005)` |
+| Background CSS | `radial-gradient(ellipse at center, #0a0a1a 0%, #000005 100%)` |
 
-#### 太阳 (Sun)
-| 参数 | 值 |
-|------|-----|
-| 核心几何体 | SphereGeometry(0.9, 64, 64) |
-| 日冕几何体 | SphereGeometry(1.25, 48, 48) |
-| 外层晕几何体 | SphereGeometry(1.8, 32, 32) |
-| 核心材质 | ShaderMaterial (自定义 vertex + fragment) |
-| 日冕材质 | ShaderMaterial, BackSide, AdditiveBlending, transparent |
-| 外晕材质 | MeshBasicMaterial, color=#ff8833, opacity=0.04, BackSide, AdditiveBlending |
-| 点光源 | intensity=4, distance=40, decay=2, color=#ffaa55 |
-| Shader | Simplex Noise 生成动态表面，三层噪声叠加 (freq 2/4/8) |
-| 颜色范围 | core #ffc866 -> mid #ff8c26 -> edge #cc400d |
+#### Sun
 
-#### 行星系统 (5 颗)
-| 行星 | 颜色 | 大小 | 轨道半径 | 速度 | 倾斜 | 卫星数 | Ring |
-|------|------|------|---------|------|------|--------|------|
-| 大健康 | #0ea5e9 / #0284c7 | 0.55 | 5.5 | 0.12 | 0.15 | 17 | no |
-| AI/大模型 | #a78bfa / #7c3aed | 0.45 | 8.0 | 0.09 | -0.10 | 7 | #7c3aed |
-| Web开发 | #fb923c / #ea580c | 0.40 | 10.5 | 0.07 | 0.20 | 4 | no |
-| 创意 | #facc15 / #ca8a04 | 0.32 | 13.0 | 0.05 | -0.25 | 1 | #ca8a04 |
-| 学术研究 | #2dd4bf / #0d9488 | 0.36 | 15.5 | 0.04 | 0.12 | 3 | no |
+| Parameter | Value |
+|-----------|-------|
+| Core geometry | `SphereGeometry(0.9, 64, 64)` |
+| Corona geometry | `SphereGeometry(1.25, 48, 48)` |
+| Outer haze geometry | `SphereGeometry(1.8, 32, 32)` |
+| Core material | Custom `ShaderMaterial` (vertex + fragment shaders) |
+| Corona material | Custom `ShaderMaterial`, `BackSide`, `AdditiveBlending`, `transparent`, `depthWrite: false` |
+| Outer haze material | `MeshBasicMaterial`, color=#ff8833, opacity=0.04, `BackSide`, `AdditiveBlending` |
+| Point light | intensity=4, distance=40, decay=2, color=#ffaa55 |
+| Shader noise | Simplex Noise, 3 layers (frequency 2/4/8), time-animated |
+| Color range | core #ffc866 (warm gold) -> mid #ff8c26 (orange) -> edge #cc400d (deep amber) |
+| Corona pulse | `sin(uTime * 1.5)` amplitude 0.2, base 0.8 |
 
-**行星材质**: MeshStandardMaterial, roughness=0.55, metalness=0.25, emissiveIntensity=0.15 (hover 0.5)
-**大气层**: SphereGeometry(1.12), BackSide, AdditiveBlending, opacity=0.08 (hover 0.20)
-**Ring**: RingGeometry(1.4, 1.8, 64), DoubleSide, AdditiveBlending, opacity=0.12
+#### Planet System (5 planets)
 
-#### 星空粒子 (CosmicDust)
-| 参数 | 值 |
-|------|-----|
-| 数量 | 3000 |
-| 分布 | 球壳, radius 25-80 |
-| 颜色 | 暖白 (60%), 冷蓝 (25%), 琥珀 (15%) |
-| 尺寸 | 0.05-0.25, sizeAttenuation |
-| 材质 | PointsMaterial, AdditiveBlending, vertexColors, depthWrite=false |
-| 旋转 | y 轴, delta * 0.003 |
+| Planet | Color / Emissive | Size | Orbit Radius | Speed | Tilt | Satellites | Ring |
+|--------|------------------|------|-------------|-------|------|------------|------|
+| Health | #0ea5e9 / #0284c7 | 0.55 | 5.5 | 0.12 | 0.15 | 17 | no |
+| AI/LLM | #a78bfa / #7c3aed | 0.45 | 8.0 | 0.09 | -0.10 | 7 | #7c3aed |
+| Web Dev | #fb923c / #ea580c | 0.40 | 10.5 | 0.07 | 0.20 | 4 | no |
+| Creative | #facc15 / #ca8a04 | 0.32 | 13.0 | 0.05 | -0.25 | 1 | #ca8a04 |
+| Research | #2dd4bf / #0d9488 | 0.36 | 15.5 | 0.04 | 0.12 | 3 | no |
 
-#### 星云 (NebulaClouds)
-| 参数 | 值 |
-|------|-----|
-| 数量 | 8 个球体 |
-| 颜色 | #1a0533, #0a1628, #0d2137, #1a0a2e, #051a2c |
-| 大小 | 15-40 |
-| 透明度 | 0.15-0.25 |
-| 旋转 | y 轴, delta * 0.001 |
+**Planet material**: `MeshStandardMaterial`, roughness=0.55, metalness=0.25, emissiveIntensity=0.15 (hover: 0.5, lerp delta*5)
+**Atmosphere**: `SphereGeometry(1.12)`, `BackSide`, `AdditiveBlending`, opacity=0.08 (hover: 0.20, lerp delta*5)
+**Ring**: `RingGeometry(1.4, 1.8, 64)`, `DoubleSide`, `AdditiveBlending`, opacity=0.12
 
-#### 后处理
-| 效果 | 参数 |
-|------|------|
+#### CosmicDust (Star Particles)
+
+| Parameter | Value |
+|-----------|-------|
+| Count | 3000 |
+| Distribution | Spherical shell, radius 25-80 |
+| Colors | Warm white 60%, cool blue 25%, amber 15% |
+| Sizes | 0.05-0.25 (per-particle random), PointsMaterial size=0.12, sizeAttenuation |
+| Material | `PointsMaterial`, `AdditiveBlending`, `vertexColors`, `depthWrite: false`, opacity=0.7 |
+| Rotation | Y-axis, delta * 0.003 |
+
+#### NebulaClouds
+
+| Parameter | Value |
+|-----------|-------|
+| Count | 8 spheres |
+| Colors | #1a0533, #0a1628, #0d2137, #1a0a2e, #051a2c |
+| Sizes | 15-40 (random) |
+| Opacity | 0.15-0.25 |
+| Rotation | Y-axis, delta * 0.001 |
+| Material | `MeshBasicMaterial`, `BackSide`, `AdditiveBlending`, `depthWrite: false` |
+
+#### Post-Processing
+
+| Effect | Parameters |
+|--------|------------|
 | Bloom | intensity=0.6, luminanceThreshold=0.2, luminanceSmoothing=0.9, mipmapBlur=true |
 | Vignette | eskil=false, offset=0.3, darkness=0.6 |
 
 #### OrbitControls
-| 参数 | 值 |
-|------|-----|
+
+| Parameter | Value |
+|-----------|-------|
 | enableDamping | true, factor=0.04 |
 | minDistance / maxDistance | 6 / 35 |
 | autoRotate | true, speed=0.2 |
 | enablePan | false |
-| maxPolarAngle / minPolarAngle | 0.7PI / 0.3PI |
+| maxPolarAngle / minPolarAngle | 0.7*PI / 0.3*PI |
 
-### 6.2 StarField 星空背景
+### 6.2 StarField
 
-| 参数 | 值 |
-|------|-----|
+| Parameter | Value |
+|-----------|-------|
 | Camera | position=[0,0,10], fov=60 |
 | DPR | [1, 1.5] |
-| 粒子数 | 桌面 1200, 移动端 500 |
-| 分布 | 球体, radius 5-55 |
-| 颜色 | 白色 (70%), 蓝色 (30%) |
-| 尺寸 | 0.15, sizeAttenuation |
-| 旋转 | y: delta*0.02, x: delta*0.005 |
-| Alpha | true (透明背景) |
+| Particle count | Desktop: 1200, Mobile: 500 |
+| Distribution | Spherical, radius 5-55 |
+| Colors | White 70%, Blue 30% |
+| Size | 0.15, sizeAttenuation |
+| Rotation | Y: delta*0.02, X: delta*0.005 |
+| Alpha | true (transparent background) |
+| Power preference | 'high-performance' |
 
-### 6.3 DataFlowGrid 数据流网格
+### 6.3 DataFlowGrid
 
-| 参数 | 值 |
-|------|-----|
+| Parameter | Value |
+|-----------|-------|
 | Camera | position=[0,12,12], fov=50 |
 | DPR | [1, 1.5] |
-| 网格大小 | 标准 14x14, 低性能 8x8 |
-| 间距 | 2 单位 |
-| 线条颜色 | #3b82f6 |
-| 脉冲点颜色 | #06b6d4 / #8b5cf6 |
-| 旋转 | -PI/4 (透视角度) |
-| 脉冲采样步长 | 标准 3, 低性能 4 |
-| Antialias | false (性能优化) |
-| Power Preference | 'low-power' |
+| Grid size | Standard: 14x14, Low-performance: 8x8 |
+| Spacing | 2 units |
+| Line color | #3b82f6 |
+| Pulse point colors | #06b6d4 / #8b5cf6 |
+| Rotation | -PI/4 (perspective angle) |
+| Pulse sample step | Standard: 3, Low-performance: 4 |
+| Antialias | false (performance) |
+| Power preference | 'low-power' |
 
-### 6.4 SkillRadar3D 能力雷达
+### 6.4 SkillRadar3D
 
-| 参数 | 值 |
-|------|-----|
+| Parameter | Value |
+|-----------|-------|
 | Camera | position=[0,0,5], fov=50 |
 | DPR | [1, 2] |
-| 雷达半径 | 2 |
-| 网格环数 | 4 |
-| 维度数 | 6 (全栈开发/AI应用/数据分析/行业知识/项目管理/创意设计) |
-| 填充颜色 | #4a90d9, opacity=0.15 |
-| 边缘颜色 | #6cb4ee, opacity=0.9 |
-| 顶点圆点 | SphereGeometry(0.04) |
-| 旋转 | z 轴, delta * 0.08 |
+| Radar radius | 2 |
+| Grid rings | 4 |
+| Dimensions | 6 (Full-stack Dev / AI Apps / Data Analysis / Industry Knowledge / Project Management / Creative Design) |
+| Fill color | #4a90d9, opacity=0.15 |
+| Edge color | #6cb4ee, opacity=0.9 |
+| Vertex dots | `SphereGeometry(0.04)` |
+| Rotation | Z-axis, delta * 0.08 |
 
-### 6.5 TechSphere 技术标签球
+### 6.5 TechSphere
 
-| 参数 | 值 |
-|------|-----|
+| Parameter | Value |
+|-----------|-------|
 | Camera | position=[0,0,6], fov=50 |
 | DPR | [1, 1.5] |
-| 球体半径 | 2.5 |
-| 标签数量 | 18 |
-| 分布算法 | Fibonacci 球面 (黄金角) |
-| 线框球体 | SphereGeometry(2.4, 24, 24), color=#1a3a5c, opacity=0.1 |
+| Sphere radius | 2.5 |
+| Label count | 18 |
+| Distribution | Fibonacci sphere (golden angle) |
+| Wireframe sphere | `SphereGeometry(2.4, 24, 24)`, color=#1a3a5c, opacity=0.1 |
 | AutoRotate | speed=0.5 |
 | OrbitControls | enableZoom=false, enablePan=false |
 
-### 6.6 ProjectSceneContainer 项目场景路由
+### 6.6 ProjectSceneContainer
 
-| 参数 | 值 |
-|------|-----|
+| Parameter | Value |
+|-----------|-------|
 | Camera | position=[0,1,5], fov=50 |
 | DPR | [1, 1.5] |
-| 命名场景映射 | campus-health, data-dashboard, desktop-app, dna-helix, neural-network, film-reel, music-box, tai-chi, gallery-3d, radar-scan |
-| 通用场景颜色 | health=#0ea5e9, ai=#8b5cf6, web=#f97316, creative=#eab308, research=#14b8a6 |
+| Named scene map | campus-health, data-dashboard, desktop-app, dna-helix, neural-network, film-reel, music-box, tai-chi, gallery-3d, radar-scan |
+| Generic scene colors | health=#0ea5e9, ai=#8b5cf6, web=#f97316, creative=#eab308, research=#14b8a6, default=#6366f1 |
 | OrbitControls | enableZoom=false, enablePan=false, polar=[PI/4, 3PI/4], azimuth=[-PI/3, PI/3] |
-| 加载方式 | `next/dynamic` 按场景类型懒加载 |
+| Loading | `next/dynamic` per scene type |
 
-### 6.7 ParticleBackground 粒子背景
+### 6.7 ParticleBackground
 
-| 参数 | 值 |
-|------|-----|
+| Parameter | Value |
+|-----------|-------|
 | Camera | position=[0,0,10], fov=60 |
 | DPR | [1, 2] |
-| 粒子数 | 桌面 500, 移动端 200 |
-| 分布 | 球体, radius 5-35 |
-| 颜色 | #4a90d9, opacity=0.4 |
-| 尺寸 | 0.05, sizeAttenuation |
-| 旋转 | y 轴, delta * 0.03 |
+| Particle count | Desktop: 500, Mobile: 200 |
+| Distribution | Spherical, radius 5-35 |
+| Color | #4a90d9, opacity=0.4 |
+| Size | 0.05, sizeAttenuation |
+| Rotation | Y-axis, delta * 0.03 |
 
 ---
 
-## 7. 样式规范
+## 7. Style Tokens
 
-### 7.1 CSS 变量表 (globals.css :root)
+### 7.1 CSS Variables (`globals.css :root`)
 
 ```css
 :root {
-  --background: #0a0a1a;      /* 主背景: 深蓝黑 */
-  --foreground: #e0e0f0;      /* 主文字: 浅灰蓝 */
-  --accent: #6488ff;          /* 强调色: 蓝紫 */
-  --accent-dim: #3a5bbf;      /* 强调暗色 */
+  --background: #0a0a1a;      /* Main background: deep blue-black */
+  --foreground: #e0e0f0;      /* Main text: light gray-blue */
+  --accent: #6488ff;          /* Accent: blue-purple */
+  --accent-dim: #3a5bbf;      /* Accent dim */
   --surface: rgba(255, 255, 255, 0.05);
   --border: rgba(255, 255, 255, 0.1);
-  --muted: #8888aa;           /* 弱化文字 */
+  --muted: #8888aa;           /* Muted text */
 }
 ```
 
-### 7.2 Tailwind Theme Token (globals.css @theme inline)
+### 7.2 Tailwind Theme Tokens (`globals.css @theme inline`)
 
 ```css
-/* 背景色 */
+/* Background colors */
 --color-bg-primary: #0a0a1a;
 --color-bg-secondary: #111827;
 --color-bg-card: #1f2937;
 
-/* 文字色 */
+/* Text colors */
 --color-text-primary: #f9fafb;
 --color-text-secondary: #9ca3af;
 
-/* 强调色 */
---color-accent-blue: #06b6d4;      /* 大健康 */
+/* Accent colors (per business line) */
+--color-accent-blue: #06b6d4;      /* Health */
 --color-accent-purple: #8b5cf6;    /* AI */
 --color-accent-orange: #f97316;    /* Web */
---color-accent-gold: #eab308;      /* 创意 */
---color-accent-teal: #14b8a6;      /* 学术 */
+--color-accent-gold: #eab308;      /* Creative */
+--color-accent-teal: #14b8a6;      /* Research */
 
-/* 发光 */
+/* Glow */
 --color-glow: #3b82f6;
 
-/* 字体 */
+/* Fonts */
 --font-sans: var(--font-geist-sans);   /* Geist Sans */
 --font-mono: var(--font-geist-mono);   /* Geist Mono */
 
-/* 自定义动画 */
+/* Custom animations */
 --animate-float: float 6s ease-in-out infinite;
 --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
 --animate-warp-in: warp-in 0.6s ease-out forwards;
 ```
 
-### 7.3 自定义 Keyframes
+### 7.3 Custom Keyframes
 
 ```css
-@keyframes float       { 0%,100%: translateY(0); 50%: translateY(-20px) }
-@keyframes pulse-glow  { 0%,100%: opacity 0.4 + 8px glow; 50%: opacity 1 + 20px glow }
-@keyframes warp-in     { 0%: scale(0.8) rotateX(10deg) blur(4px); 100%: scale(1) rotateX(0) blur(0) }
+@keyframes float       { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+@keyframes pulse-glow  { 0%,100% { opacity: 0.4; box-shadow: 0 0 8px var(--color-glow); } 50% { opacity: 1; box-shadow: 0 0 20px var(--color-glow); } }
+@keyframes warp-in     { 0% { opacity: 0; transform: scale(0.8) rotateX(10deg); filter: blur(4px); } 100% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); } }
 ```
 
-### 7.4 暗色主题 Color Token 总结
+### 7.4 Dark Theme Color Summary
 
-| 用途 | Token | Hex |
-|------|-------|-----|
-| 页面背景 | --background / --color-bg-primary | #0a0a1a |
-| 卡片/次级背景 | --color-bg-secondary | #111827 |
-| 卡片内背景 | --color-bg-card | #1f2937 |
-| 主文字 | --foreground / --color-text-primary | #e0e0f0 / #f9fafb |
-| 次级文字 | --muted / --color-text-secondary | #8888aa / #9ca3af |
-| 边框 | --border | rgba(255,255,255,0.1) |
-| 强调 | --accent | #6488ff |
-| 发光 | --color-glow | #3b82f6 |
+| Usage | Token | Hex |
+|-------|-------|-----|
+| Page background | --background / --color-bg-primary | #0a0a1a |
+| Card / secondary bg | --color-bg-secondary | #111827 |
+| Card inner bg | --color-bg-card | #1f2937 |
+| Primary text | --foreground / --color-text-primary | #e0e0f0 / #f9fafb |
+| Secondary text | --muted / --color-text-secondary | #8888aa / #9ca3af |
+| Border | --border | rgba(255,255,255,0.1) |
+| Accent | --accent | #6488ff |
+| Glow | --color-glow | #3b82f6 |
 
-### 7.5 全局样式规则
+### 7.5 Global Style Rules
 
 - `html`: `scroll-behavior: smooth`
-- `body`: min-height 100vh, overflow-x hidden, Geist Sans 字体
-- `canvas`: `touch-action: none` (防止 3D 画布干扰滚动)
+- `body`: min-height 100vh, overflow-x hidden, Geist Sans font
+- `canvas`: `touch-action: none` (prevents 3D canvas scroll interference)
 - `a, button`: `transition: color/bg/border 0.2s ease`
 - `::selection`: `background: rgba(100,136,255,0.3)`, color #fff
-- 滚动条: WebKit 8px 圆角, track #0a0a1a, thumb rgba(255,255,255,0.15)
+- Scrollbar: WebKit 8px rounded, track #0a0a1a, thumb rgba(255,255,255,0.15)
+- Firefox: `scrollbar-width: thin`, `scrollbar-color: rgba(255,255,255,0.15) #0a0a1a`
 
-### 7.6 字体
+### 7.6 Fonts
 
-| 字体 | 来源 | CSS 变量 | 用途 |
-|------|------|---------|------|
-| Geist Sans | `next/font/google` | `--font-geist-sans` | 主字体 |
-| Geist Mono | `next/font/google` | `--font-geist-mono` | 代码/等宽 |
+| Font | Source | CSS Variable | Usage |
+|------|--------|-------------|-------|
+| Geist Sans | `next/font/google` | `--font-geist-sans` | Primary body font |
+| Geist Mono | `next/font/google` | `--font-geist-mono` | Code / monospace |
 
 ---
 
-## 8. 性能目标
+## 8. Performance Targets
 
-### 8.1 Bundle Size 目标
+### 8.1 Bundle Size Targets
 
-| Chunk | 目标 (gzipped) | 当前状态 |
-|-------|---------------|---------|
-| 首屏 HTML + CSS | < 50KB | - |
-| 首屏 JS (不含 Three.js) | < 100KB | - |
-| Three.js chunk (懒加载) | < 300KB | - |
+| Chunk | Target (gzipped) | Current Status |
+|-------|-----------------|----------------|
+| First-screen HTML + CSS | < 50KB | Not measured |
+| First-screen JS (excl. Three.js) | < 100KB | Not measured |
+| Three.js chunk (lazy-loaded) | < 300KB | Not measured |
 
-### 8.2 Lighthouse 目标
+### 8.2 Lighthouse Targets
 
-| 指标 | 目标 |
-|------|------|
+| Metric | Target |
+|--------|--------|
 | First Contentful Paint (FCP) | < 1.5s |
 | Largest Contentful Paint (LCP) | < 3s (4G) |
 | Lighthouse Performance | > 80 |
 | Lighthouse Accessibility | > 85 |
 
-### 8.3 3D 渲染目标
+### 8.3 3D Rendering Targets
 
-| 指标 | 目标 |
-|------|------|
-| FPS (桌面) | > 30fps |
-| FPS (移动端) | > 20fps |
+| Metric | Target |
+|--------|--------|
+| FPS (Desktop) | > 30fps |
+| FPS (Mobile) | > 20fps |
 
-### 8.4 Bundle 分包策略
+### 8.4 Bundle Split Strategy
 
-- Three.js 及 R3F 全部通过 `next/dynamic` + `{ ssr: false }` 懒加载
-- 首屏不包含任何 Three.js 代码
-- Three.js chunk 独立为 vendor chunk，仅在 3D 页面加载
-- `next.config.ts` 配置 `transpilePackages: ['three', '@react-three/fiber', '@react-three/drei']`
+- Three.js + R3F + drei + postprocessing: all loaded via `next/dynamic` + `{ ssr: false }`
+- First screen contains zero Three.js code
+- Three.js isolated as vendor chunk, loaded only on pages with 3D
+- `next.config.ts` configures `transpilePackages: ['three', '@react-three/fiber', '@react-three/drei']`
 
 ---
 
-## 9. 响应式断点
+## 9. Responsive Breakpoints
 
-### 9.1 断点定义 (Tailwind 默认)
+### 9.1 Breakpoint Definitions (Tailwind defaults)
 
-| 名称 | 最小宽度 | 使用方式 |
-|------|---------|---------|
+| Name | Min Width | Usage |
+|------|-----------|-------|
 | sm | 640px | `sm:` prefix |
 | md | 768px | `md:` prefix |
 | lg | 1024px | `lg:` prefix |
 | xl | 1280px | `xl:` prefix |
 
-### 9.2 3D 降级策略
+### 9.2 3D Degradation Strategy
 
-| 设备 | 断点 | 后处理 | 粒子数 | 太阳系 | DPR | 降级检测 |
-|------|------|--------|--------|--------|-----|---------|
-| 移动端 | < 768px | 关闭 Bloom/Vignette | 500 (StarField) / 200 (ParticleBackground) | 完整 3D (受限于 DPR) | [1, 1.5] | `window.innerWidth < 768` |
-| 平板 | 768-1024px | 保留 Bloom (intensity 0.3) | 1200 | 完整 3D | [1, 1.5] | - |
-| 桌面 | > 1024px | 完整 Bloom + Vignette | 3000 (SolarSystem) / 1200 (StarField) | 完整 3D | [1, 2] | - |
+| Device | Breakpoint | Post-Processing | Particles | Solar System | DPR | Detection |
+|--------|-----------|-----------------|-----------|-------------|-----|-----------|
+| Mobile | < 768px | Bloom + Vignette off | 500 (StarField) / 200 (ParticleBg) | Full 3D (DPR-limited) | [1, 1.5] | `window.innerWidth < 768` |
+| Tablet | 768-1024px | Bloom on, intensity 0.3 | 1200 | Full 3D | [1, 1.5] | - |
+| Desktop | > 1024px | Full Bloom + Vignette | 3000 (Solar) / 1200 (StarField) | Full 3D | [1, 2] | - |
 
-### 9.3 布局策略
+### 9.3 Layout Strategy
 
-| 页面 | 移动端 | 平板 | 桌面 |
-|------|--------|------|------|
-| 首页 | 单列 Hero | 单列 Hero | 单列 Hero |
-| 项目列表 | 1 列卡片 | 2 列卡片 | 3 列卡片 |
-| 项目详情 | 单列全宽 | 单列全宽 | 内容 + 侧边装饰 |
-| 关于 | 单列 | 单列 | 单列 max-w-3xl |
-| 联系 | 单列居中 | 单列居中 | 单列居中 max-w-lg |
+| Page | Mobile | Tablet | Desktop |
+|------|--------|--------|---------|
+| Home | Single-column Hero | Single-column Hero | Single-column Hero |
+| Project List | 1-column cards | 2-column cards | 3-column cards |
+| Project Detail | Single-column full-width | Single-column full-width | Content + side decoration |
+| About | Single column | Single column | Single column max-w-3xl |
+| Contact | Single column centered | Single column centered | Single column centered max-w-lg |
 
-### 9.4 组件级响应式
+### 9.4 Component-Level Responsive
 
-- **Navbar**: `hidden md:flex` 桌面导航 / `md:hidden` 汉堡菜单
-- **ArchitectureDiagram**: `hidden md:flex` 水平 / `md:hidden flex` 垂直
-- **FloatingCard3D**: perspective 800px hover 效果仅桌面端 (触摸设备不触发)
+- **Navbar**: `hidden md:flex` desktop nav / `md:hidden` hamburger menu
+- **ArchitectureDiagram**: `hidden md:flex` horizontal / `md:hidden flex` vertical
+- **FloatingCard3D**: perspective 800px hover effect desktop-only (touch devices skip)
 - **SkillRadar3D**: `min-h-[400px] sm:min-h-[500px]`
 - **TechSphere**: `min-h-[400px] sm:min-h-[500px]`
 
-### 9.5 低端设备检测 (计划)
+### 9.5 Low-End Device Detection (Planned)
 
-- `navigator.hardwareConcurrency < 4` -> 降级到移动端配置
-- WebGL 支持失败 -> 回退到 CSS 动画背景
-- `useMemo` 缓存降级判断
-
----
-
-## 10. SEO / 可访问性
-
-### 10.1 Metadata 策略
-
-| 页面 | Title | Description | 生成方式 |
-|------|-------|-------------|---------|
-| 根布局 | "Hang's Portfolio" | "全栈开发 · AI应用 · 大健康行业 - 探索项目宇宙" | `export const metadata` |
-| 首页 | "Hang's Portfolio - 全栈开发 · AI应用 · 大健康" | "探索Hang的项目宇宙..." | `export const metadata` |
-| 项目详情 | "{project.name} \| Portfolio" | project.description | `generateMetadata()` |
-
-### 10.2 语言与字体
-
-- `<html lang="zh-CN">` 中文语言标记
-- Geist Sans + Geist Mono Google Fonts
-
-### 10.3 语义化 HTML 规范
-
-| 元素 | 使用 |
-|------|------|
-| `<header>` | Navbar 使用 `<header>` 包裹 |
-| `<main>` | 根布局 `<main className="flex-1 pt-16">` |
-| `<nav>` | Navbar 内 `<nav role="navigation" aria-label="Main navigation">` |
-| `<footer>` | Footer 组件使用 `<footer>` |
-| `<section>` | 各内容区块使用 section |
-| `<article>` | 项目卡片内容 |
-
-### 10.4 ARIA 标签
-
-| 元素 | ARIA |
-|------|------|
-| 所有 3D Canvas 容器 | `aria-hidden="true"` |
-| Navbar 导航 | `role="navigation"`, `aria-label="Main navigation"` |
-| 移动菜单按钮 | `aria-expanded`, `aria-label="Toggle navigation menu"` |
-| Lightbox 关闭按钮 | `aria-label="Close lightbox"` |
-| 前后翻页按钮 | `aria-label="Previous/Next image"` |
-| 外部链接 | `rel="noopener noreferrer"` |
-| 装饰性 SVG | `aria-hidden="true"` |
-
-### 10.5 可访问性目标
-
-- 颜色对比度: 文字与背景至少 4.5:1 (WCAG AA)
-- 焦点指示器: Tailwind 默认 focus ring
-- 键盘导航: Tab 可达所有交互元素
-- 跳过导航: 计划添加 "Skip to main content"
-- 图片 alt: 所有装饰性图片 `alt=""`，信息性图片提供描述
-
-### 10.6 SEO 计划 (未实施)
-
-- **Open Graph**: 计划添加 og:title, og:description, og:image, og:url
-- **Twitter Card**: 计划添加 twitter:card, twitter:title 等
-- **sitemap.xml**: 计划使用 next-sitemap 自动生成
-- **robots.txt**: 计划允许所有爬虫
-- **JSON-LD**: 计划添加 WebSite + Person schema
+- `navigator.hardwareConcurrency < 4` -> degrade to mobile config
+- WebGL support failure -> fallback to CSS animated background
+- `useMemo` cache degradation decision
 
 ---
 
-## 11. 部署配置
+## 10. SEO / Accessibility Specification
 
-### 11.1 Vercel 部署
+### 10.1 Metadata Strategy
 
-| 配置项 | 值 |
-|--------|-----|
-| 平台 | Vercel |
-| 构建命令 | `next build` |
-| 输出目录 | `.next` (默认) |
-| Node.js 版本 | Vercel 默认 |
-| 域名 | show.vercel.app (计划) |
-| 环境变量 | 无需 (纯静态内容站点) |
-| 部署触发 | GitHub 仓库 push 自动部署 |
+| Page | Title | Description | Generation |
+|------|-------|-------------|------------|
+| Root layout | "Hang's Portfolio" | "全栈开发 · AI应用 · 大健康行业 - 探索项目宇宙" | `export const metadata` |
+| Home | "Hang's Portfolio - 全栈开发 · AI应用 · 大健康" | "探索Hang的项目宇宙..." | `export const metadata` |
+| Project Detail | "{project.name} \| Portfolio" | project.description | `generateMetadata()` |
 
-### 11.2 CDN 缓存策略 (计划)
+### 10.2 Language and Fonts
 
-| 资源类型 | 策略 |
+- `<html lang="zh-CN">` Chinese language tag
+- Geist Sans + Geist Mono via `next/font/google`
+
+### 10.3 Semantic HTML
+
+| Element | Usage |
+|---------|-------|
+| `<header>` | Navbar wrapped in `<header>` |
+| `<main>` | Root layout `<main className="flex-1 pt-16">` |
+| `<nav>` | Navbar `<nav role="navigation" aria-label="Main navigation">` |
+| `<footer>` | Footer component uses `<footer>` |
+| `<section>` | Content sections |
+| `<article>` | Project card content |
+
+### 10.4 ARIA Labels
+
+| Element | ARIA |
 |---------|------|
-| 静态资源 (JS/CSS/images) | immutable 缓存 |
-| HTML 页面 | 1 小时缓存 |
-| 3D 模型 (.glb/.gltf) | immutable 缓存 |
+| All 3D Canvas containers | `aria-hidden="true"` |
+| Navbar navigation | `role="navigation"`, `aria-label="Main navigation"` |
+| Mobile menu button | `aria-expanded`, `aria-label="Toggle navigation menu"` |
+| Lightbox close button | `aria-label="Close lightbox"` |
+| Prev/Next buttons | `aria-label="Previous/Next image"` |
+| External links | `rel="noopener noreferrer"` |
+| Decorative SVGs | `aria-hidden="true"` |
 
-### 11.3 性能监控 (计划)
+### 10.5 Accessibility Targets
+
+- Color contrast: text vs background >= 4.5:1 (WCAG AA)
+- Focus indicators: Tailwind default focus ring
+- Keyboard navigation: Tab reaches all interactive elements
+- Skip navigation: planned "Skip to main content" link (not yet implemented)
+- Image alt: decorative images `alt=""`, informational images have descriptive alt
+
+### 10.6 SEO Plan (Not Yet Implemented)
+
+- **Open Graph**: planned og:title, og:description, og:image, og:url
+- **Twitter Card**: planned twitter:card, twitter:title, etc.
+- **sitemap.xml**: planned via next-sitemap auto-generation
+- **robots.txt**: planned to allow all crawlers
+- **JSON-LD**: planned WebSite + Person schema
+
+---
+
+## 11. Vercel Deploy Configuration
+
+### 11.1 Deployment Settings
+
+| Config | Value |
+|--------|-------|
+| Platform | Vercel |
+| Build command | `next build` |
+| Output directory | `.next` (default) |
+| Node.js version | Vercel default |
+| Domain | show.vercel.app (planned) |
+| Environment variables | None required (pure static content site) |
+| Deploy trigger | GitHub repo push -> auto deploy |
+
+### 11.2 CDN Cache Strategy (Planned)
+
+| Resource Type | Strategy |
+|--------------|----------|
+| Static assets (JS/CSS/images) | immutable cache |
+| HTML pages | 1-hour cache |
+| 3D models (.glb/.gltf) | immutable cache |
+
+### 11.3 Performance Monitoring (Planned)
 
 - Vercel Analytics + Web Vitals
-- 构建后 `next-sitemap` 生成 sitemap.xml
+- Post-build `next-sitemap` generates sitemap.xml
 
-### 11.4 next.config.ts 当前配置
+### 11.4 Current `next.config.ts`
 
 ```typescript
 const nextConfig: NextConfig = {
@@ -848,7 +888,7 @@ const nextConfig: NextConfig = {
 };
 ```
 
-### 11.5 TypeScript 配置
+### 11.5 TypeScript Configuration
 
 ```jsonc
 {
@@ -868,20 +908,20 @@ const nextConfig: NextConfig = {
 
 ---
 
-## 附录 A: 待实施事项 (源自 PRD 但尚未完成)
+## Appendix A: Pending Items (From PRD, Not Yet Implemented)
 
-| 编号 | 事项 | 优先级 | 说明 |
-|------|------|--------|------|
-| A1 | MDX 内容系统 | P1 | @next/mdx + @mdx-js/loader，思路链 MDX 文件 |
-| A2 | GSAP 集成 | P2 | PRD 列出但未安装，当前 Framer Motion 覆盖 |
-| A3 | next-sitemap | P1 | sitemap.xml + robots.txt 自动生成 |
-| A4 | Open Graph / Twitter Card | P1 | 社交分享元标签 |
-| A5 | JSON-LD 结构化数据 | P2 | WebSite + Person + SoftwareSourceCode schema |
-| A6 | 联系表单 | P2 | PRD 提及但当前仅 GitHub + Email 卡片 |
-| A7 | 鼠标跟随粒子 | P3 | PRD F6 提及，仅桌面端 |
-| A8 | 滚动指示 3D 彗星 | P3 | PRD F6 提及 |
-| A9 | 低端设备自动检测 | P2 | hardwareConcurrency < 4 降级 |
-| A10 | WebGL 失败 CSS 回退 | P1 | ErrorBoundary + CSS 渐变背景 |
-| A11 | "Skip to main content" | P2 | 可访问性跳过链接 |
-| A12 | 首页精选项目展示 | P0 | 当前为占位内容 |
-| A13 | PWA manifest | P3 | PRD 可选 |
+| ID | Item | Priority | Notes |
+|----|------|----------|-------|
+| A1 | MDX content system | P1 | @next/mdx + @mdx-js/loader; thought-chain MDX files |
+| A2 | GSAP integration | P2 | Listed in PRD but not installed; Framer Motion covers current needs |
+| A3 | next-sitemap | P1 | sitemap.xml + robots.txt auto-generation |
+| A4 | Open Graph / Twitter Card | P1 | Social share meta tags |
+| A5 | JSON-LD structured data | P2 | WebSite + Person + SoftwareSourceCode schema |
+| A6 | Contact form | P2 | PRD mentions but current implementation is GitHub + Email cards only |
+| A7 | Mouse-follow particles | P3 | PRD F6 mentions; desktop-only |
+| A8 | Scroll indicator 3D comet | P3 | PRD F6 mentions |
+| A9 | Low-end device auto-detection | P2 | hardwareConcurrency < 4 degradation |
+| A10 | WebGL failure CSS fallback | P1 | ErrorBoundary + CSS gradient background |
+| A11 | "Skip to main content" | P2 | Accessibility skip link |
+| A12 | Home page featured projects display | P0 | Currently placeholder content |
+| A13 | PWA manifest | P3 | PRD optional |
