@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import Navbar from '@/components/ui/Navbar';
-import Footer from '@/components/ui/Footer';
 import AboutContent from '@/components/about/AboutContent';
 
 export const metadata: Metadata = {
@@ -11,13 +9,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white">
-      <Navbar />
-
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <AboutContent />
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }

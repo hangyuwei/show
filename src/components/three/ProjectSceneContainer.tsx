@@ -91,6 +91,7 @@ export default function ProjectSceneContainer({ sceneType }: SceneContainerProps
   if (namedLoader) {
     const SceneComponent = dynamic(namedLoader, {
       loading: () => <LoadingFallback />,
+      ssr: false,
     });
 
     return (
@@ -126,6 +127,7 @@ export default function ProjectSceneContainer({ sceneType }: SceneContainerProps
 
   const GenericComponent = dynamic(genericLoader, {
     loading: () => <LoadingFallback />,
+    ssr: false,
   });
 
   return (

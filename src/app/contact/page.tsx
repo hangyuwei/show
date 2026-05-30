@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import Navbar from '@/components/ui/Navbar';
-import Footer from '@/components/ui/Footer';
 import ContactContent from '@/components/contact/ContactContent';
 
 export const metadata: Metadata = {
@@ -11,11 +9,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <Navbar />
-
       <ContactContent />
-
-      <Footer />
     </div>
   );
 }

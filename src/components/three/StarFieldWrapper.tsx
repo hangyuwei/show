@@ -1,7 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import StarField from '@/components/three/StarField';
+
+const StarField = dynamic(() => import('@/components/three/StarField'), {
+  ssr: false,
+});
 
 export default function StarFieldWrapper() {
   const pathname = usePathname();
