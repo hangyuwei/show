@@ -41,16 +41,44 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col overflow-x-hidden">
         <StarFieldWrapper />
         <Navbar />
-        <main className="flex-1 pt-14 sm:pt-16 md:pt-16">
+        <main className="flex-1 pt-14 sm:pt-16 md:pt-18">
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
-        {/* Scroll-triggered reveal utility — applied globally */}
+        {/* Scroll-triggered reveal utility — applied globally, respects reduced-motion */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 if (typeof IntersectionObserver === 'undefined') return;
+                var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                /* If user prefers reduced motion, reveal everything immediately */
+                if (prefersReduced) {
+                  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+                    el.setAttribute('data-revealed', '');
+                  });
+                  /* Also handle dynamically added elements in reduced-motion mode */
+                  var reducedMutObs = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(m) {
+                      m.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) {
+                          if (node.hasAttribute && node.hasAttribute('data-reveal')) {
+                            node.setAttribute('data-revealed', '');
+                          }
+                          if (node.querySelectorAll) {
+                            node.querySelectorAll('[data-reveal]').forEach(function(el) {
+                              el.setAttribute('data-revealed', '');
+                            });
+                          }
+                        }
+                      });
+                    });
+                  });
+                  reducedMutObs.observe(document.body, { childList: true, subtree: true });
+                  return;
+                }
+
                 var obs = new IntersectionObserver(function(entries) {
                   entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
@@ -58,7 +86,7 @@ export default function RootLayout({
                       obs.unobserve(entry.target);
                     }
                   });
-                }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+                }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
                 document.querySelectorAll('[data-reveal]').forEach(function(el) {
                   obs.observe(el);
                 });

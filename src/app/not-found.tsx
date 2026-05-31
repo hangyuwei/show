@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { motion, type Variants, type Transition } from 'framer-motion';
 
 const EASE_OUT_SMOOTH: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const EASE_SPRING_OUT: [number, number, number, number] = [0.18, 1, 0.25, 1];
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.15,
+      staggerChildren: 0.08,
+      delayChildren: 0.12,
     },
   },
 };
@@ -23,26 +24,27 @@ const itemVariants: Variants = {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: EASE_OUT_SMOOTH } as Transition,
+    transition: { duration: 0.55, ease: EASE_SPRING_OUT } as Transition,
   },
 };
 
-/* ── Glitch digit with periodic burst animation ── */
-function GlitchDigit({ digit }: { digit: string }) {
+/* ── Glitch digit with chromatic aberration burst ── */
+function GlitchDigit({ digit, delay = 0 }: { digit: string; delay?: number }) {
   return (
     <motion.span
       className="inline-block"
       animate={{
         textShadow: [
-          '2px 0 #2196ff, -2px 0 #8b5cf6',
-          '-1px 0 #2196ff, 1px 0 #8b5cf6',
-          '0 0 0 transparent',
-          '1px 0 #2196ff, -1px 0 #8b5cf6',
-          '0 0 0 transparent',
+          '2px 0 rgba(45,140,240,0.5), -2px 0 rgba(139,92,246,0.5), 0 0 20px rgba(139,92,246,0.15)',
+          '-1px 0 rgba(45,140,240,0.4), 1px 0 rgba(139,92,246,0.4), 0 0 8px rgba(45,140,240,0.1)',
+          '0 0 0 transparent, 0 0 0 transparent, 0 0 30px rgba(139,92,246,0.08)',
+          '1px 0 rgba(45,140,240,0.4), -1px 0 rgba(139,92,246,0.4), 0 0 12px rgba(45,140,240,0.1)',
+          '0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent',
         ],
       }}
       transition={{
-        duration: 4,
+        duration: 4.5,
+        delay,
         repeat: Infinity,
         ease: 'linear',
       }}
@@ -52,19 +54,21 @@ function GlitchDigit({ digit }: { digit: string }) {
   );
 }
 
-/* ── Scanning line with subtle glow trail ── */
-function ScanningLine() {
+/* ── Scanning line with wider glow trail ── */
+function ScanningLine({ reduced }: { reduced: boolean }) {
+  if (reduced) return null;
   return (
     <motion.div
       className="absolute left-0 right-0 h-px pointer-events-none"
       style={{
         background:
-          'linear-gradient(90deg, transparent 0%, rgba(33,150,255,0.3) 20%, rgba(139,92,246,0.5) 50%, rgba(33,150,255,0.3) 80%, transparent 100%)',
-        boxShadow: '0 0 16px 3px rgba(33,150,255,0.1), 0 0 40px 6px rgba(139,92,246,0.04)',
+          'linear-gradient(90deg, transparent 0%, rgba(45,140,240,0.25) 15%, rgba(139,92,246,0.45) 40%, rgba(139,92,246,0.5) 50%, rgba(20,184,166,0.35) 65%, rgba(45,140,240,0.2) 85%, transparent 100%)',
+        boxShadow:
+          '0 0 12px 2px rgba(45,140,240,0.12), 0 0 32px 4px rgba(139,92,246,0.06), 0 0 60px 8px rgba(20,184,166,0.03)',
       }}
       animate={{ top: ['0%', '100%'] }}
       transition={{
-        duration: 5,
+        duration: 6,
         repeat: Infinity,
         ease: 'linear',
       }}
@@ -80,6 +84,7 @@ function FloatingOrb({
   color,
   delay,
   duration = 5,
+  reduced,
 }: {
   x: string;
   y: string;
@@ -87,7 +92,24 @@ function FloatingOrb({
   color: string;
   delay: number;
   duration?: number;
+  reduced: boolean;
 }) {
+  if (reduced) {
+    return (
+      <div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          left: x,
+          top: y,
+          width: size,
+          height: size,
+          background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+          filter: 'blur(40px)',
+          opacity: 0.15,
+        }}
+      />
+    );
+  }
   return (
     <motion.div
       className="absolute rounded-full pointer-events-none"
@@ -100,9 +122,9 @@ function FloatingOrb({
         filter: 'blur(40px)',
       }}
       animate={{
-        y: [0, -20, 0],
-        opacity: [0.12, 0.35, 0.12],
-        scale: [1, 1.1, 1],
+        y: [0, -24, 0],
+        opacity: [0.1, 0.3, 0.1],
+        scale: [1, 1.12, 1],
       }}
       transition={{
         duration,
@@ -115,9 +137,9 @@ function FloatingOrb({
 }
 
 /* ── Star particles with depth-based parallax drift ── */
-function StarParticles() {
+function StarParticles({ reduced }: { reduced: boolean }) {
   const starsRef = useRef(
-    Array.from({ length: 18 }, (_, i) => ({
+    Array.from({ length: 22 }, (_, i) => ({
       id: i,
       x: 5 + Math.random() * 90,
       y: 5 + Math.random() * 90,
@@ -128,6 +150,8 @@ function StarParticles() {
       opacity: 0.1 + Math.random() * 0.2,
     })),
   );
+
+  if (reduced) return null;
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -141,7 +165,7 @@ function StarParticles() {
             left: `${s.x}%`,
             top: `${s.y}%`,
             background: 'rgba(255,255,255,0.8)',
-            boxShadow: `0 0 ${s.size * 2}px rgba(255,255,255,0.15)`,
+            boxShadow: `0 0 ${s.size * 2}px rgba(255,255,255,0.2), 0 0 ${s.size * 4}px rgba(139,92,246,0.05)`,
           }}
           animate={{
             y: [-s.drift, s.drift, -s.drift],
@@ -181,7 +205,7 @@ function CoordinateReadout() {
 
   return (
     <motion.p
-      className="mt-8 sm:mt-10 text-[10px] sm:text-xs text-white/15 font-mono tracking-wider"
+      className="mt-6 sm:mt-8 text-[10px] sm:text-xs text-white/[0.12] font-mono tracking-wider"
       variants={itemVariants}
     >
       COORDINATES &middot; X:{coords.x} Y:{coords.y} Z:{coords.z}
@@ -190,9 +214,9 @@ function CoordinateReadout() {
 }
 
 /* ── Constellation line pattern for extra depth ── */
-function ConstellationLines() {
+function ConstellationLines({ reduced }: { reduced: boolean }) {
   const lines = useRef(
-    Array.from({ length: 5 }, (_, i) => ({
+    Array.from({ length: 6 }, (_, i) => ({
       id: i,
       x1: 10 + Math.random() * 80,
       y1: 10 + Math.random() * 80,
@@ -202,11 +226,13 @@ function ConstellationLines() {
     })),
   );
 
+  if (reduced) return null;
+
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none"
       aria-hidden="true"
-      style={{ opacity: 0.06 }}
+      style={{ opacity: 0.05 }}
     >
       {lines.current.map((l) => (
         <motion.line
@@ -215,11 +241,11 @@ function ConstellationLines() {
           y1={`${l.y1}%`}
           x2={`${l.x2}%`}
           y2={`${l.y2}%`}
-          stroke="white"
+          stroke="url(#constellation-gradient)"
           strokeWidth={0.5}
           strokeDasharray="4 8"
           initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: [0, 0.6, 0.3] }}
+          animate={{ pathLength: 1, opacity: [0, 0.7, 0.3] }}
           transition={{
             duration: 3,
             delay: l.delay + 0.8,
@@ -227,13 +253,82 @@ function ConstellationLines() {
           }}
         />
       ))}
+      <defs>
+        <linearGradient id="constellation-gradient">
+          <stop offset="0%" stopColor="rgba(45,140,240,0.6)" />
+          <stop offset="50%" stopColor="rgba(139,92,246,0.8)" />
+          <stop offset="100%" stopColor="rgba(20,184,166,0.6)" />
+        </linearGradient>
+      </defs>
     </svg>
   );
 }
 
-export default function NotFound() {
+/* ── Mouse parallax hook ── */
+function useMouseParallax(intensity: number = 0.02) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      setOffset({
+        x: (e.clientX - cx) * intensity,
+        y: (e.clientY - cy) * intensity,
+      });
+    };
+    window.addEventListener('mousemove', handler, { passive: true });
+    return () => window.removeEventListener('mousemove', handler);
+  }, [intensity]);
+
+  return offset;
+}
+
+/* ── Radial glow behind 404 text ── */
+function BackgroundGlow({ reduced }: { reduced: boolean }) {
+  const parallax = useMouseParallax(0.015);
+
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[80vh] bg-bg-primary overflow-hidden px-4 sm:px-6">
+    <motion.div
+      className="absolute inset-0 pointer-events-none"
+      style={{ x: parallax.x, y: parallax.y }}
+    >
+      {/* Primary purple-blue glow */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] rounded-full opacity-[0.07]"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(139,92,246,0.3) 0%, rgba(45,140,240,0.15) 35%, transparent 65%)',
+          filter: 'blur(40px)',
+        }}
+      />
+      {/* Secondary teal glow offset */}
+      <div
+        className="absolute top-[40%] left-[55%] w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] rounded-full opacity-[0.04]"
+        style={{
+          background: 'radial-gradient(circle, rgba(20,184,166,0.25) 0%, transparent 60%)',
+          filter: 'blur(50px)',
+        }}
+      />
+    </motion.div>
+  );
+}
+
+export default function NotFound() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const reduced = prefersReducedMotion;
+
+  return (
+    <div className="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[80vh] md:min-h-[85vh] bg-bg-primary overflow-hidden px-4 sm:px-6">
       {/* Dot-grid background pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
@@ -246,23 +341,26 @@ export default function NotFound() {
         aria-hidden="true"
       />
 
-      {/* Constellation lines for depth */}
-      <ConstellationLines />
+      {/* Radial background glow with parallax */}
+      <BackgroundGlow reduced={reduced} />
 
-      {/* Ambient orbs — positioned for mobile-first */}
-      <FloatingOrb x="10%" y="15%" size={80} color="rgba(33,150,255,0.12)" delay={0} />
-      <FloatingOrb x="80%" y="20%" size={60} color="rgba(139,92,246,0.12)" delay={1} />
-      <FloatingOrb x="25%" y="75%" size={70} color="rgba(20,184,166,0.10)" delay={0.5} />
-      <FloatingOrb x="70%" y="70%" size={90} color="rgba(33,150,255,0.08)" delay={1.5} />
-      <FloatingOrb x="50%" y="40%" size={100} color="rgba(139,92,246,0.06)" delay={2} duration={7} />
-      <FloatingOrb x="85%" y="55%" size={50} color="rgba(20,184,166,0.08)" delay={0.8} duration={6} />
+      {/* Constellation lines for depth */}
+      <ConstellationLines reduced={reduced} />
+
+      {/* Ambient orbs — positioned for mobile-first, using CSS custom property colors */}
+      <FloatingOrb x="10%" y="15%" size={80} color="rgba(45,140,240,0.12)" delay={0} reduced={reduced} />
+      <FloatingOrb x="80%" y="20%" size={60} color="rgba(139,92,246,0.12)" delay={1} reduced={reduced} />
+      <FloatingOrb x="25%" y="75%" size={70} color="rgba(20,184,166,0.10)" delay={0.5} reduced={reduced} />
+      <FloatingOrb x="70%" y="70%" size={90} color="rgba(45,140,240,0.08)" delay={1.5} reduced={reduced} />
+      <FloatingOrb x="50%" y="40%" size={100} color="rgba(139,92,246,0.06)" delay={2} duration={7} reduced={reduced} />
+      <FloatingOrb x="85%" y="55%" size={50} color="rgba(20,184,166,0.08)" delay={0.8} duration={6} reduced={reduced} />
 
       {/* Star particles */}
-      <StarParticles />
+      <StarParticles reduced={reduced} />
 
       {/* Scanning line */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <ScanningLine />
+        <ScanningLine reduced={reduced} />
       </div>
 
       {/* Content */}
@@ -272,31 +370,32 @@ export default function NotFound() {
         initial="hidden"
         animate="visible"
       >
-        {/* 404 Number */}
+        {/* 404 Number — enhanced glow with multi-layer drop-shadow */}
         <motion.div
-          className="text-[6rem] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] font-bold leading-none tracking-tighter select-none"
+          className="text-[5.5rem] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] font-bold leading-none tracking-tighter select-none"
           style={{
-            background: 'linear-gradient(135deg, #2196ff 0%, #8b5cf6 40%, #06b6d4 70%, #2196ff 100%)',
+            background: 'linear-gradient(135deg, #60a5fa 0%, #8b5cf6 30%, #c084fc 50%, #14b8a6 75%, #60a5fa 100%)',
             backgroundSize: '200% 200%',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            animation: 'gradient-shift 6s ease infinite',
-            filter: 'drop-shadow(0 0 40px rgba(33,150,255,0.15))',
+            animation: !reduced ? 'gradient-shift 6s ease infinite' : undefined,
+            filter: 'drop-shadow(0 0 30px rgba(139,92,246,0.2)) drop-shadow(0 0 60px rgba(45,140,240,0.08))',
           }}
           variants={itemVariants}
         >
-          <GlitchDigit digit="4" />
-          <GlitchDigit digit="0" />
-          <GlitchDigit digit="4" />
+          <GlitchDigit digit="4" delay={0} />
+          <GlitchDigit digit="0" delay={0.3} />
+          <GlitchDigit digit="4" delay={0.6} />
         </motion.div>
 
-        {/* Decorative line */}
+        {/* Decorative line — wider with richer gradient */}
         <motion.div
-          className="mx-auto mt-4 mb-5 sm:mb-6 h-px w-24 sm:w-32"
+          className="mx-auto mt-4 mb-5 sm:mb-6 h-px w-28 sm:w-36"
           style={{
             background:
-              'linear-gradient(90deg, transparent 0%, rgba(33,150,255,0.5) 30%, rgba(139,92,246,0.5) 50%, rgba(20,184,166,0.5) 70%, transparent 100%)',
+              'linear-gradient(90deg, transparent 0%, rgba(45,140,240,0.4) 15%, rgba(139,92,246,0.5) 35%, rgba(20,184,166,0.5) 65%, rgba(45,140,240,0.4) 85%, transparent 100%)',
+            boxShadow: '0 0 12px rgba(139,92,246,0.15), 0 0 24px rgba(45,140,240,0.06)',
           }}
           variants={itemVariants}
         />
@@ -320,24 +419,31 @@ export default function NotFound() {
           Let&apos;s navigate you back to known space.
         </motion.p>
 
-        {/* Actions */}
+        {/* Actions — enhanced CTA buttons with glow */}
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-3"
           variants={itemVariants}
         >
           <Link
             href="/"
-            className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
               bg-glow/20 text-white border border-glow/30
               hover:bg-glow/30 hover:border-glow/50 hover:scale-[1.03] active:scale-[0.98]
               transition-all duration-300
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-glow/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             style={{
-              boxShadow: '0 0 20px rgba(33, 150, 255, 0.10), 0 2px 8px rgba(0,0,0,0.2)',
+              boxShadow:
+                '0 0 20px rgba(45,140,240,0.10), 0 0 40px rgba(139,92,246,0.05), 0 2px 8px rgba(0,0,0,0.2)',
             }}
           >
+            {/* Animated glow background on hover */}
+            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{
+                background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.08) 0%, transparent 70%)',
+              }}
+            />
             <svg
-              className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5"
+              className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5 relative z-10"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -349,12 +455,12 @@ export default function NotFound() {
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
-            Return to Home
+            <span className="relative z-10">Return to Home</span>
           </Link>
 
           <Link
             href="/projects"
-            className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
               text-text-secondary border border-white/10
               hover:text-white hover:border-white/20 hover:bg-white/5 hover:scale-[1.03] active:scale-[0.98]
               transition-all duration-300
@@ -382,20 +488,20 @@ export default function NotFound() {
 
         {/* Error code hint */}
         <motion.p
-          className="mt-3 text-[10px] sm:text-xs text-white/15 font-mono"
+          className="mt-3 text-[10px] sm:text-xs text-white/[0.12] font-mono"
           variants={itemVariants}
         >
           ERROR_CODE: 404 &middot; PAGE_NOT_FOUND
         </motion.p>
       </motion.div>
 
-      {/* Top and bottom gradient fades */}
+      {/* Top and bottom gradient fades — taller for smoother blend */}
       <div
-        className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-bg-primary to-transparent pointer-events-none"
+        className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-bg-primary to-transparent pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-primary to-transparent pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-bg-primary to-transparent pointer-events-none"
         aria-hidden="true"
       />
     </div>

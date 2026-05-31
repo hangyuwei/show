@@ -25,18 +25,27 @@
   --foreground-bright: #f6f8ff;
   --foreground-dim: #b0b8d0;
 
+  /* ── Premium luminescent highlights — for accent glow reflections ── */
+  --foreground-glow-blue: rgba(96, 165, 250, 0.85);
+  --foreground-glow-purple: rgba(167, 139, 250, 0.80);
+  --foreground-glow-teal: rgba(45, 212, 191, 0.80);
+
   /* ── Intermediate surface tones for layering depth ── */
   --surface-mid: rgba(255, 255, 255, 0.055);
   --surface-frost: rgba(140, 160, 220, 0.04);
   --surface-warm-frost: rgba(200, 180, 140, 0.025);
+  --surface-pearl: rgba(200, 210, 240, 0.03);
+  --surface-aurora: rgba(120, 140, 220, 0.025);
 
-  /* ── Accent system — blue-to-cyan gradient anchor ── */
+  /* ── Accent system — blue-to-cyan gradient anchor with richer saturation ── */
   --accent: #2d8cf0;
   --accent-end: #00e5ff;
   --accent-dim: #1552a3;
   --accent-muted: #1a6dd4;
   --accent-vivid: #4da6ff;
   --accent-soft: rgba(45, 140, 240, 0.15);
+  --accent-luminous: #7cb8ff;
+  --accent-deep: #0d3b7a;
 
   /* ── Purple / violet accent ── */
   --accent-purple: #8b5cf6;
@@ -73,7 +82,7 @@
   --muted: #7c82a6;
   --muted-light: #9ca3c4;
 
-  /* ── Type scale ── */
+  /* ── Type scale — refined with optical sizing for Geist ── */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -86,27 +95,41 @@
   --text-6xl: 3.75rem;
   --text-7xl: 4.5rem;
   --text-8xl: 6rem;
+  --text-9xl: 8rem;
 
-  /* ── Line heights ── */
+  /* ── Font weight tokens — for explicit weight control ── */
+  --weight-caption: 500;
+  --weight-body: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+  --weight-black: 900;
+
+  /* ── Line heights — tightened for headings, generous for body ── */
   --leading-xs: 1.5;
   --leading-sm: 1.5;
   --leading-base: 1.6;
   --leading-lg: 1.6;
   --leading-xl: 1.5;
   --leading-2xl: 1.4;
-  --leading-3xl: 1.35;
-  --leading-4xl: 1.3;
-  --leading-5xl: 1.25;
-  --leading-6xl: 1.15;
-  --leading-7xl: 1.1;
-  --leading-8xl: 1.05;
+  --leading-3xl: 1.3;
+  --leading-4xl: 1.2;
+  --leading-5xl: 1.15;
+  --leading-6xl: 1.1;
+  --leading-7xl: 1.05;
+  --leading-8xl: 1.0;
+  --leading-9xl: 0.95;
 
-  /* ── Letter spacing ── */
-  --tracking-heading: 0.025em;
+  /* ── Letter spacing — calibrated for Geist's geometric construction ── */
+  --tracking-caption: 0.08em;
+  --tracking-label: 0.06em;
+  --tracking-heading: 0.015em;
   --tracking-display: 0.04em;
   --tracking-tight: -0.01em;
   --tracking-tighter: -0.025em;
   --tracking-mega: -0.04em;
+  --tracking-ultra: -0.05em;
 
   /* ── Spacing ── */
   --paragraph-spacing: 1.2em;
@@ -123,7 +146,7 @@
   --radius-full: 9999px;
 
   /* ════════════════════════════════════════════════════════════════
-     GLASS-MORPHISM — Premium frosted glass system
+     GLASS-MORPHISM — Premium frosted glass system (v4)
      ════════════════════════════════════════════════════════════════ */
   --glass-bg: rgba(8, 14, 40, 0.55);
   --glass-bg-hover: rgba(10, 18, 55, 0.70);
@@ -140,12 +163,29 @@
   --glass-shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.3),
     0 2px 8px rgba(0, 0, 0, 0.15);
 
-  /* Premium glass — 5-layer depth shadow with ambient color bleed */
+  /* Premium frosted glass — warmer tint, higher contrast inner edge */
+  --glass-frost-bg: rgba(12, 18, 50, 0.52);
+  --glass-frost-bg-hover: rgba(16, 24, 62, 0.65);
+  --glass-frost-border: rgba(200, 210, 240, 0.09);
+  --glass-frost-border-hover: rgba(200, 210, 240, 0.18);
+
+  /* Aurora glass — colored ambient reflection in glass bg */
+  --glass-aurora-bg: rgba(10, 16, 46, 0.48);
+  --glass-aurora-bg-hover: rgba(14, 22, 58, 0.62);
+  --glass-aurora-border: rgba(140, 160, 255, 0.10);
+  --glass-aurora-border-hover: rgba(140, 160, 255, 0.22);
+  --glass-aurora-inner-glow: inset 0 1px 0 rgba(180, 200, 255, 0.08),
+    inset 0 0 30px rgba(96, 165, 250, 0.03),
+    inset 0 0 60px rgba(139, 92, 246, 0.015);
+
+  /* Premium glass — 5-layer depth shadow with ambient color bleed (v4 enhanced) */
   --glass-shadow-premium: 0 2px 4px rgba(0, 0, 0, 0.15),
     0 4px 12px rgba(0, 0, 0, 0.12),
     0 8px 28px rgba(0, 0, 0, 0.18),
     0 16px 48px rgba(0, 0, 0, 0.10),
     0 32px 80px rgba(0, 0, 0, 0.06),
+    0 0 120px -40px rgba(96, 165, 250, 0.04),
+    0 0 160px -60px rgba(139, 92, 246, 0.025),
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 -1px 0 rgba(0, 0, 0, 0.08);
   --glass-shadow-premium-hover: 0 2px 6px rgba(0, 0, 0, 0.18),
@@ -153,6 +193,9 @@
     0 12px 36px rgba(0, 0, 0, 0.22),
     0 24px 64px rgba(0, 0, 0, 0.12),
     0 48px 100px rgba(0, 0, 0, 0.08),
+    0 0 140px -35px rgba(96, 165, 250, 0.07),
+    0 0 200px -50px rgba(139, 92, 246, 0.04),
+    0 0 240px -70px rgba(45, 212, 191, 0.02),
     inset 0 1px 0 rgba(255, 255, 255, 0.10),
     inset 0 -1px 0 rgba(0, 0, 0, 0.10);
 
@@ -171,7 +214,7 @@
   --glass-bg-warm-hover: rgba(26, 18, 10, 0.70);
 
   /* ════════════════════════════════════════════════════════════════
-     GLOW SYSTEM — Layered radial/box glow presets
+     GLOW SYSTEM — Layered radial/box glow presets (v4 — 4 tiers)
      ════════════════════════════════════════════════════════════════ */
   --glow-blue: 0 0 12px rgba(45, 140, 240, 0.25),
     0 0 36px rgba(45, 140, 240, 0.10);
@@ -181,16 +224,28 @@
   --glow-blue-intense: 0 0 20px rgba(45, 140, 240, 0.50),
     0 0 60px rgba(45, 140, 240, 0.25),
     0 0 120px rgba(45, 140, 240, 0.10);
+  --glow-blue-ultra: 0 0 24px rgba(45, 140, 240, 0.60),
+    0 0 64px rgba(45, 140, 240, 0.35),
+    0 0 120px rgba(45, 140, 240, 0.18),
+    0 0 200px rgba(45, 140, 240, 0.06);
   --glow-purple: 0 0 12px rgba(139, 92, 246, 0.25),
     0 0 36px rgba(139, 92, 246, 0.10);
   --glow-purple-strong: 0 0 16px rgba(139, 92, 246, 0.40),
     0 0 48px rgba(139, 92, 246, 0.15),
     0 0 80px rgba(139, 92, 246, 0.06);
+  --glow-purple-ultra: 0 0 24px rgba(139, 92, 246, 0.60),
+    0 0 64px rgba(139, 92, 246, 0.35),
+    0 0 120px rgba(139, 92, 246, 0.18),
+    0 0 200px rgba(139, 92, 246, 0.06);
   --glow-teal: 0 0 12px rgba(20, 184, 166, 0.25),
     0 0 36px rgba(20, 184, 166, 0.10);
   --glow-teal-strong: 0 0 16px rgba(20, 184, 166, 0.40),
     0 0 48px rgba(20, 184, 166, 0.15),
     0 0 80px rgba(20, 184, 166, 0.06);
+  --glow-teal-ultra: 0 0 24px rgba(20, 184, 166, 0.60),
+    0 0 64px rgba(20, 184, 166, 0.35),
+    0 0 120px rgba(20, 184, 166, 0.18),
+    0 0 200px rgba(20, 184, 166, 0.06);
   --glow-warm: 0 0 12px rgba(245, 158, 11, 0.25),
     0 0 36px rgba(245, 158, 11, 0.10);
   --glow-warm-strong: 0 0 16px rgba(245, 158, 11, 0.40),
@@ -208,6 +263,25 @@
     0 0 48px rgba(139, 92, 246, 0.18),
     0 0 80px rgba(20, 184, 166, 0.10),
     0 0 120px rgba(245, 158, 11, 0.04);
+  --glow-multicolor-ultra: 0 0 24px rgba(45, 140, 240, 0.45),
+    0 0 64px rgba(139, 92, 246, 0.28),
+    0 0 120px rgba(20, 184, 166, 0.15),
+    0 0 200px rgba(245, 158, 11, 0.06),
+    0 0 280px rgba(244, 63, 94, 0.03);
+
+  /* ── Neon glow — saturated edge-glow for emphasis states ── */
+  --glow-neon-blue: 0 0 4px rgba(45, 140, 240, 0.80),
+    0 0 12px rgba(45, 140, 240, 0.50),
+    0 0 32px rgba(45, 140, 240, 0.25),
+    0 0 64px rgba(45, 140, 240, 0.10);
+  --glow-neon-purple: 0 0 4px rgba(139, 92, 246, 0.80),
+    0 0 12px rgba(139, 92, 246, 0.50),
+    0 0 32px rgba(139, 92, 246, 0.25),
+    0 0 64px rgba(139, 92, 246, 0.10);
+  --glow-neon-teal: 0 0 4px rgba(20, 184, 166, 0.80),
+    0 0 12px rgba(20, 184, 166, 0.50),
+    0 0 32px rgba(20, 184, 166, 0.25),
+    0 0 64px rgba(20, 184, 166, 0.10);
 
   /* ── Text glow presets ── */
   --text-glow-blue: 0 0 20px rgba(45, 140, 240, 0.5),
@@ -216,18 +290,23 @@
   --text-glow-purple: 0 0 20px rgba(139, 92, 246, 0.5),
     0 0 60px rgba(139, 92, 246, 0.25),
     0 0 120px rgba(139, 92, 246, 0.10);
+  --text-glow-aurora: 0 0 16px rgba(96, 165, 250, 0.45),
+    0 0 40px rgba(139, 92, 246, 0.25),
+    0 0 80px rgba(45, 212, 191, 0.12),
+    0 0 140px rgba(96, 165, 250, 0.06);
 
   /* ════════════════════════════════════════════════════════════════
      GRADIENT SYSTEM — Rich, multi-stop gradient presets
      ════════════════════════════════════════════════════════════════ */
 
-  /* Primary background gradient — four-stop depth with richer midpoint */
+  /* Primary background gradient — five-stop depth with richer midpoint */
   --gradient-bg: linear-gradient(
     170deg,
     var(--background) 0%,
-    var(--background-mid) 35%,
-    var(--background-end) 65%,
-    #0b0d22 85%,
+    var(--background-mid) 30%,
+    #08102a 50%,
+    var(--background-end) 70%,
+    #0b0d22 88%,
     #0c0e24 100%
   );
 
@@ -343,7 +422,7 @@
   );
 
   /* ════════════════════════════════════════════════════════════════
-     MESH GRADIENTS — Multi-layer radial composites for premium BGs
+     MESH GRADIENTS — Multi-layer radial composites for premium BGs (v4)
      ════════════════════════════════════════════════════════════════ */
   --gradient-mesh-hero: radial-gradient(ellipse 80% 60% at 20% 40%, rgba(45, 140, 240, 0.08) 0%, transparent 60%),
     radial-gradient(ellipse 60% 80% at 80% 30%, rgba(139, 92, 246, 0.06) 0%, transparent 55%),
@@ -353,6 +432,13 @@
     radial-gradient(ellipse 50% 70% at 75% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
   --gradient-mesh-warm: radial-gradient(ellipse 60% 50% at 60% 40%, rgba(245, 158, 11, 0.06) 0%, transparent 55%),
     radial-gradient(ellipse 50% 60% at 30% 70%, rgba(244, 63, 94, 0.04) 0%, transparent 50%);
+
+  /* Aurora mesh — richer 5-layer with indigo/violet depth */
+  --gradient-mesh-aurora: radial-gradient(ellipse 70% 55% at 15% 35%, rgba(96, 165, 250, 0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 70% at 85% 25%, rgba(139, 92, 246, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 45% at 45% 65%, rgba(99, 102, 241, 0.05) 0%, transparent 45%),
+    radial-gradient(ellipse 35% 40% at 65% 75%, rgba(20, 184, 166, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse 25% 25% at 80% 85%, rgba(245, 158, 11, 0.02) 0%, transparent 35%);
 
   /* ════════════════════════════════════════════════════════════════
      DEPTH SHADOWS — Multi-layer elevation presets
@@ -381,17 +467,23 @@
   --ease-magnetic: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-silk: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --ease-glide: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-jelly: cubic-bezier(0.5, 1.5, 0.5, 0.9);
+  --ease-dramatic: cubic-bezier(0.12, 0.9, 0.2, 1);
+  --ease-luxury: cubic-bezier(0.19, 1, 0.22, 1);
   --duration-instant: 75ms;
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-glacial: 800ms;
   --duration-spring: 600ms;
+  --duration-cinematic: 1200ms;
   --transition-default: var(--duration-normal) var(--ease-out-expo);
   --transition-fast: var(--duration-fast) var(--ease-out-expo);
   --transition-slow: var(--duration-slow) var(--ease-out-expo);
   --transition-magnetic: var(--duration-slow) var(--ease-magnetic);
   --transition-silk: var(--duration-slow) var(--ease-silk);
+  --transition-luxury: var(--duration-glacial) var(--ease-luxury);
 }
 
 
@@ -423,6 +515,10 @@
   /* Glass tokens */
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
+
+  /* Glass frost tokens */
+  --color-glass-frost-bg: var(--glass-frost-bg);
+  --color-glass-frost-border: var(--glass-frost-border);
 
   /* Background tokens */
   --color-bg-primary: var(--background);
@@ -543,6 +639,40 @@
   50%       { box-shadow: 0 0 20px rgba(45, 140, 240, 0.25), 0 0 48px rgba(139, 92, 246, 0.15), 0 0 72px rgba(20, 184, 166, 0.08); }
 }
 
+@keyframes glow-pulse-ultra-blue {
+  0%, 100% { box-shadow: 0 0 12px rgba(45, 140, 240, 0.15), 0 0 32px rgba(45, 140, 240, 0.06), 0 0 60px rgba(45, 140, 240, 0.02); }
+  50%       { box-shadow: 0 0 24px rgba(45, 140, 240, 0.45), 0 0 64px rgba(45, 140, 240, 0.20), 0 0 120px rgba(45, 140, 240, 0.08), 0 0 200px rgba(45, 140, 240, 0.03); }
+}
+
+@keyframes glow-pulse-ultra-multicolor {
+  0%, 100% { box-shadow: 0 0 12px rgba(45, 140, 240, 0.10), 0 0 28px rgba(139, 92, 246, 0.06), 0 0 50px rgba(20, 184, 166, 0.03); }
+  50%       { box-shadow: 0 0 28px rgba(45, 140, 240, 0.35), 0 0 64px rgba(139, 92, 246, 0.22), 0 0 120px rgba(20, 184, 166, 0.10), 0 0 200px rgba(245, 158, 11, 0.04), 0 0 280px rgba(244, 63, 94, 0.02); }
+}
+
+@keyframes aurora-breathe {
+  0%, 100% { opacity: 0.12; transform: scale(1); filter: blur(60px) hue-rotate(0deg); }
+  33%      { opacity: 0.28; transform: scale(1.06); filter: blur(55px) hue-rotate(15deg); }
+  66%      { opacity: 0.20; transform: scale(1.03); filter: blur(58px) hue-rotate(-10deg); }
+}
+
+@keyframes border-travel-premium {
+  0%   { left: -60%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { left: 160%; opacity: 0; }
+}
+
+@keyframes neon-flicker {
+  0%, 100% { opacity: 1; }
+  5%  { opacity: 0.85; }
+  10% { opacity: 1; }
+  15% { opacity: 0.92; }
+  20% { opacity: 1; }
+  50% { opacity: 0.98; }
+  55% { opacity: 0.88; }
+  60% { opacity: 1; }
+}
+
 @keyframes border-spin-slow {
   to { rotate: 360deg; }
 }
@@ -576,7 +706,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Headings — Geist-optimized type hierarchy ─────────────── */
+/* ── Headings — Geist-optimized type hierarchy with optical sizing ── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-primary);
   font-weight: 700;
@@ -584,29 +714,47 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   text-wrap: balance;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'tnum', 'ss01';
+  font-optical-sizing: auto;
+  orphans: 3;
+  widows: 3;
 }
 
 h1 {
   font-size: var(--text-5xl);
   letter-spacing: var(--tracking-tighter);
-  line-height: 1.1;
-  font-weight: 800;
+  line-height: var(--leading-5xl);
+  font-weight: var(--weight-extrabold);
 }
 h2 {
   font-size: var(--text-4xl);
-  line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.015em;
+  line-height: var(--leading-4xl);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: -0.018em;
 }
 h3 {
   font-size: var(--text-3xl);
   line-height: var(--leading-3xl);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.012em;
 }
-h4 { font-size: var(--text-2xl); line-height: var(--leading-2xl); font-weight: 700; letter-spacing: -0.005em; }
-h5 { font-size: var(--text-xl);  line-height: var(--leading-xl);  font-weight: 600; letter-spacing: 0; }
-h6 { font-size: var(--text-lg);  line-height: var(--leading-lg);  font-weight: 600; letter-spacing: 0.005em; }
+h4 {
+  font-size: var(--text-2xl);
+  line-height: var(--leading-2xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.008em;
+}
+h5 {
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.003em;
+}
+h6 {
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0;
+}
 
 /* ── Paragraph spacing ──────────────────────────────────────── */
 p {
@@ -696,13 +844,82 @@ section {
     0 4px 12px rgba(0, 0, 0, 0.2),
     0 12px 40px rgba(0, 0, 0, 0.1);
 }
+/* ── Premium text-shadow — intense glow with ambient color halo ── */
+.text-shadow-glow-blue-intense {
+  text-shadow:
+    0 0 8px rgba(45, 140, 240, 0.5),
+    0 0 24px rgba(45, 140, 240, 0.3),
+    0 0 60px rgba(45, 140, 240, 0.15),
+    0 0 120px rgba(45, 140, 240, 0.06);
+}
+.text-shadow-glow-purple-intense {
+  text-shadow:
+    0 0 8px rgba(139, 92, 246, 0.5),
+    0 0 24px rgba(139, 92, 246, 0.3),
+    0 0 60px rgba(139, 92, 246, 0.15),
+    0 0 120px rgba(139, 92, 246, 0.06);
+}
+.text-shadow-glow-multi-intense {
+  text-shadow:
+    0 0 10px rgba(45, 140, 240, 0.45),
+    0 0 30px rgba(139, 92, 246, 0.25),
+    0 0 60px rgba(99, 102, 241, 0.15),
+    0 0 100px rgba(20, 184, 166, 0.08);
+}
+/* ── Aurora text glow — shifting multi-hue text shadow ── */
+.text-shadow-glow-aurora {
+  text-shadow:
+    0 0 10px rgba(96, 165, 250, 0.40),
+    0 0 28px rgba(139, 92, 246, 0.22),
+    0 0 56px rgba(99, 102, 241, 0.12),
+    0 0 100px rgba(45, 212, 191, 0.06),
+    0 0 160px rgba(96, 165, 250, 0.03);
+}
+/* ── Neon text glow — tight saturated edge glow ── */
+.text-shadow-glow-neon-blue {
+  text-shadow:
+    0 0 4px rgba(45, 140, 240, 0.80),
+    0 0 12px rgba(45, 140, 240, 0.50),
+    0 0 28px rgba(45, 140, 240, 0.22);
+}
+.text-shadow-glow-neon-purple {
+  text-shadow:
+    0 0 4px rgba(139, 92, 246, 0.80),
+    0 0 12px rgba(139, 92, 246, 0.50),
+    0 0 28px rgba(139, 92, 246, 0.22);
+}
+.text-shadow-glow-neon-teal {
+  text-shadow:
+    0 0 4px rgba(20, 184, 166, 0.80),
+    0 0 12px rgba(20, 184, 166, 0.50),
+    0 0 28px rgba(20, 184, 166, 0.22);
+}
+/* ── Frosted text — subtle inner light + depth for titles over busy BGs ── */
+.text-shadow-frosted {
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.12),
+    0 0 8px rgba(140, 160, 255, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 12px 40px rgba(0, 0, 0, 0.15);
+}
+/* ── Cinematic — maximum depth for hero-scale text ── */
+.text-shadow-cinematic {
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    0 20px 50px rgba(0, 0, 0, 0.25),
+    0 40px 100px rgba(0, 0, 0, 0.12);
+}
 
 /* ── Premium heading — multi-layer depth for hero & section titles ── */
 .heading-premium {
-  font-weight: 900;
-  letter-spacing: -0.02em;
+  font-weight: var(--weight-black);
+  letter-spacing: -0.025em;
   line-height: 1.05;
   text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.06),
     0 0 40px rgba(4, 6, 15, 0.6),
     0 1px 2px rgba(0, 0, 0, 0.5),
     0 4px 12px rgba(0, 0, 0, 0.3),
@@ -711,10 +928,11 @@ section {
 
 /* ── Section heading — lighter depth for in-page section titles ── */
 .heading-section {
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  line-height: 1.12;
+  font-weight: var(--weight-extrabold);
+  letter-spacing: -0.018em;
+  line-height: 1.1;
   text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.05),
     0 0 30px rgba(4, 6, 15, 0.5),
     0 1px 2px rgba(0, 0, 0, 0.4),
     0 4px 12px rgba(0, 0, 0, 0.2);
@@ -722,38 +940,73 @@ section {
 
 /* ── Display heading — largest scale, tightest spacing ── */
 .heading-display {
-  font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 1.0;
+  font-weight: var(--weight-black);
+  letter-spacing: var(--tracking-ultra);
+  line-height: 0.95;
   text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.08),
     0 0 50px rgba(4, 6, 15, 0.7),
     0 1px 3px rgba(0, 0, 0, 0.6),
     0 6px 16px rgba(0, 0, 0, 0.35),
     0 16px 48px rgba(0, 0, 0, 0.18);
 }
 
+/* ── Subheading — for descriptive text below section titles ── */
+.heading-sub {
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 /* ── Caption / label text — small, tracked-out, uppercase ── */
 .text-caption {
   font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-weight: var(--weight-caption);
+  letter-spacing: var(--tracking-caption);
   text-transform: uppercase;
   line-height: 1.5;
+}
+
+/* ── Overline — slightly larger tracked-out label for section tags ── */
+.text-overline {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 /* ── Body text refinements ── */
 .text-body {
   font-size: var(--text-base);
-  font-weight: 400;
-  line-height: 1.7;
+  font-weight: var(--weight-body);
+  line-height: 1.75;
   letter-spacing: 0.005em;
 }
 
 .text-body-sm {
   font-size: var(--text-sm);
-  font-weight: 400;
-  line-height: 1.65;
+  font-weight: var(--weight-body);
+  line-height: 1.7;
   letter-spacing: 0.003em;
+}
+
+/* ── Large body — comfortable reading size for lede paragraphs ── */
+.text-body-lg {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-body);
+  line-height: 1.75;
+  letter-spacing: 0.003em;
+}
+
+/* ── Numeric / mono text — for stats, counters, code ── */
+.text-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on;
+  letter-spacing: -0.02em;
 }
 
 
@@ -871,6 +1124,46 @@ section {
   box-shadow: var(--glass-inner-shadow), var(--glass-shadow-hover);
 }
 
+/* ── Frosted glass — warmer tint with pearl-like inner light ── */
+.glass-frost {
+  background: var(--glass-frost-bg);
+  border: 1px solid var(--glass-frost-border);
+  backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.3);
+  box-shadow: var(--glass-shadow-premium);
+  transition:
+    background var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-slow) var(--ease-out-expo),
+    backdrop-filter var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-frost:hover {
+  background: var(--glass-frost-bg-hover);
+  border-color: var(--glass-frost-border-hover);
+  box-shadow: var(--glass-shadow-premium-hover);
+}
+
+/* ── Aurora glass — colored ambient reflection for hero/feature panels ── */
+.glass-aurora {
+  background: var(--glass-aurora-bg);
+  border: 1px solid var(--glass-aurora-border);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  box-shadow: var(--glass-shadow-premium), var(--glass-aurora-inner-glow);
+  transition:
+    background var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-slow) var(--ease-luxury),
+    backdrop-filter var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-aurora:hover {
+  background: var(--glass-aurora-bg-hover);
+  border-color: var(--glass-aurora-border-hover);
+  box-shadow: var(--glass-shadow-premium-hover), var(--glass-aurora-inner-glow);
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════
    GLOW Utilities
@@ -880,16 +1173,25 @@ section {
 .glow-blue        { box-shadow: var(--glow-blue); }
 .glow-blue-strong { box-shadow: var(--glow-blue-strong); }
 .glow-blue-intense { box-shadow: var(--glow-blue-intense); }
+.glow-blue-ultra  { box-shadow: var(--glow-blue-ultra); }
 .glow-purple      { box-shadow: var(--glow-purple); }
 .glow-purple-strong { box-shadow: var(--glow-purple-strong); }
+.glow-purple-ultra { box-shadow: var(--glow-purple-ultra); }
 .glow-teal        { box-shadow: var(--glow-teal); }
 .glow-teal-strong { box-shadow: var(--glow-teal-strong); }
+.glow-teal-ultra  { box-shadow: var(--glow-teal-ultra); }
 .glow-warm        { box-shadow: var(--glow-warm); }
 .glow-warm-strong { box-shadow: var(--glow-warm-strong); }
 .glow-rose        { box-shadow: var(--glow-rose); }
 .glow-rose-strong { box-shadow: var(--glow-rose-strong); }
 .glow-multicolor  { box-shadow: var(--glow-multicolor); }
 .glow-multicolor-strong { box-shadow: var(--glow-multicolor-strong); }
+.glow-multicolor-ultra { box-shadow: var(--glow-multicolor-ultra); }
+
+/* ── Neon glow — saturated edge glow for emphasis states ── */
+.glow-neon-blue   { box-shadow: var(--glow-neon-blue); }
+.glow-neon-purple { box-shadow: var(--glow-neon-purple); }
+.glow-neon-teal   { box-shadow: var(--glow-neon-teal); }
 
 /* ── Animated glow — pulsing box-shadow ── */
 .glow-pulse-blue {
@@ -924,6 +1226,26 @@ section {
 
 .glow-pulse-multicolor {
   animation: glow-pulse-multicolor 4s ease-in-out infinite;
+}
+
+/* ── Ultra pulse glow — wider, richer 5-layer pulse ── */
+.glow-pulse-blue-ultra {
+  animation: glow-pulse-ultra-blue 4s ease-in-out infinite;
+}
+
+.glow-pulse-multicolor-ultra {
+  animation: glow-pulse-ultra-multicolor 5s ease-in-out infinite;
+}
+
+/* ── Neon flicker — realistic neon sign effect ── */
+.glow-neon-flicker-blue {
+  animation: neon-flicker 3s ease-in-out infinite;
+  box-shadow: var(--glow-neon-blue);
+}
+
+.glow-neon-flicker-purple {
+  animation: neon-flicker 3.5s ease-in-out infinite;
+  box-shadow: var(--glow-neon-purple);
 }
 
 /* ── Hover glow — glow appears on hover ── */
@@ -1146,6 +1468,18 @@ section {
 /* Ambient orb with breathing animation */
 .ambient-orb-breathe {
   animation: breathe 6s ease-in-out infinite;
+}
+
+/* Ambient orb with aurora animation — hue-shifting color drift */
+.ambient-orb-aurora {
+  animation: aurora-breathe 8s ease-in-out infinite;
+}
+
+/* Ambient orb — indigo variant for richer depth */
+.ambient-orb-indigo {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
 }
 
 
@@ -1461,4 +1795,202 @@ canvas {
 /* ── Silk fade — ultra-smooth opacity transition ── */
 .transition-silk {
   transition: all var(--duration-slow) var(--ease-silk);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 4 — PREMIUM POLISH: Aurora glow, luxury transitions, neon
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Glow Ring Interactive — always-on subtle ring, brighter on hover ── */
+.glow-ring-interactive {
+  position: relative;
+}
+
+.glow-ring-interactive::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    rgba(96, 165, 250, 0.10),
+    rgba(139, 92, 246, 0.08),
+    rgba(45, 212, 191, 0.06),
+    rgba(96, 165, 250, 0.10)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity var(--duration-slow) var(--ease-luxury);
+}
+
+.glow-ring-interactive:hover::after {
+  opacity: 1;
+}
+
+/* ── Surface Aura Aurora — multi-hue ambient glow ── */
+.surface-aura-aurora {
+  position: relative;
+}
+
+.surface-aura-aurora::before {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(96, 165, 250, 0.07) 0%,
+    rgba(139, 92, 246, 0.04) 30%,
+    rgba(45, 212, 191, 0.025) 55%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-glacial) var(--ease-luxury);
+  z-index: -1;
+}
+
+.surface-aura-aurora:hover::before {
+  opacity: 1;
+}
+
+/* ── Border Shimmer Premium — richer 4-stop with fade-in/out ── */
+.border-shimmer-premium {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-shimmer-premium::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 55%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(96, 165, 250, 0.5) 25%,
+    rgba(139, 92, 246, 0.7) 50%,
+    rgba(45, 212, 191, 0.5) 75%,
+    transparent 100%
+  );
+  animation: border-travel-premium 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Shimmer Premium — richer highlight sweep with wider band ── */
+.shimmer-premium {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-premium::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.02) 32%,
+    rgba(255, 255, 255, 0.06) 42%,
+    rgba(200, 210, 240, 0.08) 50%,
+    rgba(255, 255, 255, 0.06) 58%,
+    rgba(255, 255, 255, 0.02) 68%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Aurora gradient text — 5-stop with warm anchor ── */
+.text-gradient-aurora {
+  background: linear-gradient(
+    135deg,
+    #60a5fa 0%,
+    #818cf8 20%,
+    #a78bfa 40%,
+    #2dd4bf 60%,
+    #60a5fa 80%,
+    #818cf8 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text-flow 8s ease infinite;
+  filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.15))
+    drop-shadow(0 0 40px rgba(139, 92, 246, 0.08));
+}
+
+/* ── Mesh gradient backgrounds — aurora variant ── */
+.bg-mesh-aurora { background: var(--gradient-mesh-aurora); }
+
+/* ── Luxury hover — ultra-smooth scale + shadow lift ── */
+.hover-luxury {
+  transition:
+    transform var(--duration-glacial) var(--ease-luxury),
+    box-shadow var(--duration-glacial) var(--ease-luxury);
+}
+
+.hover-luxury:hover {
+  transform: translateY(-3px) scale(1.005);
+}
+
+/* ── Jelly hover — bouncy scale micro-interaction ── */
+.hover-jelly {
+  transition: transform var(--duration-slow) var(--ease-jelly);
+}
+
+.hover-jelly:hover {
+  transform: scale(1.03);
+}
+
+/* ── Dramatic enter — slower, more theatrical fade-in-up ── */
+.transition-dramatic {
+  transition: all var(--duration-cinematic) var(--ease-dramatic);
+}
+
+/* ── Premium focus ring — aurora glow on keyboard focus ── */
+:focus-visible.premium-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(96, 165, 250, 0.50),
+    0 0 0 5px rgba(96, 165, 250, 0.12),
+    0 0 16px rgba(96, 165, 250, 0.10),
+    0 0 32px rgba(139, 92, 246, 0.06);
+}
+
+/* ── Dot grid premium — finer spacing with aurora tint ── */
+.dot-grid-premium {
+  background-image: radial-gradient(circle, rgba(180, 200, 255, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* ── Cross grid — intersection pattern for subtle texture ── */
+.cross-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Gradient divider premium — richer 5-stop with wider spread ── */
+.gradient-divider-premium {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(96, 165, 250, 0.30) 12%,
+    rgba(139, 92, 246, 0.50) 35%,
+    rgba(45, 212, 191, 0.40) 55%,
+    rgba(99, 102, 241, 0.30) 78%,
+    transparent 100%
+  );
 }

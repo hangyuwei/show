@@ -51,24 +51,25 @@ export default function ProjectFilter({
               className={`
                 relative flex items-center gap-2 whitespace-nowrap rounded-full
                 px-5 py-2.5 text-sm font-medium tracking-wide
-                border transition-all duration-400
+                border transition-all duration-500
                 ${
                   isActive
                     ? 'text-white border-transparent'
-                    : 'bg-white/[0.015] text-zinc-500 border-white/[0.05] hover:bg-white/[0.06] hover:text-zinc-300 hover:border-white/[0.10]'
+                    : 'bg-white/[0.015] text-zinc-500 border-white/[0.05] hover:bg-white/[0.06] hover:text-zinc-300 hover:border-white/[0.12]'
                 }
               `}
               style={
                 isActive
                   ? {
-                      background: `linear-gradient(135deg, ${lineColor}20, ${lineColor}0c 55%, ${lineColor}05)`,
+                      background: `linear-gradient(135deg, ${lineColor}25, ${lineColor}10 55%, ${lineColor}06)`,
                       borderColor: 'transparent',
                       boxShadow: `
-                        0 0 32px ${lineColor}30,
-                        0 0 12px ${lineColor}1c,
-                        0 0 4px ${lineColor}45,
-                        inset 0 1px 0 ${lineColor}28,
-                        inset 0 0 20px ${lineColor}0c`,
+                        0 0 40px ${lineColor}35,
+                        0 0 16px ${lineColor}20,
+                        0 0 6px ${lineColor}50,
+                        0 2px 12px rgba(0,0,0,0.25),
+                        inset 0 1px 0 ${lineColor}30,
+                        inset 0 0 24px ${lineColor}0e`,
                     }
                   : undefined
               }
@@ -78,11 +79,11 @@ export default function ProjectFilter({
                 borderColor: 'rgba(255,255,255,0.10)',
               } : {}}
               layout
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 18, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
-                duration: 0.4,
-                delay: filterIdx * 0.05,
+                duration: 0.45,
+                delay: filterIdx * 0.06,
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
@@ -95,49 +96,50 @@ export default function ProjectFilter({
                   className="absolute inset-0 rounded-full"
                   layoutId="activeFilterGlow"
                   style={{
-                    border: `1.5px solid ${lineColor}60`,
+                    border: `1.5px solid ${lineColor}70`,
                     boxShadow: `
-                      0 0 28px ${lineColor}38,
-                      0 0 56px ${lineColor}14,
-                      0 0 96px ${lineColor}06,
-                      inset 0 0 14px ${lineColor}0c`,
+                      0 0 36px ${lineColor}40,
+                      0 0 72px ${lineColor}18,
+                      0 0 120px ${lineColor}08,
+                      0 0 200px ${lineColor}03,
+                      inset 0 0 18px ${lineColor}0e`,
                   }}
                   transition={{
                     type: 'spring',
-                    stiffness: 400,
-                    damping: 28,
+                    stiffness: 380,
+                    damping: 26,
                   }}
                 />
               )}
 
-              {/* Active dot indicator with pulse */}
+              {/* Active dot indicator with premium pulse */}
               {isActive && (
                 <motion.span
                   layoutId="activeDot"
                   className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full"
                   style={{
                     background: `radial-gradient(circle, ${lineColor}, ${lineColor}cc)`,
-                    boxShadow: `0 0 10px ${lineColor}a0, 0 0 4px ${lineColor}`,
+                    boxShadow: `0 0 14px ${lineColor}c0, 0 0 6px ${lineColor}, 0 0 24px ${lineColor}40`,
                   }}
                   animate={{
-                    scale: [1, 1.35, 1],
-                    opacity: [1, 0.8, 1],
+                    scale: [1, 1.4, 1],
+                    opacity: [1, 0.75, 1],
                   }}
                   transition={{
                     scale: {
-                      duration: 2.2,
+                      duration: 2.0,
                       repeat: Infinity,
                       ease: 'easeInOut',
                     },
                     opacity: {
-                      duration: 2.2,
+                      duration: 2.0,
                       repeat: Infinity,
                       ease: 'easeInOut',
                     },
                     layout: {
                       type: 'spring',
-                      stiffness: 500,
-                      damping: 32,
+                      stiffness: 480,
+                      damping: 30,
                     },
                   }}
                 />

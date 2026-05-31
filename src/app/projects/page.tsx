@@ -19,61 +19,68 @@ export default function ProjectsPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-black">
-      {/* Dot grid pattern background — refined density */}
+      {/* Dot grid pattern background — premium density with color tint */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage:
-            'radial-gradient(circle, rgba(255,255,255,0.04) 0.8px, transparent 0.8px)',
-          backgroundSize: '20px 20px',
+            'radial-gradient(circle, rgba(139,92,246,0.06) 0.7px, transparent 0.7px)',
+          backgroundSize: '18px 18px',
           maskImage:
-            'radial-gradient(ellipse 85% 75% at 50% 18%, black 5%, transparent 100%)',
+            'radial-gradient(ellipse 90% 80% at 50% 15%, black 3%, transparent 100%)',
           WebkitMaskImage:
-            'radial-gradient(ellipse 85% 75% at 50% 18%, black 5%, transparent 100%)',
+            'radial-gradient(ellipse 90% 80% at 50% 15%, black 3%, transparent 100%)',
         }}
       />
-      {/* Grid lines overlay — wider, subtler */}
+      {/* Grid lines overlay — wider, subtler with violet tint */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
-          backgroundSize: '140px 140px',
+            'linear-gradient(rgba(139,92,246,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.025) 1px, transparent 1px)',
+          backgroundSize: '120px 120px',
           maskImage:
-            'radial-gradient(ellipse 75% 65% at 50% 28%, black 10%, transparent 100%)',
+            'radial-gradient(ellipse 80% 70% at 50% 25%, black 8%, transparent 100%)',
           WebkitMaskImage:
-            'radial-gradient(ellipse 75% 65% at 50% 28%, black 10%, transparent 100%)',
+            'radial-gradient(ellipse 80% 70% at 50% 25%, black 8%, transparent 100%)',
         }}
       />
-      {/* Cross-hatch diagonal lines for texture depth */}
+      {/* Cross-hatch diagonal lines for texture depth — premium color tint */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-[0.014]"
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.018]"
         style={{
           backgroundImage:
-            'repeating-linear-gradient(45deg, transparent, transparent 48px, rgba(255,255,255,0.30) 48px, rgba(255,255,255,0.30) 49px), repeating-linear-gradient(-45deg, transparent, transparent 48px, rgba(255,255,255,0.30) 48px, rgba(255,255,255,0.30) 49px)',
+            'repeating-linear-gradient(45deg, transparent, transparent 48px, rgba(139,92,246,0.35) 48px, rgba(139,92,246,0.35) 49px), repeating-linear-gradient(-45deg, transparent, transparent 48px, rgba(20,184,166,0.25) 48px, rgba(20,184,166,0.25) 49px)',
           maskImage:
-            'radial-gradient(ellipse 60% 50% at 50% 36%, black 15%, transparent 80%)',
+            'radial-gradient(ellipse 65% 55% at 50% 32%, black 12%, transparent 80%)',
           WebkitMaskImage:
-            'radial-gradient(ellipse 60% 50% at 50% 36%, black 15%, transparent 80%)',
+            'radial-gradient(ellipse 65% 55% at 50% 32%, black 12%, transparent 80%)',
         }}
       />
-      {/* Ambient glow orbs for atmosphere — expanded and softer */}
+      {/* Ambient glow orbs for atmosphere — premium layered light */}
       <div
-        className="pointer-events-none absolute top-[10%] left-[6%] w-[600px] h-[600px] rounded-full z-0"
+        className="pointer-events-none absolute top-[8%] left-[4%] w-[700px] h-[700px] rounded-full z-0"
         style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, rgba(139,92,246,0.02) 45%, transparent 70%)',
-        }}
-      />
-      <div
-        className="pointer-events-none absolute bottom-[15%] right-[2%] w-[700px] h-[700px] rounded-full z-0"
-        style={{
-          background: 'radial-gradient(circle, rgba(6,182,212,0.05) 0%, rgba(6,182,212,0.015) 45%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, rgba(139,92,246,0.03) 40%, rgba(139,92,246,0.01) 60%, transparent 75%)',
         }}
       />
       <div
-        className="pointer-events-none absolute top-[52%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] rounded-full z-0"
+        className="pointer-events-none absolute bottom-[12%] right-[0%] w-[800px] h-[800px] rounded-full z-0"
         style={{
-          background: 'radial-gradient(ellipse, rgba(249,115,22,0.028) 0%, rgba(249,115,22,0.01) 45%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(6,182,212,0.07) 0%, rgba(6,182,212,0.025) 40%, rgba(6,182,212,0.008) 60%, transparent 75%)',
+        }}
+      />
+      <div
+        className="pointer-events-none absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[550px] rounded-full z-0"
+        style={{
+          background: 'radial-gradient(ellipse, rgba(249,115,22,0.035) 0%, rgba(249,115,22,0.015) 40%, rgba(249,115,22,0.005) 60%, transparent 75%)',
+        }}
+      />
+      {/* Fourth orb — subtle blue accent for depth layering */}
+      <div
+        className="pointer-events-none absolute top-[30%] right-[15%] w-[500px] h-[500px] rounded-full z-0"
+        style={{
+          background: 'radial-gradient(circle, rgba(45,140,240,0.04) 0%, rgba(45,140,240,0.015) 40%, transparent 70%)',
         }}
       />
       {/* Subtle noise texture overlay for depth */}
@@ -91,9 +98,9 @@ export default function ProjectsPage() {
       <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
         {/* Section title */}
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 34 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <SectionTitle
             title="项目宇宙"
@@ -104,9 +111,9 @@ export default function ProjectsPage() {
         {/* Filter */}
         <motion.div
           className="mt-12 mb-10"
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.5, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
         >
           <ProjectFilter
             activeFilter={activeFilter}
@@ -116,7 +123,7 @@ export default function ProjectsPage() {
 
         {/* Card grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-9"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
           layout
         >
           <AnimatePresence mode="popLayout">
