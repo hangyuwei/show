@@ -83,14 +83,14 @@ export default function ContactContent() {
   };
 
   const inputWrapperClass = (field: string) =>
-    `relative rounded-xl transition-all duration-500 ${
+    `relative rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
       focused === field
-        ? 'ring-1 ring-[var(--accent)]/30 shadow-[0_0_24px_rgba(33,150,255,0.15),0_0_48px_rgba(33,150,255,0.05),0_4px_16px_rgba(0,0,0,0.2)]'
-        : 'shadow-[0_2px_8px_rgba(0,0,0,0.15)]'
+        ? 'ring-1 ring-[var(--accent)]/20 shadow-[0_0_24px_rgba(33,150,255,0.12),0_0_48px_rgba(139,92,246,0.06),0_8px_32px_rgba(0,0,0,0.25)]'
+        : 'shadow-[0_2px_12px_rgba(0,0,0,0.18),0_1px_3px_rgba(0,0,0,0.12)]'
     }`;
 
   const inputClass =
-    'relative w-full rounded-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] px-4 py-3 text-sm text-white/90 placeholder-white/20 outline-none backdrop-blur-xl transition-all duration-500 focus:border-[var(--accent)]/40 focus:bg-[var(--glass-bg-hover)]';
+    'relative w-full rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] px-4 py-3.5 text-sm text-white/90 placeholder-white/20 outline-none backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus:border-[var(--accent)]/30 focus:bg-[var(--glass-bg-hover)] focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]';
 
   return (
     <>
@@ -104,11 +104,11 @@ export default function ContactContent() {
       >
         <div className="w-full max-w-lg">
           {/* Heading */}
-          <motion.div variants={itemVariants} className="text-center mb-10">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-3 tracking-heading accent-gradient-text">
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-3.5 tracking-heading accent-gradient-text">
               联系我
             </h1>
-            <p className="text-sm sm:text-base text-white/40">
+            <p className="text-sm sm:text-base text-white/35 leading-relaxed">
               期待与你的交流与合作
             </p>
           </motion.div>
@@ -121,24 +121,29 @@ export default function ContactContent() {
           >
             {/* Name */}
             <div className="relative">
-              <label
+              <motion.label
                 htmlFor="name"
-                className={`block text-xs font-medium mb-2 ml-0.5 transition-all duration-300 ${
-                  focused === 'name'
-                    ? 'text-[var(--accent)] translate-x-0.5'
-                    : 'text-white/40'
-                }`}
+                animate={focused === 'name' ? { x: 2, color: 'var(--accent)' } : { x: 0, color: 'rgba(255,255,255,0.4)' }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="block text-xs font-medium mb-2.5 ml-0.5"
               >
                 姓名
-              </label>
+              </motion.label>
               <div className={inputWrapperClass('name')}>
-                {/* Soft animated glow halo on focus */}
+                {/* Multi-layer animated glow halo on focus */}
                 {focused === 'name' && (
-                  <div className="absolute -inset-[3px] rounded-xl bg-gradient-to-r from-[var(--accent)]/20 via-[var(--color-accent-teal)]/15 to-[var(--accent-purple)]/20 blur-md animate-[breathe_3s_ease-in-out_infinite] pointer-events-none" />
+                  <>
+                    <div className="absolute -inset-[4px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/15 via-[var(--color-accent-teal)]/10 to-[var(--accent-purple)]/15 blur-lg animate-[breathe_3s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/8 via-transparent to-[var(--accent-purple)]/8 blur-sm pointer-events-none" />
+                  </>
                 )}
                 {/* Top-edge glass light reflection */}
                 {focused === 'name' && (
-                  <div className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent pointer-events-none" />
+                )}
+                {/* Bottom-edge subtle glow on focus */}
+                {focused === 'name' && (
+                  <div className="absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent pointer-events-none" />
                 )}
                 <input
                   id="name"
@@ -156,22 +161,26 @@ export default function ContactContent() {
 
             {/* Email */}
             <div className="relative">
-              <label
+              <motion.label
                 htmlFor="email"
-                className={`block text-xs font-medium mb-2 ml-0.5 transition-all duration-300 ${
-                  focused === 'email'
-                    ? 'text-[var(--accent)] translate-x-0.5'
-                    : 'text-white/40'
-                }`}
+                animate={focused === 'email' ? { x: 2, color: 'var(--accent)' } : { x: 0, color: 'rgba(255,255,255,0.4)' }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="block text-xs font-medium mb-2.5 ml-0.5"
               >
                 邮箱
-              </label>
+              </motion.label>
               <div className={inputWrapperClass('email')}>
                 {focused === 'email' && (
-                  <div className="absolute -inset-[3px] rounded-xl bg-gradient-to-r from-[var(--accent)]/20 via-[var(--color-accent-teal)]/15 to-[var(--accent-purple)]/20 blur-md animate-[breathe_3s_ease-in-out_infinite] pointer-events-none" />
+                  <>
+                    <div className="absolute -inset-[4px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/15 via-[var(--color-accent-teal)]/10 to-[var(--accent-purple)]/15 blur-lg animate-[breathe_3s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/8 via-transparent to-[var(--accent-purple)]/8 blur-sm pointer-events-none" />
+                  </>
                 )}
                 {focused === 'email' && (
-                  <div className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent pointer-events-none" />
+                )}
+                {focused === 'email' && (
+                  <div className="absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent pointer-events-none" />
                 )}
                 <input
                   id="email"
@@ -189,22 +198,26 @@ export default function ContactContent() {
 
             {/* Message */}
             <div className="relative">
-              <label
+              <motion.label
                 htmlFor="message"
-                className={`block text-xs font-medium mb-2 ml-0.5 transition-all duration-300 ${
-                  focused === 'message'
-                    ? 'text-[var(--accent)] translate-x-0.5'
-                    : 'text-white/40'
-                }`}
+                animate={focused === 'message' ? { x: 2, color: 'var(--accent)' } : { x: 0, color: 'rgba(255,255,255,0.4)' }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="block text-xs font-medium mb-2.5 ml-0.5"
               >
                 留言
-              </label>
+              </motion.label>
               <div className={inputWrapperClass('message')}>
                 {focused === 'message' && (
-                  <div className="absolute -inset-[3px] rounded-xl bg-gradient-to-r from-[var(--accent)]/20 via-[var(--color-accent-teal)]/15 to-[var(--accent-purple)]/20 blur-md animate-[breathe_3s_ease-in-out_infinite] pointer-events-none" />
+                  <>
+                    <div className="absolute -inset-[4px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/15 via-[var(--color-accent-teal)]/10 to-[var(--accent-purple)]/15 blur-lg animate-[breathe_3s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/8 via-transparent to-[var(--accent-purple)]/8 blur-sm pointer-events-none" />
+                  </>
                 )}
                 {focused === 'message' && (
-                  <div className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent pointer-events-none" />
+                )}
+                {focused === 'message' && (
+                  <div className="absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent pointer-events-none" />
                 )}
                 <textarea
                   id="message"
@@ -223,16 +236,20 @@ export default function ContactContent() {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.015 }}
-              whileTap={{ scale: 0.985 }}
-              className="group relative w-full py-3.5 rounded-xl text-sm font-semibold text-white overflow-hidden transition-shadow duration-500 hover:shadow-[0_0_32px_rgba(33,150,255,0.35),0_0_64px_rgba(139,92,246,0.15),0_0_96px_rgba(0,229,255,0.08)] active:shadow-[0_0_16px_rgba(33,150,255,0.25)]"
+              whileHover={{ scale: 1.012 }}
+              whileTap={{ scale: 0.975 }}
+              className="group relative w-full py-3.5 rounded-2xl text-sm font-semibold text-white overflow-hidden transition-shadow duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_0_28px_rgba(33,150,255,0.30),0_0_56px_rgba(139,92,246,0.12),0_0_84px_rgba(0,229,255,0.06),0_8px_32px_rgba(0,0,0,0.3)] active:shadow-[0_0_12px_rgba(33,150,255,0.2)]"
             >
-              {/* Multi-stop gradient background */}
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/80 to-[var(--color-accent-teal)] opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
-              {/* Animated shimmer sweep */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.12] to-transparent animate-[shimmer_2.5s_ease-in-out_infinite] pointer-events-none" />
-              {/* Top-edge highlight reflection */}
-              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-60" />
+              {/* Rich four-stop gradient background */}
+              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/85 via-[var(--accent-purple)]/70 to-[var(--color-accent-teal)] opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Animated shimmer sweep with softer edge */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.10] to-transparent translate-x-[-100%] group-hover:animate-[shimmer_2.5s_ease-in-out_infinite] pointer-events-none" />
+              {/* Top-edge highlight — glass reflection */}
+              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+              {/* Bottom-edge subtle depth shadow */}
+              <span className="absolute inset-x-2 bottom-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent" />
+              {/* Inner top gradient for depth illusion */}
+              <span className="absolute inset-x-0 top-0 h-[40%] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none rounded-t-2xl" />
               <span className="relative z-10 flex items-center justify-center gap-2">
                 <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
@@ -245,17 +262,17 @@ export default function ContactContent() {
           {/* Divider */}
           <motion.div
             variants={itemVariants}
-            className="flex items-center gap-3 my-8"
+            className="flex items-center gap-3 my-10"
           >
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/8 to-white/15" />
-            <span className="text-[11px] text-white/25 tracking-wide">或通过</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-white/15 via-white/8 to-transparent" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/6 to-white/12" />
+            <span className="text-[11px] text-white/20 tracking-widest uppercase">或通过</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-white/12 via-white/6 to-transparent" />
           </motion.div>
 
           {/* Social Links as icon cards */}
           <motion.div
             variants={itemVariants}
-            className="flex justify-center gap-4"
+            className="flex justify-center gap-5"
           >
             {socialLinks.map((link) => (
               <motion.a
@@ -267,22 +284,24 @@ export default function ContactContent() {
                     ? 'noopener noreferrer'
                     : undefined
                 }
-                whileHover={{ scale: 1.04, y: -2 }}
+                whileHover={{ scale: 1.03, y: -3 }}
                 whileTap={{ scale: 0.97 }}
-                className="group relative flex items-center gap-3 rounded-xl px-5 py-3 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl transition-all duration-400 hover:border-[var(--accent)]/25 hover:bg-[var(--glass-bg-hover)] hover:shadow-[0_0_20px_rgba(33,150,255,0.12),0_0_40px_rgba(139,92,246,0.06),0_8px_24px_rgba(0,0,0,0.25)]"
+                className="group relative flex items-center gap-3.5 rounded-2xl px-6 py-3.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[var(--accent)]/20 hover:bg-[var(--glass-bg-hover)] hover:shadow-[0_0_24px_rgba(33,150,255,0.10),0_0_48px_rgba(139,92,246,0.05),0_12px_32px_rgba(0,0,0,0.28)]"
               >
                 {/* Top-edge light bar on hover */}
-                <div className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/40 transition-all duration-500" />
+                <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/35 transition-all duration-500" />
                 {/* Bottom gradient underline accent on hover */}
-                <div className="absolute bottom-0 left-3 right-3 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/50 transition-all duration-500" />
-                <span className="text-white/50 group-hover:text-[var(--accent)] transition-colors duration-300">
+                <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-teal)]/0 to-transparent group-hover:via-[var(--color-accent-teal)]/40 transition-all duration-500" />
+                {/* Soft inner glow on hover */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <span className="text-white/45 group-hover:text-[var(--accent)] transition-colors duration-400">
                   {link.icon}
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-white/60 group-hover:text-white/90 transition-colors duration-300">
+                  <span className="text-sm font-medium text-white/55 group-hover:text-white/90 transition-colors duration-400">
                     {link.name}
                   </span>
-                  <span className="text-[10px] text-white/25 group-hover:text-white/45 transition-colors duration-300">
+                  <span className="text-[10px] text-white/20 group-hover:text-white/40 transition-colors duration-400">
                     {link.label}
                   </span>
                 </div>
@@ -292,7 +311,7 @@ export default function ContactContent() {
 
           <motion.p
             variants={itemVariants}
-            className="text-center text-xs text-white/25 mt-8"
+            className="text-center text-xs text-white/20 mt-10 tracking-wide"
           >
             欢迎通过以上方式联系我
           </motion.p>

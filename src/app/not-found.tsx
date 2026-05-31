@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, type Variants } from 'framer-motion';
+import { motion, type Variants, type Transition } from 'framer-motion';
+
+const EASE_OUT_SMOOTH: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -16,14 +18,16 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+    filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: EASE_OUT_SMOOTH } as Transition,
   },
 };
 
+/* ── Glitch digit with periodic burst animation ── */
 function GlitchDigit({ digit }: { digit: string }) {
   return (
     <motion.span
@@ -48,6 +52,7 @@ function GlitchDigit({ digit }: { digit: string }) {
   );
 }
 
+/* ── Scanning line with subtle glow trail ── */
 function ScanningLine() {
   return (
     <motion.div
@@ -55,7 +60,7 @@ function ScanningLine() {
       style={{
         background:
           'linear-gradient(90deg, transparent 0%, rgba(33,150,255,0.3) 20%, rgba(139,92,246,0.5) 50%, rgba(33,150,255,0.3) 80%, transparent 100%)',
-        boxShadow: '0 0 16px 3px rgba(33,150,255,0.1)',
+        boxShadow: '0 0 16px 3px rgba(33,150,255,0.1), 0 0 40px 6px rgba(139,92,246,0.04)',
       }}
       animate={{ top: ['0%', '100%'] }}
       transition={{
@@ -67,6 +72,7 @@ function ScanningLine() {
   );
 }
 
+/* ── Ambient floating orb with smooth breathing ── */
 function FloatingOrb({
   x,
   y,
@@ -91,6 +97,7 @@ function FloatingOrb({
         width: size,
         height: size,
         background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: 'blur(40px)',
       }}
       animate={{
         y: [0, -20, 0],
@@ -107,22 +114,24 @@ function FloatingOrb({
   );
 }
 
-/* ── Tiny drifting star particles ── */
+/* ── Star particles with depth-based parallax drift ── */
 function StarParticles() {
-  const stars = Array.from({ length: 18 }, (_, i) => ({
-    id: i,
-    x: 5 + Math.random() * 90,
-    y: 5 + Math.random() * 90,
-    size: 1 + Math.random() * 2,
-    duration: 8 + Math.random() * 12,
-    delay: Math.random() * 4,
-    drift: 6 + Math.random() * 14,
-    opacity: 0.1 + Math.random() * 0.2,
-  }));
+  const starsRef = useRef(
+    Array.from({ length: 18 }, (_, i) => ({
+      id: i,
+      x: 5 + Math.random() * 90,
+      y: 5 + Math.random() * 90,
+      size: 1 + Math.random() * 2,
+      duration: 8 + Math.random() * 12,
+      delay: Math.random() * 4,
+      drift: 6 + Math.random() * 14,
+      opacity: 0.1 + Math.random() * 0.2,
+    })),
+  );
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-      {stars.map((s) => (
+      {starsRef.current.map((s) => (
         <motion.div
           key={s.id}
           className="absolute rounded-full"
@@ -132,6 +141,7 @@ function StarParticles() {
             left: `${s.x}%`,
             top: `${s.y}%`,
             background: 'rgba(255,255,255,0.8)',
+            boxShadow: `0 0 ${s.size * 2}px rgba(255,255,255,0.15)`,
           }}
           animate={{
             y: [-s.drift, s.drift, -s.drift],
@@ -179,9 +189,51 @@ function CoordinateReadout() {
   );
 }
 
+/* ── Constellation line pattern for extra depth ── */
+function ConstellationLines() {
+  const lines = useRef(
+    Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      x1: 10 + Math.random() * 80,
+      y1: 10 + Math.random() * 80,
+      x2: 10 + Math.random() * 80,
+      y2: 10 + Math.random() * 80,
+      delay: Math.random() * 3,
+    })),
+  );
+
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      aria-hidden="true"
+      style={{ opacity: 0.06 }}
+    >
+      {lines.current.map((l) => (
+        <motion.line
+          key={l.id}
+          x1={`${l.x1}%`}
+          y1={`${l.y1}%`}
+          x2={`${l.x2}%`}
+          y2={`${l.y2}%`}
+          stroke="white"
+          strokeWidth={0.5}
+          strokeDasharray="4 8"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: [0, 0.6, 0.3] }}
+          transition={{
+            duration: 3,
+            delay: l.delay + 0.8,
+            ease: 'easeOut',
+          }}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function NotFound() {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[80vh] bg-bg-primary overflow-hidden px-4 sm:px-6">
+    <div className="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[80vh] bg-bg-primary overflow-hidden px-4 sm:px-6">
       {/* Dot-grid background pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
@@ -194,7 +246,10 @@ export default function NotFound() {
         aria-hidden="true"
       />
 
-      {/* Ambient orbs */}
+      {/* Constellation lines for depth */}
+      <ConstellationLines />
+
+      {/* Ambient orbs — positioned for mobile-first */}
       <FloatingOrb x="10%" y="15%" size={80} color="rgba(33,150,255,0.12)" delay={0} />
       <FloatingOrb x="80%" y="20%" size={60} color="rgba(139,92,246,0.12)" delay={1} />
       <FloatingOrb x="25%" y="75%" size={70} color="rgba(20,184,166,0.10)" delay={0.5} />
@@ -212,7 +267,7 @@ export default function NotFound() {
 
       {/* Content */}
       <motion.div
-        className="relative z-10 text-center max-w-lg"
+        className="relative z-10 text-center max-w-lg w-full"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -277,7 +332,9 @@ export default function NotFound() {
               hover:bg-glow/30 hover:border-glow/50 hover:scale-[1.03] active:scale-[0.98]
               transition-all duration-300
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-glow/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
-            style={{ boxShadow: '0 0 20px rgba(33, 150, 255, 0.10)' }}
+            style={{
+              boxShadow: '0 0 20px rgba(33, 150, 255, 0.10), 0 2px 8px rgba(0,0,0,0.2)',
+            }}
           >
             <svg
               className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5"
@@ -332,7 +389,11 @@ export default function NotFound() {
         </motion.p>
       </motion.div>
 
-      {/* Bottom fade */}
+      {/* Top and bottom gradient fades */}
+      <div
+        className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-bg-primary to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
       <div
         className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-primary to-transparent pointer-events-none"
         aria-hidden="true"

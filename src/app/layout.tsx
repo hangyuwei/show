@@ -45,6 +45,45 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
+        {/* Scroll-triggered reveal utility — applied globally */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof IntersectionObserver === 'undefined') return;
+                var obs = new IntersectionObserver(function(entries) {
+                  entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                      entry.target.setAttribute('data-revealed', '');
+                      obs.unobserve(entry.target);
+                    }
+                  });
+                }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+                document.querySelectorAll('[data-reveal]').forEach(function(el) {
+                  obs.observe(el);
+                });
+                /* Also observe dynamically added elements */
+                var mutObs = new MutationObserver(function(mutations) {
+                  mutations.forEach(function(m) {
+                    m.addedNodes.forEach(function(node) {
+                      if (node.nodeType === 1) {
+                        if (node.hasAttribute && node.hasAttribute('data-reveal')) {
+                          obs.observe(node);
+                        }
+                        if (node.querySelectorAll) {
+                          node.querySelectorAll('[data-reveal]').forEach(function(el) {
+                            obs.observe(el);
+                          });
+                        }
+                      }
+                    });
+                  });
+                });
+                mutObs.observe(document.body, { childList: true, subtree: true });
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );

@@ -9,10 +9,12 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto relative">
-      {/* Multi-color gradient top border */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/40 via-[var(--accent-purple)]/30 to-transparent" />
+      {/* Multi-color gradient top border — three-stop for richness */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/35 via-[var(--accent-purple)]/25 via-[var(--color-accent-teal)]/20 to-transparent" />
       {/* Soft glow bleed below the border */}
-      <div className="absolute top-0 inset-x-0 h-4 bg-gradient-to-r from-transparent via-[var(--accent)]/[0.04] to-transparent blur-sm pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-6 bg-gradient-to-r from-transparent via-[var(--accent)]/[0.03] to-transparent blur-md pointer-events-none" />
+      {/* Ambient glow at center */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-8 bg-gradient-to-b from-[var(--accent-purple)]/[0.04] to-transparent blur-xl pointer-events-none" />
 
       {/* Subtle background pattern */}
       <div
@@ -24,30 +26,30 @@ export default function Footer() {
         }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-6 pt-4">
-        <div className="relative rounded-2xl backdrop-blur-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] overflow-hidden">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-6 pt-5">
+        <div className="relative rounded-2xl backdrop-blur-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2),0_1px_4px_rgba(0,0,0,0.1)]">
           {/* Inner top gradient accent line */}
-          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/25 to-[var(--accent)]/0" />
+          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/20 to-[var(--accent)]/0" />
           {/* Soft inner glow reflection at top */}
-          <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white/[0.015] to-transparent pointer-events-none" />
 
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center justify-between px-7 py-5">
             {/* Left: Copyright with animated accent dot */}
-            <span className="text-xs text-white/35 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--color-accent-teal)] opacity-50 animate-[breathe_4s_ease-in-out_infinite]" />
-              <span>&copy; 2024&ndash;2026 Hang</span>
+            <span className="text-xs text-white/30 flex items-center gap-2.5">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--color-accent-teal)] opacity-40 animate-[breathe_4s_ease-in-out_infinite] shadow-[0_0_6px_rgba(33,150,255,0.25)]" />
+              <span className="tracking-wide">&copy; 2024&ndash;2026 Hang</span>
             </span>
 
             {/* Center: Navigation links */}
-            <nav className="hidden sm:flex items-center gap-3">
+            <nav className="hidden sm:flex items-center gap-4">
               <a
                 href="https://github.com/hangyuwei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group text-xs text-white/35 hover:text-[var(--accent)] transition-all duration-400 flex items-center gap-1.5 relative"
+                className="group text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
               >
                 <svg
-                  className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110"
+                  className="w-3.5 h-3.5 transition-transform duration-400 group-hover:scale-110"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
@@ -60,19 +62,19 @@ export default function Footer() {
                 </svg>
                 <span className="relative">
                   GitHub
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] to-[var(--color-accent-teal)] transition-all duration-400 group-hover:w-full" />
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] to-[var(--color-accent-teal)] transition-all duration-500 group-hover:w-full" />
                 </span>
               </a>
 
               {/* Separator with gradient */}
-              <span className="w-px h-3 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+              <span className="w-px h-3.5 bg-gradient-to-b from-transparent via-white/8 to-transparent" />
 
               <a
                 href="mailto:13811282241@163.com"
-                className="group text-xs text-white/35 hover:text-[var(--accent)] transition-all duration-400 flex items-center gap-1.5 relative"
+                className="group text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
               >
                 <svg
-                  className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110"
+                  className="w-3.5 h-3.5 transition-transform duration-400 group-hover:scale-110"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -86,7 +88,7 @@ export default function Footer() {
                 </svg>
                 <span className="relative">
                   Email
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] to-[var(--color-accent-teal)] transition-all duration-400 group-hover:w-full" />
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] to-[var(--color-accent-teal)] transition-all duration-500 group-hover:w-full" />
                 </span>
               </a>
             </nav>
@@ -97,7 +99,7 @@ export default function Footer() {
                 href="https://github.com/hangyuwei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-white/35 hover:text-[var(--accent)] transition-colors duration-300 flex items-center gap-1"
+                className="text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
               >
                 <svg
                   className="w-3.5 h-3.5"
@@ -113,13 +115,13 @@ export default function Footer() {
                 </svg>
                 GitHub
               </a>
-              <span className="w-px h-2.5 bg-white/10" />
+              <span className="w-px h-3 bg-gradient-to-b from-transparent via-white/8 to-transparent" />
               <a
                 href="mailto:13811282241@163.com"
-                className="text-xs text-white/35 hover:text-[var(--accent)] transition-colors duration-300 flex items-center gap-1"
+                className="text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
               >
                 <svg
-                  className="w-3 h-3"
+                  className="w-3.5 h-3.5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -139,12 +141,12 @@ export default function Footer() {
             <motion.button
               type="button"
               onClick={scrollToTop}
-              whileHover={{ y: -1 }}
+              whileHover={{ y: -2 }}
               whileTap={{ y: 0 }}
-              className="group/btn text-xs text-white/35 hover:text-[var(--accent)] transition-all duration-400 flex items-center gap-1"
+              className="group/btn text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
             >
               <svg
-                className="w-3.5 h-3.5 transition-transform duration-400 group-hover/btn:-translate-y-0.5"
+                className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:-translate-y-0.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -158,13 +160,13 @@ export default function Footer() {
               </svg>
               <span className="relative">
                 顶部
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] to-[var(--color-accent-teal)] transition-all duration-400 group-hover/btn:w-full" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] to-[var(--color-accent-teal)] transition-all duration-500 group-hover/btn:w-full" />
               </span>
             </motion.button>
           </div>
 
-          {/* Bottom inner gradient line */}
-          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--color-accent-teal)]/15 to-[var(--accent)]/0" />
+          {/* Bottom inner gradient line — teal anchor for visual balance */}
+          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--color-accent-teal)]/12 to-[var(--accent)]/0" />
         </div>
       </div>
     </footer>

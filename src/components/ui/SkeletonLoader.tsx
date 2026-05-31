@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, type Transition } from 'framer-motion';
 
 interface SkeletonLoaderProps {
   variant?: 'card' | 'text' | '3d' | 'image' | 'avatar';
@@ -8,6 +8,17 @@ interface SkeletonLoaderProps {
   className?: string;
 }
 
+/* ── Shared easing ── */
+const EASE_OUT_SMOOTH: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+/* ── Shimmer gradient constants for re-use ── */
+const SHIMMER_GRADIENT =
+  'linear-gradient(105deg, transparent 0%, transparent 35%, rgba(255,255,255,0.03) 42%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 58%, transparent 65%, transparent 100%)';
+
+const TOP_EDGE_GLOW =
+  'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%)';
+
+/* ── Base skeleton pulse block ── */
 function SkeletonPulse({ className }: { className?: string }) {
   return (
     <motion.div
@@ -15,33 +26,39 @@ function SkeletonPulse({ className }: { className?: string }) {
       animate={{ opacity: [0.35, 0.6, 0.35] }}
       transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
     >
-      {/* Shimmer overlay with wider, softer gradient */}
+      {/* Shimmer overlay — wider, softer sweep */}
       <div
         className="absolute inset-0"
         style={{
-          background:
-            'linear-gradient(105deg, transparent 0%, transparent 35%, rgba(255,255,255,0.03) 42%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 58%, transparent 65%, transparent 100%)',
+          background: SHIMMER_GRADIENT,
           animation: 'skeleton-shimmer 2s ease-in-out infinite',
         }}
       />
       {/* Subtle inner glow at top edge */}
       <div
         className="absolute inset-x-0 top-0 h-px"
+        style={{ background: TOP_EDGE_GLOW }}
+      />
+      {/* Secondary softer shimmer — delayed for layered depth */}
+      <div
+        className="absolute inset-0 opacity-50"
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%)',
+          background: SHIMMER_GRADIENT,
+          animation: 'skeleton-shimmer 3s ease-in-out infinite 0.5s',
         }}
       />
     </motion.div>
   );
 }
 
+/* ── Card skeleton ── */
 function CardSkeleton() {
   return (
     <motion.div
       className="rounded-xl border border-white/[0.06] bg-bg-secondary/60 p-4 sm:p-5 space-y-4"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.5, ease: EASE_OUT_SMOOTH } as Transition}
     >
       {/* Header */}
       <div className="flex items-center gap-3">
@@ -67,13 +84,14 @@ function CardSkeleton() {
   );
 }
 
+/* ── Text skeleton ── */
 function TextSkeleton() {
   return (
     <motion.div
       className="space-y-3"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.5, ease: EASE_OUT_SMOOTH } as Transition}
     >
       <SkeletonPulse className="h-6 w-2/3" />
       <SkeletonPulse className="h-4 w-full" />
@@ -86,13 +104,14 @@ function TextSkeleton() {
   );
 }
 
+/* ── 3D scene skeleton ── */
 function Scene3DSkeleton() {
   return (
     <motion.div
       className="relative w-full aspect-square max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-2xl border border-white/[0.06] bg-bg-secondary/60 overflow-hidden"
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, scale: 0.96, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+      transition={{ duration: 0.55, ease: EASE_OUT_SMOOTH } as Transition}
     >
       {/* Sphere-like skeleton with layered glow */}
       <div
@@ -121,9 +140,12 @@ function Scene3DSkeleton() {
         style={{ animation: 'float 8s ease-in-out infinite 0.5s' }}
       />
 
-      {/* Center glow */}
+      {/* Center glow — breathing animation */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="h-4 w-4 rounded-full bg-glow/40 animate-pulse" />
+        <div
+          className="h-4 w-4 rounded-full bg-glow/40"
+          style={{ animation: 'breathe 2s ease-in-out infinite' }}
+        />
       </div>
 
       {/* Corner decorations — responsive sizing */}
@@ -134,13 +156,14 @@ function Scene3DSkeleton() {
   );
 }
 
+/* ── Image skeleton ── */
 function ImageSkeleton() {
   return (
     <motion.div
       className="rounded-xl overflow-hidden"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.5, ease: EASE_OUT_SMOOTH } as Transition}
     >
       <div className="aspect-[4/3] relative bg-bg-card">
         <div
@@ -168,13 +191,14 @@ function ImageSkeleton() {
   );
 }
 
+/* ── Avatar skeleton ── */
 function AvatarSkeleton() {
   return (
     <motion.div
       className="flex items-center gap-3 sm:gap-4"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 8, filter: 'blur(3px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.45, ease: EASE_OUT_SMOOTH } as Transition}
     >
       <SkeletonPulse className="h-10 w-10 sm:h-12 sm:w-12 rounded-full shrink-0" />
       <div className="flex-1 space-y-2">
@@ -207,13 +231,14 @@ export default function SkeletonLoader({
       {Array.from({ length: count }, (_, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{
-            duration: 0.4,
-            delay: i * 0.07,
-            ease: [0.22, 1, 0.36, 1],
-          }}
+            duration: 0.45,
+            delay: i * 0.08,
+            ease: EASE_OUT_SMOOTH,
+            filter: { duration: 0.4 },
+          } as Transition}
         >
           <Component />
         </motion.div>

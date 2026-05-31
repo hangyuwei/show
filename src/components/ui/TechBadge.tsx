@@ -15,31 +15,31 @@ export default function TechBadge({ name, color, delay = 0 }: TechBadgeProps) {
     <motion.span
       className="inline-flex items-center rounded-full px-2.5 py-[3px] text-[11px] font-medium tracking-wider uppercase
         backdrop-blur-sm whitespace-nowrap select-none cursor-default"
-      initial={{ opacity: 0, scale: 0.75, y: 4 }}
+      initial={{ opacity: 0, scale: 0.7, y: 6 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{
         type: 'spring',
-        stiffness: 550,
-        damping: 28,
+        stiffness: 500,
+        damping: 25,
         delay,
       }}
       style={{
-        background: `linear-gradient(145deg, ${badgeColor}18, ${badgeColor}08 50%, ${badgeColor}04)`,
-        border: `1px solid ${badgeColor}25`,
+        background: `linear-gradient(150deg, ${badgeColor}1c, ${badgeColor}08 50%, ${badgeColor}05)`,
+        border: `1px solid ${badgeColor}28`,
         color: `${badgeColor}dd`,
-        boxShadow: `0 0 2px ${badgeColor}12, 0 1px 3px rgba(0,0,0,0.18), inset 0 1px 0 ${badgeColor}08`,
-        transition: 'border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
+        boxShadow: `0 0 3px ${badgeColor}14, 0 1px 4px rgba(0,0,0,0.20), inset 0 1px 0 ${badgeColor}0a`,
+        transition: 'border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease',
       }}
       whileHover={{
-        scale: 1.12,
-        boxShadow: `0 0 12px ${badgeColor}25, 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 0 ${badgeColor}12`,
+        scale: 1.15,
+        boxShadow: `0 0 14px ${badgeColor}28, 0 2px 8px rgba(0,0,0,0.22), inset 0 1px 0 ${badgeColor}15`,
       }}
     >
       <span
         className="mr-1.5 inline-block h-[5px] w-[5px] rounded-full"
         style={{
           background: `radial-gradient(circle, ${badgeColor}, ${badgeColor}90)`,
-          boxShadow: `0 0 6px ${badgeColor}60, 0 0 2px ${badgeColor}40`,
+          boxShadow: `0 0 8px ${badgeColor}70, 0 0 3px ${badgeColor}50`,
         }}
       />
       {name}

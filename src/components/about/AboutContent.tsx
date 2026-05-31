@@ -76,11 +76,11 @@ const TIMELINE: TimelineItem[] = [
 /* ── Animation Variants ──────────────────────────────────── */
 
 const sectionVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: 'easeOut' as const },
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -112,43 +112,52 @@ const heroLineVariants = {
 };
 
 const timelineItemVariants = {
-  hidden: { opacity: 0, x: -30, scale: 0.97 },
+  hidden: { opacity: 0, x: -24, scale: 0.98 },
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
     scale: 1,
-    transition: { duration: 0.5, delay: i * 0.15, ease: 'easeOut' as const },
+    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
+
+const cardHoverShadow = '0 8px 32px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.15), 0 0 1px rgba(255,255,255,0.06)';
+const cardBaseShadow = '0 2px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1), 0 0 1px rgba(255,255,255,0.04)';
 
 /* ── Sub-Components ──────────────────────────────────────── */
 
 function SectionDivider() {
   return (
-    <div className="flex items-center justify-center my-4 sm:my-8">
-      <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/10 to-white/15" />
-      <div className="mx-4 flex items-center gap-1.5">
-        <div className="h-1 w-1 rounded-full bg-accent-blue/50 shadow-[0_0_4px_rgba(33,150,255,0.4)]" />
+    <div className="flex items-center justify-center my-6 sm:my-10">
+      <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/8 to-white/12" />
+      <div className="h-px w-8 bg-gradient-to-r from-white/12 to-accent-blue/20" />
+      <div className="mx-3 flex items-center gap-1.5">
+        <div className="h-1 w-1 rounded-full bg-accent-blue/40 shadow-[0_0_4px_rgba(33,150,255,0.35)]" />
+        <div className="h-[3px] w-[3px] rounded-full bg-white/20" />
         <div className="h-1.5 w-1.5 rounded-full bg-accent-teal/50 shadow-[0_0_6px_rgba(20,184,166,0.4)]" />
-        <div className="h-1 w-1 rounded-full bg-accent-purple/50 shadow-[0_0_4px_rgba(139,92,246,0.4)]" />
+        <div className="h-[3px] w-[3px] rounded-full bg-white/20" />
+        <div className="h-1 w-1 rounded-full bg-accent-purple/40 shadow-[0_0_4px_rgba(139,92,246,0.35)]" />
       </div>
-      <div className="h-px w-20 bg-gradient-to-l from-transparent via-white/10 to-white/15" />
+      <div className="h-px w-8 bg-gradient-to-l from-white/12 to-accent-purple/20" />
+      <div className="h-px w-16 bg-gradient-to-l from-transparent via-white/8 to-white/12" />
     </div>
   );
 }
 
 function SectionTitle({ children, subtitle }: { children: React.ReactNode; subtitle?: string }) {
   return (
-    <div className="text-center mb-8 sm:mb-10">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-2 tracking-heading">
+    <div className="text-center mb-10 sm:mb-14">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2 tracking-heading heading-section">
         <span className="accent-gradient-text">{children}</span>
       </h2>
       {subtitle && (
-        <p className="text-sm text-white/40 tracking-wide mt-1">{subtitle}</p>
+        <p className="text-sm text-white/35 tracking-wide mt-2 max-w-sm mx-auto leading-relaxed">{subtitle}</p>
       )}
-      {/* Subtle underline accent */}
-      <div className="flex justify-center mt-3">
-        <div className="h-px w-12 bg-gradient-to-r from-transparent via-accent-blue/30 to-transparent" />
+      {/* Refined underline accent with gradient endpoints */}
+      <div className="flex justify-center mt-4 gap-1">
+        <div className="h-px w-6 bg-gradient-to-r from-transparent to-accent-blue/25" />
+        <div className="h-px w-10 bg-gradient-to-r from-accent-blue/30 via-accent-teal/25 to-accent-purple/30" />
+        <div className="h-px w-6 bg-gradient-to-l from-transparent to-accent-purple/25" />
       </div>
     </div>
   );
@@ -165,15 +174,23 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
-        className="relative w-full py-16 sm:py-24 mb-4"
+        className="relative w-full py-16 sm:py-24 mb-8"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Background gradient glow behind title */}
+        {/* Background gradient glow behind title — multi-layer depth */}
         <div
-          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/4 w-[700px] h-[400px] rounded-full opacity-[0.12] animate-breathe"
+          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/4 w-[700px] h-[400px] rounded-full opacity-[0.10] animate-breathe"
           style={{
             background: 'radial-gradient(ellipse, #2196ff 0%, #8b5cf6 30%, #14b8a6 60%, transparent 80%)',
             filter: 'blur(80px)',
+          }}
+        />
+        {/* Secondary softer bloom layer */}
+        <div
+          className="pointer-events-none absolute top-8 left-1/2 -translate-x-1/2 w-[500px] h-[250px] rounded-full opacity-[0.06]"
+          style={{
+            background: 'radial-gradient(ellipse, #2196ff 0%, transparent 70%)',
+            filter: 'blur(100px)',
           }}
         />
 
@@ -182,6 +199,11 @@ export default function AboutContent() {
           className="pointer-events-none absolute top-8 right-[10%] w-3 h-3 rounded-full bg-accent-teal/40 shadow-[0_0_12px_rgba(20,184,166,0.3)]"
           style={{ animation: 'float 7s ease-in-out infinite' }}
         />
+        {/* Floating accent orb - center left */}
+        <div
+          className="pointer-events-none absolute top-1/2 left-[8%] w-2.5 h-2.5 rounded-full bg-accent-blue/25 shadow-[0_0_10px_rgba(33,150,255,0.2)]"
+          style={{ animation: 'float 8s ease-in-out infinite 1s' }}
+        />
         {/* Floating accent orb - bottom left */}
         <div
           className="pointer-events-none absolute bottom-12 left-[15%] w-2 h-2 rounded-full bg-accent-purple/30 shadow-[0_0_8px_rgba(139,92,246,0.25)]"
@@ -189,15 +211,16 @@ export default function AboutContent() {
         />
 
         <div className="relative text-center pt-16 sm:pt-24 pb-12 sm:pb-16">
-          {/* Label */}
+          {/* Label pill */}
           <motion.span
             variants={heroSubtitleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="inline-block text-xs font-mono tracking-display uppercase text-accent-teal/60 mb-4 px-3 py-1 rounded-full border border-accent-teal/15"
-            style={{ background: 'rgba(20, 184, 166, 0.06)' }}
+            className="inline-flex items-center gap-1.5 text-xs font-mono tracking-display uppercase text-accent-teal/60 mb-5 px-3.5 py-1.5 rounded-full border border-accent-teal/12"
+            style={{ background: 'rgba(20, 184, 166, 0.05)' }}
           >
+            <span className="w-1 h-1 rounded-full bg-accent-teal/50" />
             About
           </motion.span>
 
@@ -207,35 +230,37 @@ export default function AboutContent() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-4xl sm:text-6xl font-bold tracking-tight mb-5"
+            className="text-4xl sm:text-6xl font-bold tracking-tight mb-5 heading-premium"
           >
             <span className="accent-gradient-text">关于我</span>
           </motion.h1>
 
-          {/* Subtitle line */}
+          {/* Subtitle line with refined spacing */}
           <motion.p
             variants={heroSubtitleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-base sm:text-lg text-white/40 max-w-md mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/35 max-w-md mx-auto leading-relaxed tracking-wide"
           >
             全栈开发 / 大健康技术 / AI 应用 / 创意可视化
           </motion.p>
 
-          {/* Decorative line with glow */}
+          {/* Decorative separator with layered glow dots */}
           <motion.div
             variants={heroLineVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="flex justify-center items-center gap-2 mt-6 origin-center"
+            className="flex justify-center items-center gap-2 mt-7 origin-center"
           >
-            <span className="w-12 h-px bg-gradient-to-r from-transparent to-accent-blue/50" />
+            <span className="w-16 h-px bg-gradient-to-r from-transparent to-accent-blue/40" />
+            <span className="w-1 h-1 rounded-full bg-accent-blue/50 shadow-[0_0_4px_rgba(33,150,255,0.3)]" />
             <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/60 shadow-[0_0_6px_rgba(33,150,255,0.4)]" />
             <span className="w-2 h-2 rounded-full bg-accent-teal/50 shadow-[0_0_8px_rgba(20,184,166,0.4)]" />
             <span className="w-1.5 h-1.5 rounded-full bg-accent-purple/60 shadow-[0_0_6px_rgba(139,92,246,0.4)]" />
-            <span className="w-12 h-px bg-gradient-to-l from-transparent to-accent-purple/50" />
+            <span className="w-1 h-1 rounded-full bg-accent-purple/50 shadow-[0_0_4px_rgba(139,92,246,0.3)]" />
+            <span className="w-16 h-px bg-gradient-to-l from-transparent to-accent-purple/40" />
           </motion.div>
         </div>
       </motion.section>
@@ -246,12 +271,12 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
-        className="relative w-full mb-16 sm:mb-24"
+        className="relative w-full mb-20 sm:mb-28"
         style={{ padding: 0, background: 'none' }}
       >
         {/* Background gradient orb with breathing animation */}
         <div
-          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.07] animate-breathe"
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.06] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #2196ff 0%, #14b8a6 40%, transparent 70%)',
             filter: 'blur(80px)',
@@ -261,10 +286,10 @@ export default function AboutContent() {
         <SectionTitle subtitle="跨领域复合能力全景 — 涵盖工程、设计、数据与 AI">能力雷达</SectionTitle>
 
         <div
-          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-500 hover:border-white/[0.10]"
+          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-700 hover:border-white/[0.12]"
           style={{
             background: 'var(--glass-bg)',
-            boxShadow: 'var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.04)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}
         >
           {/* Inner ambient gradient at top */}
@@ -294,25 +319,32 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
-        className="relative max-w-3xl mx-auto mb-16 sm:mb-24"
+        className="relative max-w-3xl mx-auto mb-20 sm:mb-28"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Subtle background glow */}
+        {/* Subtle background glow — two-layer depth */}
         <div
-          className="pointer-events-none absolute top-0 right-0 w-80 h-80 rounded-full opacity-[0.06] animate-breathe"
+          className="pointer-events-none absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.05] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-[0.04]"
+          style={{
+            background: 'radial-gradient(circle, #2196ff 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />
 
         <SectionTitle subtitle="了解更多关于我的故事">关于我</SectionTitle>
 
-        {/* Bio Card with gradient border */}
+        {/* Bio Card with animated gradient border */}
         <div className="relative rounded-2xl p-px overflow-hidden group">
           {/* Animated gradient border */}
           <div
-            className="absolute inset-0 rounded-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-700"
+            className="absolute inset-0 rounded-2xl opacity-35 group-hover:opacity-65 transition-opacity duration-700"
             style={{
               background: 'linear-gradient(135deg, #2196ff, #8b5cf6, #14b8a6, #2196ff)',
               backgroundSize: '300% 300%',
@@ -320,28 +352,44 @@ export default function AboutContent() {
             }}
           />
           <div
-            className="relative rounded-2xl p-6 sm:p-10 transition-shadow duration-500"
+            className="relative rounded-2xl p-6 sm:p-10 transition-all duration-700 group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.25)]"
             style={{
               background: 'var(--glass-bg)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.04)',
             }}
           >
-            {/* Inner top ambient light */}
+            {/* Inner top ambient light — gradient fade */}
             <div
-              className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 opacity-[0.06]"
+              className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-24 opacity-[0.05]"
               style={{
                 background: 'radial-gradient(ellipse, #8b5cf6, transparent 70%)',
+                filter: 'blur(20px)',
+              }}
+            />
+            {/* Inner bottom subtle warmth */}
+            <div
+              className="pointer-events-none absolute bottom-0 right-1/4 w-1/3 h-16 opacity-[0.03]"
+              style={{
+                background: 'radial-gradient(ellipse, #14b8a6, transparent 70%)',
                 filter: 'blur(16px)',
               }}
             />
 
             <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-              {/* Avatar with gradient ring */}
+              {/* Avatar with multi-layer gradient ring */}
               <div className="shrink-0 self-center sm:self-start">
                 <div className="relative">
-                  {/* Outer glow ring */}
+                  {/* Outermost glow halo */}
                   <div
-                    className="absolute -inset-1.5 rounded-full opacity-40 group-hover:opacity-60 transition-opacity duration-700"
+                    className="absolute -inset-3 rounded-full opacity-20 group-hover:opacity-35 transition-opacity duration-700"
+                    style={{
+                      background: 'linear-gradient(135deg, #2196ff, #8b5cf6, #14b8a6)',
+                      filter: 'blur(12px)',
+                    }}
+                  />
+                  {/* Middle glow ring */}
+                  <div
+                    className="absolute -inset-1.5 rounded-full opacity-35 group-hover:opacity-55 transition-opacity duration-700"
                     style={{
                       background: 'linear-gradient(135deg, #2196ff, #8b5cf6, #14b8a6)',
                       filter: 'blur(6px)',
@@ -351,23 +399,26 @@ export default function AboutContent() {
                     className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-3xl sm:text-4xl font-bold text-white"
                     style={{
                       background: 'linear-gradient(135deg, #2196ff 0%, #8b5cf6 50%, #14b8a6 100%)',
-                      boxShadow: '0 0 30px rgba(33, 150, 255, 0.2), 0 0 60px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255,255,255,0.15)',
+                      boxShadow: '0 0 30px rgba(33, 150, 255, 0.15), 0 0 60px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
                     }}
                   >
                     H
                   </div>
-                  {/* Online status indicator */}
-                  <div className="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-green-400 border-2 border-[var(--glass-bg)] shadow-[0_0_8px_rgba(74,222,128,0.6)]" />
+                  {/* Online status indicator with refined glow */}
+                  <div
+                    className="absolute bottom-0.5 right-0.5 w-4 h-4 rounded-full bg-green-400 border-2 border-[var(--glass-bg)]"
+                    style={{ boxShadow: '0 0 8px rgba(74,222,128,0.5), 0 0 16px rgba(74,222,128,0.2)' }}
+                  />
                 </div>
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="text-xl sm:text-2xl font-bold mb-1">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1.5 tracking-tight">
                   <span className="accent-gradient-text">Hang</span>
                 </h3>
 
                 {/* Location + availability line */}
-                <div className="flex items-center gap-3 mb-3 text-xs text-white/30">
+                <div className="flex items-center gap-3 mb-4 text-xs text-white/30">
                   <span className="inline-flex items-center gap-1">
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -407,26 +458,26 @@ export default function AboutContent() {
                   </span>
                 </div>
 
-                <div className="space-y-3">
-                  <p className="text-sm sm:text-base leading-relaxed text-white/70">
+                <div className="space-y-3.5">
+                  <p className="text-sm sm:text-base leading-[1.75] text-white/65">
                     拥有多年全栈开发经验，专注于将技术与行业深度结合。在大健康领域深耕多年，
                     擅长将数据分析、AI 技术与医疗健康场景融合，打造有价值的数字产品。
                   </p>
-                  <p className="text-sm sm:text-base leading-relaxed text-white/70">
+                  <p className="text-sm sm:text-base leading-[1.75] text-white/65">
                     技术视野覆盖前端工程、后端服务、数据智能与创意可视化。相信技术的价值在于解决真实问题，
                     追求工程卓越与用户体验的平衡。
                   </p>
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-white/[0.06]">
+                <div className="mt-6 pt-5 border-t border-white/[0.06]">
                   <a
                     href="https://github.com/hangyuwei"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 text-sm text-white/50 hover:text-accent-blue transition-all duration-300 group/link"
+                    className="inline-flex items-center gap-2.5 text-sm text-white/40 hover:text-accent-blue transition-all duration-300 group/link"
                   >
                     <span
-                      className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 group-hover/link:border-accent-blue/30 group-hover/link:bg-accent-blue/10 transition-all duration-300"
+                      className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/8 group-hover/link:border-accent-blue/25 group-hover/link:bg-accent-blue/8 transition-all duration-300"
                     >
                       <svg
                         className="w-4 h-4"
@@ -467,12 +518,12 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
-        className="relative w-full mb-16 sm:mb-24"
+        className="relative w-full mb-20 sm:mb-28"
         style={{ padding: 0, background: 'none' }}
       >
         {/* Background gradient orb with breathing animation */}
         <div
-          className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.06] animate-breathe"
+          className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.05] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #8b5cf6 0%, #2196ff 40%, transparent 70%)',
             filter: 'blur(80px)',
@@ -483,10 +534,10 @@ export default function AboutContent() {
         <SectionTitle subtitle="拖拽旋转探索我的技术版图 — 从前端到后端、从数据到 AI">技术栈</SectionTitle>
 
         <div
-          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-500 hover:border-white/[0.10]"
+          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-700 hover:border-white/[0.12]"
           style={{
             background: 'var(--glass-bg)',
-            boxShadow: 'var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.04)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}
         >
           {/* Inner ambient gradient at bottom */}
@@ -516,49 +567,66 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
-        className="relative max-w-3xl mx-auto"
+        className="relative max-w-3xl mx-auto mb-8 sm:mb-12"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Background gradient orb */}
+        {/* Background gradient orb — dual layer */}
         <div
-          className="pointer-events-none absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-[0.05] animate-breathe"
+          className="pointer-events-none absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-[0.04] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #14b8a6 0%, #2196ff 40%, transparent 70%)',
             filter: 'blur(60px)',
             animationDelay: '4s',
           }}
         />
+        <div
+          className="pointer-events-none absolute top-1/4 right-0 w-64 h-64 rounded-full opacity-[0.03]"
+          style={{
+            background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
+            filter: 'blur(50px)',
+          }}
+        />
 
         <SectionTitle subtitle="持续成长的技术之旅">职业经历</SectionTitle>
 
         <div className="relative">
-          {/* Timeline line - enhanced gradient with glow */}
+          {/* Timeline line — multi-layer glow with gradient */}
           <motion.div
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 1.0, ease: 'easeOut' }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="absolute left-5 sm:left-7 top-3 bottom-3 w-px origin-top"
           >
+            {/* Outermost soft bloom */}
+            <div className="absolute inset-0 w-8 -translate-x-[14px] bg-gradient-to-b from-accent-blue/10 via-accent-purple/8 to-accent-teal/10 blur-lg" />
             {/* Glow behind line - wider soft bloom */}
             <div className="absolute inset-0 w-5 -translate-x-2 bg-gradient-to-b from-accent-blue/15 via-accent-purple/10 to-accent-teal/10 blur-md" />
             {/* Narrower sharper glow */}
             <div className="absolute inset-0 w-2 -translate-x-0.5 bg-gradient-to-b from-accent-blue/25 via-accent-purple/20 to-accent-teal/20 blur-sm" />
             {/* Main line */}
-            <div className="absolute inset-0 bg-gradient-to-b from-accent-blue via-accent-purple to-accent-teal opacity-30" />
-            {/* Start cap - larger with glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-accent-blue via-accent-purple to-accent-teal opacity-25" />
+            {/* Start cap — outer glow */}
             <div
-              className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-blue"
-              style={{ boxShadow: '0 0 8px rgba(33,150,255,0.6), 0 0 16px rgba(33,150,255,0.3)' }}
+              className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full opacity-30"
+              style={{ background: '#2196ff', filter: 'blur(4px)' }}
             />
-            {/* End cap - larger with glow */}
             <div
-              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-teal"
-              style={{ boxShadow: '0 0 8px rgba(20,184,166,0.6), 0 0 16px rgba(20,184,166,0.3)' }}
+              className="absolute -top-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-blue"
+              style={{ boxShadow: '0 0 8px rgba(33,150,255,0.5), 0 0 16px rgba(33,150,255,0.25), inset 0 1px 0 rgba(255,255,255,0.2)' }}
+            />
+            {/* End cap — outer glow */}
+            <div
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full opacity-30"
+              style={{ background: '#14b8a6', filter: 'blur(4px)' }}
+            />
+            <div
+              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-teal"
+              style={{ boxShadow: '0 0 8px rgba(20,184,166,0.5), 0 0 16px rgba(20,184,166,0.25), inset 0 1px 0 rgba(255,255,255,0.2)' }}
             />
           </motion.div>
 
-          <div className="space-y-8 sm:space-y-10">
+          <div className="space-y-6 sm:space-y-8">
             {TIMELINE.map((item, i) => {
               const dotColors = [
                 { bg: '#2196ff', glow: 'rgba(33, 150, 255, 0.5)', ring: 'rgba(33, 150, 255, 0.2)' },
@@ -579,16 +647,21 @@ export default function AboutContent() {
                   variants={timelineItemVariants}
                   className="relative pl-14 sm:pl-18"
                 >
-                  {/* Timeline dot - pulsing with color */}
+                  {/* Timeline dot — multi-layer glow with color */}
                   <div className="absolute left-3 sm:left-5 top-5">
-                    {/* Outer pulse ring - subtle breathing instead of ping */}
+                    {/* Outermost soft aura */}
                     <div
-                      className="absolute -inset-2.5 rounded-full opacity-30 animate-breathe"
+                      className="absolute -inset-4 rounded-full opacity-15"
+                      style={{ background: color.bg, filter: 'blur(6px)' }}
+                    />
+                    {/* Outer pulse ring - subtle breathing */}
+                    <div
+                      className="absolute -inset-2.5 rounded-full opacity-25 animate-breathe"
                       style={{ backgroundColor: color.glow, animationDelay: `${i * 1.5}s` }}
                     />
                     {/* Middle ring with glow */}
                     <div
-                      className="absolute -inset-1.5 rounded-full opacity-25"
+                      className="absolute -inset-1.5 rounded-full opacity-20"
                       style={{ boxShadow: `0 0 14px ${color.glow}` }}
                     />
                     {/* Core dot with inset highlight */}
@@ -596,42 +669,55 @@ export default function AboutContent() {
                       className="relative w-4 h-4 rounded-full border-2"
                       style={{
                         backgroundColor: color.bg,
-                        borderColor: `${color.bg}80`,
-                        boxShadow: `0 0 12px ${color.glow}, 0 0 24px ${color.ring}, inset 0 1px 0 rgba(255,255,255,0.2)`,
+                        borderColor: `${color.bg}60`,
+                        boxShadow: `0 0 10px ${color.glow}, 0 0 20px ${color.ring}, inset 0 1px 0 rgba(255,255,255,0.25)`,
                       }}
-                    />
+                    >
+                      {/* Inner shine */}
+                      <div
+                        className="absolute top-0.5 left-1 w-1.5 h-1 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.3)', filter: 'blur(1px)' }}
+                      />
+                    </div>
                   </div>
 
-                  {/* Card with left accent bar */}
+                  {/* Card with left accent bar and multi-layer shadow */}
                   <div
-                    className="relative rounded-xl overflow-hidden group transition-all duration-500 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+                    className="relative rounded-xl overflow-hidden group transition-all duration-600"
                     style={{
                       background: 'var(--glass-bg)',
                       border: '1px solid var(--glass-border)',
+                      boxShadow: cardBaseShadow,
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.boxShadow = `${cardHoverShadow}, 0 0 20px ${color.ring}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.boxShadow = cardBaseShadow;
                     }}
                   >
                     {/* Left accent bar with gradient fade */}
                     <div
-                      className="absolute left-0 top-0 bottom-0 w-0.5 opacity-60 group-hover:opacity-100 group-hover:w-1 transition-all duration-500"
+                      className="absolute left-0 top-0 bottom-0 w-0.5 opacity-50 group-hover:opacity-90 group-hover:w-1 transition-all duration-500"
                       style={{
-                        background: `linear-gradient(180deg, ${color.bg}, ${color.bg}60, ${color.bg}20)`,
+                        background: `linear-gradient(180deg, ${color.bg}, ${color.bg}50, ${color.bg}15)`,
                       }}
                     />
 
-                    {/* Subtle top highlight on hover */}
+                    {/* Top highlight on hover */}
                     <div
                       className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                       style={{
-                        background: `linear-gradient(90deg, transparent, ${color.bg}30, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${color.bg}25, transparent)`,
                       }}
                     />
 
-                    <div className="p-5 sm:p-6 group-hover:bg-white/[0.03] transition-colors duration-500">
-                      <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="p-5 sm:p-6 group-hover:bg-white/[0.02] transition-colors duration-500">
+                      <div className="flex items-start justify-between gap-3 mb-2.5">
                         <div className="flex items-center gap-2.5">
                           <span
-                            className="flex items-center justify-center w-7 h-7 rounded-md transition-colors duration-300 group-hover:bg-[${color.bg}25]"
-                            style={{ backgroundColor: `${color.bg}15` }}
+                            className="flex items-center justify-center w-7 h-7 rounded-lg transition-all duration-300 group-hover:scale-105"
+                            style={{ backgroundColor: `${color.bg}12` }}
                           >
                             <svg
                               className="w-3.5 h-3.5"
@@ -643,26 +729,26 @@ export default function AboutContent() {
                               <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
                             </svg>
                           </span>
-                          <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-accent-blue transition-colors duration-300">
+                          <h3 className="text-base sm:text-lg font-semibold text-white/90 group-hover:text-white tracking-tight transition-colors duration-300">
                             {item.title}
                           </h3>
                         </div>
                         {isLast && (
                           <span
-                            className="shrink-0 px-2 py-0.5 rounded text-[10px] font-medium tracking-wider uppercase"
-                            style={{ background: `${color.bg}20`, color: color.bg }}
+                            className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium tracking-wider uppercase border"
+                            style={{ background: `${color.bg}15`, color: color.bg, borderColor: `${color.bg}25` }}
                           >
                             Current
                           </span>
                         )}
                       </div>
                       <span
-                        className="text-xs font-mono mb-3 block ml-[38px]"
-                        style={{ color: `${color.bg}99` }}
+                        className="text-xs font-mono mb-3 block ml-[38px] tracking-wide"
+                        style={{ color: `${color.bg}80` }}
                       >
                         {item.period}
                       </span>
-                      <p className="text-sm text-white/60 leading-relaxed ml-[38px] group-hover:text-white/70 transition-colors duration-300">
+                      <p className="text-sm text-white/50 leading-[1.7] ml-[38px] group-hover:text-white/65 transition-colors duration-300">
                         {item.description}
                       </p>
                     </div>
