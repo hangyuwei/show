@@ -112,10 +112,11 @@ const heroLineVariants = {
 };
 
 const timelineItemVariants = {
-  hidden: { opacity: 0, x: -30 },
+  hidden: { opacity: 0, x: -30, scale: 0.97 },
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
+    scale: 1,
     transition: { duration: 0.5, delay: i * 0.15, ease: 'easeOut' as const },
   }),
 };
@@ -125,13 +126,13 @@ const timelineItemVariants = {
 function SectionDivider() {
   return (
     <div className="flex items-center justify-center my-4 sm:my-8">
-      <div className="h-px w-16 bg-gradient-to-r from-transparent to-white/10" />
-      <div className="mx-3 flex gap-1">
-        <div className="h-1 w-1 rounded-full bg-accent-blue/40" />
-        <div className="h-1 w-1 rounded-full bg-accent-teal/40" />
-        <div className="h-1 w-1 rounded-full bg-accent-purple/40" />
+      <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/10 to-white/15" />
+      <div className="mx-4 flex items-center gap-1.5">
+        <div className="h-1 w-1 rounded-full bg-accent-blue/50 shadow-[0_0_4px_rgba(33,150,255,0.4)]" />
+        <div className="h-1.5 w-1.5 rounded-full bg-accent-teal/50 shadow-[0_0_6px_rgba(20,184,166,0.4)]" />
+        <div className="h-1 w-1 rounded-full bg-accent-purple/50 shadow-[0_0_4px_rgba(139,92,246,0.4)]" />
       </div>
-      <div className="h-px w-16 bg-gradient-to-l from-transparent to-white/10" />
+      <div className="h-px w-20 bg-gradient-to-l from-transparent via-white/10 to-white/15" />
     </div>
   );
 }
@@ -143,8 +144,12 @@ function SectionTitle({ children, subtitle }: { children: React.ReactNode; subti
         <span className="accent-gradient-text">{children}</span>
       </h2>
       {subtitle && (
-        <p className="text-sm text-white/40 tracking-wide">{subtitle}</p>
+        <p className="text-sm text-white/40 tracking-wide mt-1">{subtitle}</p>
       )}
+      {/* Subtle underline accent */}
+      <div className="flex justify-center mt-3">
+        <div className="h-px w-12 bg-gradient-to-r from-transparent via-accent-blue/30 to-transparent" />
+      </div>
     </div>
   );
 }
@@ -165,11 +170,22 @@ export default function AboutContent() {
       >
         {/* Background gradient glow behind title */}
         <div
-          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/4 w-[700px] h-[400px] rounded-full opacity-[0.12]"
+          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/4 w-[700px] h-[400px] rounded-full opacity-[0.12] animate-breathe"
           style={{
             background: 'radial-gradient(ellipse, #2196ff 0%, #8b5cf6 30%, #14b8a6 60%, transparent 80%)',
             filter: 'blur(80px)',
           }}
+        />
+
+        {/* Floating accent orb - top right */}
+        <div
+          className="pointer-events-none absolute top-8 right-[10%] w-3 h-3 rounded-full bg-accent-teal/40 shadow-[0_0_12px_rgba(20,184,166,0.3)]"
+          style={{ animation: 'float 7s ease-in-out infinite' }}
+        />
+        {/* Floating accent orb - bottom left */}
+        <div
+          className="pointer-events-none absolute bottom-12 left-[15%] w-2 h-2 rounded-full bg-accent-purple/30 shadow-[0_0_8px_rgba(139,92,246,0.25)]"
+          style={{ animation: 'float 9s ease-in-out infinite 2s' }}
         />
 
         <div className="relative text-center pt-16 sm:pt-24 pb-12 sm:pb-16">
@@ -179,7 +195,8 @@ export default function AboutContent() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="inline-block text-xs font-mono tracking-display uppercase text-accent-teal/60 mb-4"
+            className="inline-block text-xs font-mono tracking-display uppercase text-accent-teal/60 mb-4 px-3 py-1 rounded-full border border-accent-teal/15"
+            style={{ background: 'rgba(20, 184, 166, 0.06)' }}
           >
             About
           </motion.span>
@@ -206,7 +223,7 @@ export default function AboutContent() {
             全栈开发 / 大健康技术 / AI 应用 / 创意可视化
           </motion.p>
 
-          {/* Decorative line */}
+          {/* Decorative line with glow */}
           <motion.div
             variants={heroLineVariants}
             initial="hidden"
@@ -214,11 +231,11 @@ export default function AboutContent() {
             viewport={{ once: true }}
             className="flex justify-center items-center gap-2 mt-6 origin-center"
           >
-            <span className="w-10 h-px bg-gradient-to-r from-transparent to-accent-blue/50" />
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/50" />
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-teal/50" />
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-purple/50" />
-            <span className="w-10 h-px bg-gradient-to-l from-transparent to-accent-purple/50" />
+            <span className="w-12 h-px bg-gradient-to-r from-transparent to-accent-blue/50" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/60 shadow-[0_0_6px_rgba(33,150,255,0.4)]" />
+            <span className="w-2 h-2 rounded-full bg-accent-teal/50 shadow-[0_0_8px_rgba(20,184,166,0.4)]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-purple/60 shadow-[0_0_6px_rgba(139,92,246,0.4)]" />
+            <span className="w-12 h-px bg-gradient-to-l from-transparent to-accent-purple/50" />
           </motion.div>
         </div>
       </motion.section>
@@ -232,9 +249,9 @@ export default function AboutContent() {
         className="relative w-full mb-16 sm:mb-24"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Background gradient orb */}
+        {/* Background gradient orb with breathing animation */}
         <div
-          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.07]"
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.07] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #2196ff 0%, #14b8a6 40%, transparent 70%)',
             filter: 'blur(80px)',
@@ -243,14 +260,27 @@ export default function AboutContent() {
 
         <SectionTitle subtitle="跨领域复合能力全景 — 涵盖工程、设计、数据与 AI">能力雷达</SectionTitle>
 
-        <div className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06]"
-          style={{ background: 'var(--glass-bg)' }}
+        <div
+          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-500 hover:border-white/[0.10]"
+          style={{
+            background: 'var(--glass-bg)',
+            boxShadow: 'var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.04)',
+          }}
         >
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-accent-blue/20 rounded-tl-2xl" />
-          <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-accent-teal/20 rounded-tr-2xl" />
-          <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-accent-teal/20 rounded-bl-2xl" />
-          <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-accent-blue/20 rounded-br-2xl" />
+          {/* Inner ambient gradient at top */}
+          <div
+            className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 rounded-full opacity-[0.08]"
+            style={{
+              background: 'radial-gradient(ellipse, #2196ff, transparent 70%)',
+              filter: 'blur(20px)',
+            }}
+          />
+
+          {/* Corner accents with hover brightness */}
+          <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-accent-blue/20 rounded-tl-2xl group-hover/panel:border-accent-blue/35 transition-colors duration-500" />
+          <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-accent-teal/20 rounded-tr-2xl group-hover/panel:border-accent-teal/35 transition-colors duration-500" />
+          <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-accent-teal/20 rounded-bl-2xl group-hover/panel:border-accent-teal/35 transition-colors duration-500" />
+          <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-accent-blue/20 rounded-br-2xl group-hover/panel:border-accent-blue/35 transition-colors duration-500" />
 
           <SkillRadar3D />
         </div>
@@ -269,7 +299,7 @@ export default function AboutContent() {
       >
         {/* Subtle background glow */}
         <div
-          className="pointer-events-none absolute top-0 right-0 w-80 h-80 rounded-full opacity-[0.06]"
+          className="pointer-events-none absolute top-0 right-0 w-80 h-80 rounded-full opacity-[0.06] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
             filter: 'blur(60px)',
@@ -290,18 +320,38 @@ export default function AboutContent() {
             }}
           />
           <div
-            className="relative rounded-2xl p-6 sm:p-10"
-            style={{ background: 'var(--glass-bg)' }}
+            className="relative rounded-2xl p-6 sm:p-10 transition-shadow duration-500"
+            style={{
+              background: 'var(--glass-bg)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+            }}
           >
+            {/* Inner top ambient light */}
+            <div
+              className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 opacity-[0.06]"
+              style={{
+                background: 'radial-gradient(ellipse, #8b5cf6, transparent 70%)',
+                filter: 'blur(16px)',
+              }}
+            />
+
             <div className="flex flex-col sm:flex-row sm:items-start gap-6">
               {/* Avatar with gradient ring */}
               <div className="shrink-0 self-center sm:self-start">
                 <div className="relative">
+                  {/* Outer glow ring */}
                   <div
-                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-3xl sm:text-4xl font-bold text-white"
+                    className="absolute -inset-1.5 rounded-full opacity-40 group-hover:opacity-60 transition-opacity duration-700"
+                    style={{
+                      background: 'linear-gradient(135deg, #2196ff, #8b5cf6, #14b8a6)',
+                      filter: 'blur(6px)',
+                    }}
+                  />
+                  <div
+                    className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-3xl sm:text-4xl font-bold text-white"
                     style={{
                       background: 'linear-gradient(135deg, #2196ff 0%, #8b5cf6 50%, #14b8a6 100%)',
-                      boxShadow: '0 0 30px rgba(33, 150, 255, 0.2), 0 0 60px rgba(139, 92, 246, 0.1)',
+                      boxShadow: '0 0 30px rgba(33, 150, 255, 0.2), 0 0 60px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255,255,255,0.15)',
                     }}
                   >
                     H
@@ -316,24 +366,40 @@ export default function AboutContent() {
                   <span className="accent-gradient-text">Hang</span>
                 </h3>
 
+                {/* Location + availability line */}
+                <div className="flex items-center gap-3 mb-3 text-xs text-white/30">
+                  <span className="inline-flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
+                    China
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-white/20" />
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400/60 shadow-[0_0_4px_rgba(74,222,128,0.4)]" />
+                    Open to collaborate
+                  </span>
+                </div>
+
                 {/* Role tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium text-accent-blue border border-accent-blue/30"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium text-accent-blue border border-accent-blue/30 transition-all duration-300 hover:border-accent-blue/50 hover:shadow-[0_0_8px_rgba(33,150,255,0.15)]"
                     style={{ background: 'rgba(33, 150, 255, 0.1)' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-blue" />
                     全栈开发
                   </span>
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border border-accent-teal/30"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border border-accent-teal/30 transition-all duration-300 hover:border-accent-teal/50 hover:shadow-[0_0_8px_rgba(20,184,166,0.15)]"
                     style={{ background: 'rgba(20, 184, 166, 0.1)', color: '#14b8a6' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-teal" />
                     大健康行业
                   </span>
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border border-accent-purple/30"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border border-accent-purple/30 transition-all duration-300 hover:border-accent-purple/50 hover:shadow-[0_0_8px_rgba(139,92,246,0.15)]"
                     style={{ background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-purple" />
@@ -404,26 +470,39 @@ export default function AboutContent() {
         className="relative w-full mb-16 sm:mb-24"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Background gradient orb */}
+        {/* Background gradient orb with breathing animation */}
         <div
-          className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.06]"
+          className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.06] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #8b5cf6 0%, #2196ff 40%, transparent 70%)',
             filter: 'blur(80px)',
+            animationDelay: '2s',
           }}
         />
 
         <SectionTitle subtitle="拖拽旋转探索我的技术版图 — 从前端到后端、从数据到 AI">技术栈</SectionTitle>
 
         <div
-          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06]"
-          style={{ background: 'var(--glass-bg)' }}
+          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-500 hover:border-white/[0.10]"
+          style={{
+            background: 'var(--glass-bg)',
+            boxShadow: 'var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.04)',
+          }}
         >
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-accent-purple/20 rounded-tl-2xl" />
-          <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-accent-blue/20 rounded-tr-2xl" />
-          <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-accent-blue/20 rounded-bl-2xl" />
-          <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-accent-purple/20 rounded-br-2xl" />
+          {/* Inner ambient gradient at bottom */}
+          <div
+            className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 rounded-full opacity-[0.08]"
+            style={{
+              background: 'radial-gradient(ellipse, #8b5cf6, transparent 70%)',
+              filter: 'blur(20px)',
+            }}
+          />
+
+          {/* Corner accents with hover brightness */}
+          <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-accent-purple/20 rounded-tl-2xl group-hover/panel:border-accent-purple/35 transition-colors duration-500" />
+          <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-accent-blue/20 rounded-tr-2xl group-hover/panel:border-accent-blue/35 transition-colors duration-500" />
+          <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-accent-blue/20 rounded-bl-2xl group-hover/panel:border-accent-blue/35 transition-colors duration-500" />
+          <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-accent-purple/20 rounded-br-2xl group-hover/panel:border-accent-purple/35 transition-colors duration-500" />
 
           <TechSphere />
         </div>
@@ -442,10 +521,11 @@ export default function AboutContent() {
       >
         {/* Background gradient orb */}
         <div
-          className="pointer-events-none absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-[0.05]"
+          className="pointer-events-none absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-[0.05] animate-breathe"
           style={{
             background: 'radial-gradient(circle, #14b8a6 0%, #2196ff 40%, transparent 70%)',
             filter: 'blur(60px)',
+            animationDelay: '4s',
           }}
         />
 
@@ -460,14 +540,22 @@ export default function AboutContent() {
             transition={{ duration: 1.0, ease: 'easeOut' }}
             className="absolute left-5 sm:left-7 top-3 bottom-3 w-px origin-top"
           >
-            {/* Glow behind line */}
-            <div className="absolute inset-0 w-3 -translate-x-1 bg-gradient-to-b from-accent-blue/20 via-accent-purple/15 to-accent-teal/15 blur-sm" />
+            {/* Glow behind line - wider soft bloom */}
+            <div className="absolute inset-0 w-5 -translate-x-2 bg-gradient-to-b from-accent-blue/15 via-accent-purple/10 to-accent-teal/10 blur-md" />
+            {/* Narrower sharper glow */}
+            <div className="absolute inset-0 w-2 -translate-x-0.5 bg-gradient-to-b from-accent-blue/25 via-accent-purple/20 to-accent-teal/20 blur-sm" />
             {/* Main line */}
             <div className="absolute inset-0 bg-gradient-to-b from-accent-blue via-accent-purple to-accent-teal opacity-30" />
-            {/* Start cap */}
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-accent-blue shadow-[0_0_8px_rgba(33,150,255,0.6)]" />
-            {/* End cap */}
-            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-accent-teal shadow-[0_0_8px_rgba(20,184,166,0.6)]" />
+            {/* Start cap - larger with glow */}
+            <div
+              className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-blue"
+              style={{ boxShadow: '0 0 8px rgba(33,150,255,0.6), 0 0 16px rgba(33,150,255,0.3)' }}
+            />
+            {/* End cap - larger with glow */}
+            <div
+              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-teal"
+              style={{ boxShadow: '0 0 8px rgba(20,184,166,0.6), 0 0 16px rgba(20,184,166,0.3)' }}
+            />
           </motion.div>
 
           <div className="space-y-8 sm:space-y-10">
@@ -493,40 +581,48 @@ export default function AboutContent() {
                 >
                   {/* Timeline dot - pulsing with color */}
                   <div className="absolute left-3 sm:left-5 top-5">
-                    {/* Outer pulse ring */}
+                    {/* Outer pulse ring - subtle breathing instead of ping */}
                     <div
-                      className="absolute -inset-2 rounded-full animate-ping opacity-20"
-                      style={{ backgroundColor: color.glow }}
+                      className="absolute -inset-2.5 rounded-full opacity-30 animate-breathe"
+                      style={{ backgroundColor: color.glow, animationDelay: `${i * 1.5}s` }}
                     />
-                    {/* Middle ring */}
+                    {/* Middle ring with glow */}
                     <div
-                      className="absolute -inset-1 rounded-full opacity-30"
-                      style={{ boxShadow: `0 0 12px ${color.glow}` }}
+                      className="absolute -inset-1.5 rounded-full opacity-25"
+                      style={{ boxShadow: `0 0 14px ${color.glow}` }}
                     />
-                    {/* Core dot */}
+                    {/* Core dot with inset highlight */}
                     <div
-                      className="relative w-3.5 h-3.5 rounded-full border-2"
+                      className="relative w-4 h-4 rounded-full border-2"
                       style={{
                         backgroundColor: color.bg,
                         borderColor: `${color.bg}80`,
-                        boxShadow: `0 0 10px ${color.glow}, 0 0 20px ${color.ring}`,
+                        boxShadow: `0 0 12px ${color.glow}, 0 0 24px ${color.ring}, inset 0 1px 0 rgba(255,255,255,0.2)`,
                       }}
                     />
                   </div>
 
                   {/* Card with left accent bar */}
                   <div
-                    className="relative rounded-xl overflow-hidden group"
+                    className="relative rounded-xl overflow-hidden group transition-all duration-500 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
                     style={{
                       background: 'var(--glass-bg)',
                       border: '1px solid var(--glass-border)',
                     }}
                   >
-                    {/* Left accent bar */}
+                    {/* Left accent bar with gradient fade */}
                     <div
                       className="absolute left-0 top-0 bottom-0 w-0.5 opacity-60 group-hover:opacity-100 group-hover:w-1 transition-all duration-500"
                       style={{
-                        background: `linear-gradient(180deg, ${color.bg}, ${color.bg}40)`,
+                        background: `linear-gradient(180deg, ${color.bg}, ${color.bg}60, ${color.bg}20)`,
+                      }}
+                    />
+
+                    {/* Subtle top highlight on hover */}
+                    <div
+                      className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${color.bg}30, transparent)`,
                       }}
                     />
 
@@ -534,7 +630,7 @@ export default function AboutContent() {
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div className="flex items-center gap-2.5">
                           <span
-                            className="flex items-center justify-center w-7 h-7 rounded-md"
+                            className="flex items-center justify-center w-7 h-7 rounded-md transition-colors duration-300 group-hover:bg-[${color.bg}25]"
                             style={{ backgroundColor: `${color.bg}15` }}
                           >
                             <svg
@@ -566,7 +662,7 @@ export default function AboutContent() {
                       >
                         {item.period}
                       </span>
-                      <p className="text-sm text-white/60 leading-relaxed ml-[38px]">
+                      <p className="text-sm text-white/60 leading-relaxed ml-[38px] group-hover:text-white/70 transition-colors duration-300">
                         {item.description}
                       </p>
                     </div>

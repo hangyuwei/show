@@ -23,6 +23,10 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
   const lineInfo = businessLineLabels[project.businessLine];
   const accentColor = lineInfo.color;
 
+  // Smoothed mouse tracking target for buttery tilt
+  const targetTilt = useRef({ x: 0, y: 0 });
+  const rafTiltRef = useRef<number>(0);
+
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!cardRef.current) return;
@@ -32,11 +36,11 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
       const mouseX = e.clientX - centerX;
       const mouseY = e.clientY - centerY;
 
-      // Smoother tilt with slight deadzone
+      // Smooth tilt with eased deadzone
       const rotateY = (mouseX / (rect.width / 2)) * 8;
       const rotateX = -(mouseY / (rect.height / 2)) * 8;
 
-      setTilt({ x: rotateX, y: rotateY });
+      targetTilt.current = { x: rotateX, y: rotateY };
 
       const glossX = ((e.clientX - rect.left) / rect.width) * 100;
       const glossY = ((e.clientY - rect.top) / rect.height) * 100;
@@ -47,20 +51,36 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
+    targetTilt.current = { x: tilt.x, y: tilt.y };
+
+    // Smooth tilt interpolation loop
+    const interpolateTilt = () => {
+      setTilt((prev) => ({
+        x: prev.x + (targetTilt.current.x - prev.x) * 0.15,
+        y: prev.y + (targetTilt.current.y - prev.y) * 0.15,
+      }));
+      rafTiltRef.current = requestAnimationFrame(interpolateTilt);
+    };
+    rafTiltRef.current = requestAnimationFrame(interpolateTilt);
+
     // Start rotating border angle
     const animate = () => {
       setBorderAngle((prev) => (prev + 0.8) % 360);
       animFrameRef.current = requestAnimationFrame(animate);
     };
     animFrameRef.current = requestAnimationFrame(animate);
-  }, []);
+  }, [tilt.x, tilt.y]);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
+    targetTilt.current = { x: 0, y: 0 };
     setTilt({ x: 0, y: 0 });
     setGlossPosition({ x: 50, y: 50 });
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
+    }
+    if (rafTiltRef.current) {
+      cancelAnimationFrame(rafTiltRef.current);
     }
   }, []);
 
@@ -71,39 +91,40 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
     <motion.div
       initial={{ opacity: 0, y: 60, scale: 0.92, filter: 'blur(6px)' }}
       animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-      exit={{ opacity: 0, y: 20, scale: 0.96 }}
+      exit={{ opacity: 0, y: 20, scale: 0.96, filter: 'blur(4px)' }}
       transition={{
-        duration: 0.55,
-        delay: index * 0.07,
+        duration: 0.6,
+        delay: index * 0.06,
         ease: [0.22, 0.61, 0.36, 1],
-        filter: { duration: 0.4, delay: index * 0.07 },
+        filter: { duration: 0.45, delay: index * 0.06 },
       }}
       layout
-      style={{ perspective: '1000px' }}
+      style={{ perspective: '1200px' }}
     >
       <Link href={`/projects/${project.slug}`} className="block">
         <div
           ref={cardRef}
           className="group relative overflow-hidden rounded-2xl cursor-pointer"
           style={{
-            transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${isHovered ? -8 : 0}px) scale(${isHovered ? 1.02 : 1})`,
+            transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${isHovered ? -10 : 0}px) scale(${isHovered ? 1.02 : 1})`,
             transformStyle: 'preserve-3d',
             transition: isHovered
-              ? 'box-shadow 0.35s ease, scale 0.35s ease'
-              : 'transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.35s ease',
+              ? 'box-shadow 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)'
+              : 'transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)',
             boxShadow: isHovered
-              ? `0 25px 50px rgba(0,0,0,0.5),
-                 0 10px 25px rgba(0,0,0,0.3),
-                 0 4px 12px rgba(0,0,0,0.2),
-                 0 0 40px ${accentColor}25,
-                 0 0 80px ${accentColor}10,
-                 inset 0 1px 0 rgba(255,255,255,0.1),
-                 inset 0 -1px 0 rgba(0,0,0,0.15)`
-              : `0 6px 20px rgba(0,0,0,0.25),
-                 0 2px 6px rgba(0,0,0,0.15),
-                 0 0 15px ${accentColor}05,
-                 inset 0 1px 0 rgba(255,255,255,0.04),
-                 inset 0 -1px 0 rgba(0,0,0,0.04)`,
+              ? `0 30px 60px rgba(0,0,0,0.55),
+                 0 12px 28px rgba(0,0,0,0.35),
+                 0 4px 14px rgba(0,0,0,0.25),
+                 0 0 50px ${accentColor}20,
+                 0 0 100px ${accentColor}0a,
+                 0 0 150px ${accentColor}05,
+                 inset 0 1px 0 rgba(255,255,255,0.12),
+                 inset 0 -1px 0 rgba(0,0,0,0.18)`
+              : `0 8px 24px rgba(0,0,0,0.28),
+                 0 2px 8px rgba(0,0,0,0.18),
+                 0 0 20px ${accentColor}05,
+                 inset 0 1px 0 rgba(255,255,255,0.05),
+                 inset 0 -1px 0 rgba(0,0,0,0.05)`,
           }}
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnter}
@@ -115,12 +136,12 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
             style={{
               padding: '1.5px',
               background: isHovered
-                ? `conic-gradient(from ${borderAngle}deg at 50% 50%, ${accentColor}dd, ${accentColor}40, transparent 25%, transparent 50%, ${accentColor}40, ${accentColor}dd)`
-                : `linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 40%, rgba(255,255,255,0.05), rgba(255,255,255,0.02) 60%, rgba(255,255,255,0.08))`,
+                ? `conic-gradient(from ${borderAngle}deg at 50% 50%, ${accentColor}ee, ${accentColor}60 15%, ${accentColor}20 25%, transparent 35%, transparent 50%, ${accentColor}20 65%, ${accentColor}60 85%, ${accentColor}ee)`
+                : `linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 70%, rgba(255,255,255,0.1))`,
               WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',
-              transition: isHovered ? 'none' : 'background 0.5s ease',
+              transition: isHovered ? 'none' : 'background 0.6s ease',
               pointerEvents: 'none' as const,
             }}
           />
@@ -131,11 +152,11 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
             <div
               className="h-[3px] w-full rounded-t-2xl"
               style={{
-                background: `linear-gradient(90deg, transparent 5%, ${accentColor} 30%, ${accentColor}cc 50%, ${accentColor} 70%, transparent 95%)`,
+                background: `linear-gradient(90deg, transparent 2%, ${accentColor} 20%, ${accentColor}cc 50%, ${accentColor} 80%, transparent 98%)`,
                 boxShadow: isHovered
-                  ? `0 0 16px ${accentColor}60, 0 0 32px ${accentColor}20`
-                  : `0 0 12px ${accentColor}30, 0 0 24px ${accentColor}10`,
-                transition: 'box-shadow 0.4s ease',
+                  ? `0 0 20px ${accentColor}70, 0 0 40px ${accentColor}25, 0 2px 8px ${accentColor}40`
+                  : `0 0 14px ${accentColor}35, 0 0 28px ${accentColor}12`,
+                transition: 'box-shadow 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)',
               }}
             />
 
@@ -149,15 +170,17 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
                   inset: 0,
                   background: `linear-gradient(
                     105deg,
-                    transparent 30%,
-                    ${accentColor}08 38%,
-                    rgba(255,255,255,0.08) 43%,
-                    rgba(255,255,255,0.14) 50%,
-                    rgba(255,255,255,0.08) 57%,
-                    ${accentColor}08 62%,
-                    transparent 70%
+                    transparent 25%,
+                    ${accentColor}06 32%,
+                    rgba(255,255,255,0.06) 38%,
+                    rgba(255,255,255,0.12) 44%,
+                    rgba(255,255,255,0.16) 50%,
+                    rgba(255,255,255,0.12) 56%,
+                    rgba(255,255,255,0.06) 62%,
+                    ${accentColor}06 68%,
+                    transparent 75%
                   )`,
-                  animation: isHovered ? 'shimmer 1.8s ease-in-out infinite' : 'none',
+                  animation: isHovered ? 'shimmer 2.2s ease-in-out infinite' : 'none',
                   transform: 'translateX(-100%)',
                 }}
               />
@@ -165,18 +188,20 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
 
             {/* Gloss overlay follows cursor — wider, softer */}
             <div
-              className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-400 group-hover:opacity-100"
               style={{
-                background: `radial-gradient(ellipse at ${glossPosition.x}% ${glossPosition.y}%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 30%, transparent 60%)`,
+                background: `radial-gradient(ellipse 60% 50% at ${glossPosition.x}% ${glossPosition.y}%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 35%, transparent 65%)`,
               }}
             />
 
             {/* Subtle dot grid pattern on card background */}
             <div
-              className="pointer-events-none absolute inset-0 z-0 opacity-[0.025] rounded-2xl"
+              className="pointer-events-none absolute inset-0 z-0 rounded-2xl"
               style={{
-                backgroundImage: 'radial-gradient(circle, white 0.5px, transparent 0.5px)',
-                backgroundSize: '14px 14px',
+                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.6) 0.5px, transparent 0.5px)',
+                backgroundSize: '16px 16px',
+                opacity: isHovered ? 0.035 : 0.02,
+                transition: 'opacity 0.5s ease',
               }}
             />
 
@@ -184,24 +209,25 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
             <div
               className="relative h-32 flex items-center justify-center overflow-hidden"
               style={{
-                background: `linear-gradient(135deg, ${accentColor}25, ${accentColor}06, ${accentColor}12)`,
-                transition: 'background 0.4s ease',
+                background: `linear-gradient(145deg, ${accentColor}22, ${accentColor}05 40%, ${accentColor}0e 70%, ${accentColor}08)`,
+                transition: 'background 0.5s ease',
               }}
             >
               {/* Hovered icon area gets a richer gradient */}
               <div
-                className="absolute inset-0 transition-opacity duration-400"
+                className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(135deg, ${accentColor}35, ${accentColor}0a, ${accentColor}1a)`,
+                  background: `linear-gradient(145deg, ${accentColor}38, ${accentColor}0c 35%, ${accentColor}18 65%, ${accentColor}0a)`,
                   opacity: isHovered ? 1 : 0,
-                  transition: 'opacity 0.4s ease',
+                  transition: 'opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)',
                 }}
               />
               <span
-                className="text-4xl relative z-10 transition-transform duration-300"
+                className="text-4xl relative z-10"
                 style={{
-                  transform: isHovered ? 'translateZ(30px) scale(1.15)' : 'translateZ(30px) scale(1)',
-                  transition: 'transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)',
+                  transform: isHovered ? 'translateZ(30px) scale(1.2)' : 'translateZ(30px) scale(1)',
+                  transition: 'transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)',
+                  filter: isHovered ? `drop-shadow(0 0 12px ${accentColor}50)` : 'none',
                 }}
               >
                 {lineInfo.emoji}
@@ -213,27 +239,32 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
               <div
                 className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl"
                 style={{
-                  background: `linear-gradient(180deg, ${accentColor}ee, ${accentColor}60, ${accentColor}20)`,
-                  boxShadow: `2px 0 12px ${accentColor}30`,
+                  background: `linear-gradient(180deg, ${accentColor}f0, ${accentColor}70 40%, ${accentColor}40 70%, ${accentColor}18)`,
+                  boxShadow: isHovered
+                    ? `3px 0 16px ${accentColor}45`
+                    : `2px 0 12px ${accentColor}28`,
+                  transition: 'box-shadow 0.5s ease',
                 }}
               />
 
-              {/* Corner glow — enlarges on hover */}
+              {/* Corner glow — top-right, enlarges on hover */}
               <div
-                className="absolute -top-8 -right-8 w-24 h-24 rounded-full transition-all duration-500"
+                className="absolute -top-10 -right-10 w-28 h-28 rounded-full"
                 style={{
-                  background: `radial-gradient(circle, ${accentColor}80, transparent 70%)`,
-                  opacity: isHovered ? 0.3 : 0.2,
-                  transform: isHovered ? 'scale(1.3)' : 'scale(1)',
+                  background: `radial-gradient(circle, ${accentColor}90, ${accentColor}30 40%, transparent 70%)`,
+                  opacity: isHovered ? 0.35 : 0.18,
+                  transform: isHovered ? 'scale(1.4)' : 'scale(1)',
+                  transition: 'all 0.6s cubic-bezier(0.22, 0.61, 0.36, 1)',
                 }}
               />
               {/* Secondary corner glow bottom-left */}
               <div
-                className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full transition-all duration-500"
+                className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full"
                 style={{
-                  background: `radial-gradient(circle, ${accentColor}50, transparent 70%)`,
-                  opacity: isHovered ? 0.2 : 0,
-                  transform: isHovered ? 'scale(1.2)' : 'scale(0.8)',
+                  background: `radial-gradient(circle, ${accentColor}60, ${accentColor}20 40%, transparent 70%)`,
+                  opacity: isHovered ? 0.25 : 0,
+                  transform: isHovered ? 'scale(1.3)' : 'scale(0.7)',
+                  transition: 'all 0.6s cubic-bezier(0.22, 0.61, 0.36, 1)',
                 }}
               />
             </div>
@@ -242,9 +273,10 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
             <div className="relative z-10 flex flex-col gap-3 p-5">
               {/* Title with enhanced hover glow */}
               <h3
-                className="text-lg font-semibold text-white leading-snug transition-all duration-300"
+                className="text-lg font-semibold text-white leading-snug transition-all duration-400"
                 style={{
-                  textShadow: isHovered ? `0 0 20px ${accentColor}15` : 'none',
+                  textShadow: isHovered ? `0 0 24px ${accentColor}18, 0 0 48px ${accentColor}08` : 'none',
+                  transition: 'text-shadow 0.4s ease',
                 }}
               >
                 {project.name}
@@ -262,12 +294,15 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
                 ))}
                 {extraCount > 0 && (
                   <span
-                    className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide backdrop-blur-sm whitespace-nowrap transition-all duration-300"
+                    className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide backdrop-blur-sm whitespace-nowrap"
                     style={{
-                      background: isHovered ? `${accentColor}18` : `${accentColor}10`,
-                      border: `1px solid ${accentColor}28`,
+                      background: isHovered ? `${accentColor}1c` : `${accentColor}10`,
+                      border: `1px solid ${isHovered ? `${accentColor}35` : `${accentColor}22`}`,
                       color: `${accentColor}dd`,
-                      boxShadow: isHovered ? `0 0 10px ${accentColor}18` : `0 0 6px ${accentColor}08`,
+                      boxShadow: isHovered
+                        ? `0 0 14px ${accentColor}20, 0 0 4px ${accentColor}10`
+                        : `0 0 8px ${accentColor}08`,
+                      transition: 'all 0.35s ease',
                     }}
                   >
                     +{extraCount}
@@ -276,24 +311,25 @@ export default function FloatingCard3D({ project, index }: FloatingCard3DProps) 
               </div>
 
               {/* Bottom: business line + arrow */}
-              <div className="flex items-center justify-between mt-2 pt-3 border-t border-white/[0.06] group-hover:border-white/[0.1] transition-colors duration-300">
+              <div className="flex items-center justify-between mt-2 pt-3 border-t border-white/[0.06] group-hover:border-white/[0.12] transition-colors duration-400">
                 <span
-                  className="text-xs font-medium transition-all duration-300"
+                  className="text-xs font-medium"
                   style={{
                     color: `${accentColor}cc`,
-                    textShadow: isHovered ? `0 0 8px ${accentColor}30` : 'none',
+                    textShadow: isHovered ? `0 0 12px ${accentColor}35, 0 0 4px ${accentColor}20` : 'none',
+                    transition: 'text-shadow 0.4s ease',
                   }}
                 >
                   {lineInfo.emoji} {lineInfo.name}
                 </span>
                 <motion.span
-                  className="text-zinc-500 group-hover:text-white transition-colors duration-300"
+                  className="text-zinc-500 group-hover:text-white"
                   style={{
-                    filter: isHovered ? `drop-shadow(0 0 6px ${accentColor}60)` : 'none',
-                    transition: 'filter 0.3s ease',
+                    filter: isHovered ? `drop-shadow(0 0 8px ${accentColor}70)` : 'none',
+                    transition: 'filter 0.35s ease, color 0.35s ease',
                   }}
-                  animate={isHovered ? { x: [0, 4, 0] } : { x: 0 }}
-                  transition={isHovered ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.3 }}
+                  animate={isHovered ? { x: [0, 5, 0] } : { x: 0 }}
+                  transition={isHovered ? { duration: 1.4, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.3 }}
                 >
                   <svg
                     width="16"

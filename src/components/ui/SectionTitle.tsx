@@ -17,7 +17,7 @@ export default function SectionTitle({
 
   return (
     <motion.div
-      className={`flex flex-col gap-4 ${alignment}`}
+      className={`flex flex-col gap-3 ${alignment}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -37,15 +37,17 @@ export default function SectionTitle({
         />
       </div>
 
-      {/* Section heading — gradient text with depth shadow */}
+      {/* Section heading — premium gradient text with depth shadow */}
       <h2
-        className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
+        className="text-[2rem] font-black tracking-[0.02em] leading-[1.15] sm:text-[2.5rem] lg:text-[3.25rem]"
         style={{
-          background: 'linear-gradient(135deg, #ffffff 0%, #c7d2fe 40%, #a5b4fc 100%)',
+          background:
+            'linear-gradient(135deg, #ffffff 0%, #e0e7ff 25%, #c7d2fe 45%, #a5b4fc 65%, #c7d2fe 85%, #ffffff 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4))',
+          filter:
+            'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 4px 12px rgba(99, 102, 241, 0.15))',
         }}
       >
         {title}
@@ -53,7 +55,7 @@ export default function SectionTitle({
 
       {subtitle && (
         <motion.p
-          className="max-w-2xl text-base leading-relaxed text-zinc-300/80 sm:text-lg"
+          className="max-w-2xl text-[0.9375rem] font-light leading-[1.7] tracking-[0.005em] text-zinc-300/70 sm:text-base"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

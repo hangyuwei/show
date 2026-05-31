@@ -11,27 +11,33 @@ interface PageTransitionProps {
 const pageVariants: Variants = {
   initial: {
     opacity: 0,
-    y: 12,
-    filter: 'blur(6px)',
+    y: 16,
+    scale: 0.995,
+    filter: 'blur(8px)',
   },
   animate: {
     opacity: 1,
     y: 0,
+    scale: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.45,
-      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       opacity: { duration: 0.35, ease: 'easeOut' },
-      filter: { duration: 0.4, ease: 'easeOut' },
+      filter: { duration: 0.45, ease: 'easeOut' },
+      scale: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
     },
   },
   exit: {
     opacity: 0,
-    y: -8,
-    filter: 'blur(4px)',
+    y: -10,
+    scale: 0.998,
+    filter: 'blur(6px)',
     transition: {
-      duration: 0.25,
+      duration: 0.28,
       ease: [0.55, 0.06, 0.68, 0.19] as [number, number, number, number],
+      opacity: { duration: 0.18, ease: 'easeIn' },
+      filter: { duration: 0.22, ease: 'easeIn' },
     },
   },
 };
@@ -47,6 +53,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
         initial="initial"
         animate="animate"
         exit="exit"
+        style={{ willChange: 'opacity, transform, filter' }}
       >
         {children}
       </motion.div>

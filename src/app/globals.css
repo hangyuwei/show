@@ -21,6 +21,7 @@
   --background-deep: #020308;
   --foreground: #e4e9f7;
   --foreground-bright: #f6f8ff;
+  --foreground-dim: #b0b8d0;
 
   /* ── Accent system — blue-to-cyan gradient anchor ── */
   --accent: #2196ff;
@@ -50,9 +51,12 @@
   --surface: rgba(255, 255, 255, 0.04);
   --surface-elevated: rgba(255, 255, 255, 0.07);
   --surface-hover: rgba(255, 255, 255, 0.10);
+  --surface-active: rgba(255, 255, 255, 0.14);
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-strong: rgba(255, 255, 255, 0.14);
+  --border-accent: rgba(33, 150, 255, 0.20);
+  --border-accent-strong: rgba(33, 150, 255, 0.35);
   --muted: #7c82a6;
   --muted-light: #9ca3c4;
 
@@ -123,6 +127,16 @@
   --glass-shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.3),
     0 2px 8px rgba(0, 0, 0, 0.15);
 
+  /* Tinted glass variants — add subtle color to glass bg */
+  --glass-bg-blue: rgba(8, 16, 48, 0.55);
+  --glass-bg-blue-hover: rgba(10, 20, 60, 0.70);
+  --glass-bg-purple: rgba(16, 12, 48, 0.55);
+  --glass-bg-purple-hover: rgba(20, 16, 60, 0.70);
+  --glass-bg-teal: rgba(8, 20, 40, 0.55);
+  --glass-bg-teal-hover: rgba(10, 24, 50, 0.70);
+  --glass-bg-warm: rgba(20, 14, 8, 0.55);
+  --glass-bg-warm-hover: rgba(26, 18, 10, 0.70);
+
   /* ════════════════════════════════════════════════════════════════
      GLOW SYSTEM — Layered radial/box glow presets
      ════════════════════════════════════════════════════════════════ */
@@ -146,9 +160,21 @@
     0 0 80px rgba(20, 184, 166, 0.06);
   --glow-warm: 0 0 12px rgba(245, 158, 11, 0.25),
     0 0 36px rgba(245, 158, 11, 0.10);
+  --glow-warm-strong: 0 0 16px rgba(245, 158, 11, 0.40),
+    0 0 48px rgba(245, 158, 11, 0.15),
+    0 0 80px rgba(245, 158, 11, 0.06);
+  --glow-rose: 0 0 12px rgba(244, 63, 94, 0.25),
+    0 0 36px rgba(244, 63, 94, 0.10);
+  --glow-rose-strong: 0 0 16px rgba(244, 63, 94, 0.40),
+    0 0 48px rgba(244, 63, 94, 0.15),
+    0 0 80px rgba(244, 63, 94, 0.06);
   --glow-multicolor: 0 0 12px rgba(33, 150, 255, 0.20),
     0 0 36px rgba(139, 92, 246, 0.12),
     0 0 60px rgba(20, 184, 166, 0.06);
+  --glow-multicolor-strong: 0 0 16px rgba(33, 150, 255, 0.30),
+    0 0 48px rgba(139, 92, 246, 0.18),
+    0 0 80px rgba(20, 184, 166, 0.10),
+    0 0 120px rgba(245, 158, 11, 0.04);
 
   /* ── Text glow presets ── */
   --text-glow-blue: 0 0 20px rgba(33, 150, 255, 0.5),
@@ -162,13 +188,21 @@
      GRADIENT SYSTEM — Rich, multi-stop gradient presets
      ════════════════════════════════════════════════════════════════ */
 
-  /* Primary background gradient — three-stop depth */
+  /* Primary background gradient — three-stop depth with richer midpoint */
   --gradient-bg: linear-gradient(
     170deg,
     var(--background) 0%,
     var(--background-mid) 40%,
     var(--background-end) 70%,
     #0c0e24 100%
+  );
+
+  /* Soft vertical gradient for page sections */
+  --gradient-section-fade: linear-gradient(
+    180deg,
+    rgba(4, 6, 15, 0) 0%,
+    rgba(8, 12, 30, 0.4) 50%,
+    rgba(4, 6, 15, 0) 100%
   );
 
   /* Accent gradients */
@@ -244,6 +278,24 @@
     rgba(10, 16, 41, 0.95) 100%
   );
 
+  /* Gradient for glass card top edges — subtle accent shimmer */
+  --gradient-card-top: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 15%,
+    var(--accent-purple) 50%,
+    var(--accent-teal) 85%,
+    transparent 100%
+  );
+
+  /* Gradient for input focus rings — animated feel */
+  --gradient-focus-ring: linear-gradient(
+    135deg,
+    rgba(33, 150, 255, 0.35) 0%,
+    rgba(139, 92, 246, 0.20) 50%,
+    rgba(20, 184, 166, 0.25) 100%
+  );
+
   /* Divider gradients */
   --gradient-divider: linear-gradient(
     90deg,
@@ -257,11 +309,17 @@
   /* ── Transition presets ── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-instant: 75ms;
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
+  --duration-glacial: 800ms;
   --transition-default: var(--duration-normal) var(--ease-out-expo);
+  --transition-fast: var(--duration-fast) var(--ease-out-expo);
+  --transition-slow: var(--duration-slow) var(--ease-out-expo);
 }
 
 
@@ -273,14 +331,18 @@
   /* Core color tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-foreground-dim: var(--foreground-dim);
   --color-accent: var(--accent);
   --color-accent-dim: var(--accent-dim);
   --color-accent-muted: var(--accent-muted);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-active: var(--surface-active);
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
   --color-border-strong: var(--border-strong);
+  --color-border-accent: var(--border-accent);
   --color-muted: var(--muted);
   --color-muted-light: var(--muted-light);
   --font-sans: var(--font-primary);
@@ -321,6 +383,10 @@
   --animate-gradient-shift: gradient-shift 8s ease infinite;
   --animate-breathe: breathe 4s ease-in-out infinite;
   --animate-shimmer-slow: shimmer 2.5s ease-in-out infinite;
+  --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
+  --animate-fade-in-scale: fade-in-scale 0.5s ease-out forwards;
+  --animate-slide-in-left: slide-in-left 0.4s ease-out forwards;
+  --animate-subtle-bounce: subtle-bounce 2.5s ease-in-out infinite;
 }
 
 
@@ -375,6 +441,45 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glow-pulse-warm {
+  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.15), 0 0 24px rgba(245, 158, 11, 0.06); }
+  50%       { box-shadow: 0 0 16px rgba(245, 158, 11, 0.35), 0 0 48px rgba(245, 158, 11, 0.12), 0 0 72px rgba(245, 158, 11, 0.04); }
+}
+
+@keyframes glow-pulse-teal {
+  0%, 100% { box-shadow: 0 0 8px rgba(20, 184, 166, 0.15), 0 0 24px rgba(20, 184, 166, 0.06); }
+  50%       { box-shadow: 0 0 16px rgba(20, 184, 166, 0.35), 0 0 48px rgba(20, 184, 166, 0.12), 0 0 72px rgba(20, 184, 166, 0.04); }
+}
+
+@keyframes glow-pulse-rose {
+  0%, 100% { box-shadow: 0 0 8px rgba(244, 63, 94, 0.15), 0 0 24px rgba(244, 63, 94, 0.06); }
+  50%       { box-shadow: 0 0 16px rgba(244, 63, 94, 0.35), 0 0 48px rgba(244, 63, 94, 0.12), 0 0 72px rgba(244, 63, 94, 0.04); }
+}
+
+@keyframes glow-pulse-multicolor {
+  0%, 100% { box-shadow: 0 0 8px rgba(33, 150, 255, 0.12), 0 0 24px rgba(139, 92, 246, 0.08); }
+  50%       { box-shadow: 0 0 20px rgba(33, 150, 255, 0.25), 0 0 48px rgba(139, 92, 246, 0.15), 0 0 72px rgba(20, 184, 166, 0.08); }
+}
+
+@keyframes border-spin-slow {
+  to { rotate: 360deg; }
+}
+
+@keyframes subtle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════
    4. Base Styles
@@ -405,6 +510,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: var(--tracking-heading);
   line-height: 1.2;
   text-wrap: balance;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'tnum';
 }
 
 h1 {
@@ -417,6 +523,7 @@ h2 {
   font-size: var(--text-4xl);
   line-height: var(--leading-4xl);
   font-weight: 800;
+  letter-spacing: 0.015em;
 }
 h3 { font-size: var(--text-3xl); line-height: var(--leading-3xl); font-weight: 700; }
 h4 { font-size: var(--text-2xl); line-height: var(--leading-2xl); font-weight: 700; }
@@ -477,6 +584,38 @@ section {
 .text-shadow-glow-cyan {
   text-shadow: 0 0 20px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.1);
 }
+.text-shadow-glow-warm {
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.3), 0 0 60px rgba(245, 158, 11, 0.1);
+}
+.text-shadow-depth {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Premium heading — multi-layer depth for hero & section titles ── */
+.heading-premium {
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-shadow:
+    0 0 40px rgba(4, 6, 15, 0.6),
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Section heading — lighter depth for in-page section titles ── */
+.heading-section {
+  font-weight: 800;
+  letter-spacing: 0.015em;
+  line-height: 1.2;
+  text-shadow:
+    0 0 30px rgba(4, 6, 15, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -536,6 +675,63 @@ section {
   border-color: rgba(255, 255, 255, 0.10);
 }
 
+/* Tinted glass — blue undertone for accent-themed panels */
+.glass-blue {
+  background: var(--glass-bg-blue);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow);
+  transition:
+    background var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-blue:hover {
+  background: var(--glass-bg-blue-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow-hover);
+}
+
+/* Tinted glass — purple undertone for purple-accent panels */
+.glass-purple {
+  background: var(--glass-bg-purple);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow);
+  transition:
+    background var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-purple:hover {
+  background: var(--glass-bg-purple-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow-hover);
+}
+
+/* Tinted glass — teal undertone */
+.glass-teal {
+  background: var(--glass-bg-teal);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow);
+  transition:
+    background var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-teal:hover {
+  background: var(--glass-bg-teal-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow-hover);
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════
    GLOW Utilities
@@ -550,7 +746,11 @@ section {
 .glow-teal        { box-shadow: var(--glow-teal); }
 .glow-teal-strong { box-shadow: var(--glow-teal-strong); }
 .glow-warm        { box-shadow: var(--glow-warm); }
+.glow-warm-strong { box-shadow: var(--glow-warm-strong); }
+.glow-rose        { box-shadow: var(--glow-rose); }
+.glow-rose-strong { box-shadow: var(--glow-rose-strong); }
 .glow-multicolor  { box-shadow: var(--glow-multicolor); }
+.glow-multicolor-strong { box-shadow: var(--glow-multicolor-strong); }
 
 /* ── Animated glow — pulsing box-shadow ── */
 .glow-pulse-blue {
@@ -571,6 +771,22 @@ section {
   50%       { box-shadow: 0 0 16px rgba(139, 92, 246, 0.35), 0 0 48px rgba(139, 92, 246, 0.12), 0 0 72px rgba(139, 92, 246, 0.04); }
 }
 
+.glow-pulse-warm {
+  animation: glow-pulse-warm 3s ease-in-out infinite;
+}
+
+.glow-pulse-teal {
+  animation: glow-pulse-teal 3s ease-in-out infinite;
+}
+
+.glow-pulse-rose {
+  animation: glow-pulse-rose 3s ease-in-out infinite;
+}
+
+.glow-pulse-multicolor {
+  animation: glow-pulse-multicolor 4s ease-in-out infinite;
+}
+
 /* ── Hover glow — glow appears on hover ── */
 .glow-hover-blue {
   transition: box-shadow var(--duration-slow) var(--ease-out-expo);
@@ -586,11 +802,32 @@ section {
   box-shadow: var(--glow-purple-strong);
 }
 
+.glow-hover-teal {
+  transition: box-shadow var(--duration-slow) var(--ease-out-expo);
+}
+.glow-hover-teal:hover {
+  box-shadow: var(--glow-teal-strong);
+}
+
+.glow-hover-warm {
+  transition: box-shadow var(--duration-slow) var(--ease-out-expo);
+}
+.glow-hover-warm:hover {
+  box-shadow: var(--glow-warm-strong);
+}
+
+.glow-hover-rose {
+  transition: box-shadow var(--duration-slow) var(--ease-out-expo);
+}
+.glow-hover-rose:hover {
+  box-shadow: var(--glow-rose-strong);
+}
+
 .glow-hover-multicolor {
   transition: box-shadow var(--duration-slow) var(--ease-out-expo);
 }
 .glow-hover-multicolor:hover {
-  box-shadow: var(--glow-multicolor);
+  box-shadow: var(--glow-multicolor-strong);
 }
 
 
@@ -674,10 +911,62 @@ section {
   to { rotate: 360deg; }
 }
 
+/* Slow variant — 8s rotation for subtler movement */
+.gradient-border-animated-slow {
+  position: relative;
+}
+
+.gradient-border-animated-slow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent),
+    var(--accent-purple),
+    var(--accent-teal),
+    var(--accent)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-spin-slow 8s linear infinite;
+  pointer-events: none;
+}
+
 /* Divider line utility */
 .gradient-divider {
   height: 1px;
   background: var(--gradient-divider);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   SHIMMER OVERLAY utility — reusable shimmer effect for cards/CTAs
+   ═══════════════════════════════════════════════════════════════════ */
+
+.shimmer-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.03) 38%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 62%,
+    transparent 75%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 
@@ -703,6 +992,23 @@ section {
   pointer-events: none;
 }
 
+.ambient-orb-warm {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.10) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.ambient-orb-rose {
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.10) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+/* Ambient orb with breathing animation */
+.ambient-orb-breathe {
+  animation: breathe 6s ease-in-out infinite;
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════
    DOT-GRID PATTERN utility
@@ -719,13 +1025,15 @@ section {
    ═══════════════════════════════════════════════════════════════════ */
 
 ::selection {
-  background: rgba(33, 150, 255, 0.3);
+  background: rgba(33, 150, 255, 0.30);
   color: #ffffff;
+  text-shadow: none;
 }
 
 ::-moz-selection {
-  background: rgba(33, 150, 255, 0.3);
+  background: rgba(33, 150, 255, 0.30);
   color: #ffffff;
+  text-shadow: none;
 }
 
 
@@ -749,6 +1057,7 @@ section {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, var(--accent) 0%, var(--accent-teal) 100%);
+  box-shadow: 0 0 8px rgba(33, 150, 255, 0.25);
 }
 
 /* Firefox */
@@ -770,13 +1079,29 @@ button,
     background-color var(--duration-normal) var(--ease-out-expo),
     border-color var(--duration-normal) var(--ease-out-expo),
     box-shadow var(--duration-normal) var(--ease-out-expo),
-    transform 200ms var(--ease-out-expo);
+    transform 200ms var(--ease-out-expo),
+    opacity var(--duration-normal) var(--ease-out-expo);
 }
 
-/* Focus ring — consistent across interactive elements */
+/* Active press micro-feedback */
+a:active:not(:disabled),
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Focus ring — premium glow ring with layered depth */
 :focus-visible {
-  outline: 2px solid rgba(33, 150, 255, 0.5);
+  outline: 2px solid rgba(33, 150, 255, 0.55);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(33, 150, 255, 0.12),
+    0 0 12px rgba(33, 150, 255, 0.10);
+}
+
+/* Remove focus ring for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }
 
 

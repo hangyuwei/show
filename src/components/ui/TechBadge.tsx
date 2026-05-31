@@ -13,33 +13,33 @@ export default function TechBadge({ name, color, delay = 0 }: TechBadgeProps) {
 
   return (
     <motion.span
-      className="inline-flex items-center rounded-full px-2 py-[3px] text-[11px] font-medium tracking-wider uppercase
-        backdrop-blur-sm whitespace-nowrap select-none"
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
+      className="inline-flex items-center rounded-full px-2.5 py-[3px] text-[11px] font-medium tracking-wider uppercase
+        backdrop-blur-sm whitespace-nowrap select-none cursor-default"
+      initial={{ opacity: 0, scale: 0.75, y: 4 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{
         type: 'spring',
-        stiffness: 500,
-        damping: 30,
+        stiffness: 550,
+        damping: 28,
         delay,
       }}
       style={{
-        background: `linear-gradient(135deg, ${badgeColor}15, ${badgeColor}06)`,
-        border: `1px solid ${badgeColor}22`,
-        color: `${badgeColor}cc`,
-        boxShadow: `0 0 1px ${badgeColor}15, 0 1px 2px rgba(0,0,0,0.15)`,
-        transition: 'border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
+        background: `linear-gradient(145deg, ${badgeColor}18, ${badgeColor}08 50%, ${badgeColor}04)`,
+        border: `1px solid ${badgeColor}25`,
+        color: `${badgeColor}dd`,
+        boxShadow: `0 0 2px ${badgeColor}12, 0 1px 3px rgba(0,0,0,0.18), inset 0 1px 0 ${badgeColor}08`,
+        transition: 'border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
       }}
       whileHover={{
-        scale: 1.1,
-        borderColor: `${badgeColor}50`,
+        scale: 1.12,
+        boxShadow: `0 0 12px ${badgeColor}25, 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 0 ${badgeColor}12`,
       }}
     >
       <span
         className="mr-1.5 inline-block h-[5px] w-[5px] rounded-full"
         style={{
-          background: `linear-gradient(135deg, ${badgeColor}, ${badgeColor}aa)`,
-          boxShadow: `0 0 5px ${badgeColor}50`,
+          background: `radial-gradient(circle, ${badgeColor}, ${badgeColor}90)`,
+          boxShadow: `0 0 6px ${badgeColor}60, 0 0 2px ${badgeColor}40`,
         }}
       />
       {name}
