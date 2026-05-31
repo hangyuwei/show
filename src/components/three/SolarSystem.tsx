@@ -40,9 +40,9 @@ const PLANETS: PlanetConfig[] = [
     name: '大健康',
     color: '#0ea5e9',
     emissiveHex: '#0284c7',
-    size: 0.55,
+    size: 0.6,
     orbitRadius: 5.5,
-    orbitSpeed: 0.12,
+    orbitSpeed: 0.14,
     tilt: 0.15,
     satellites: Array.from({ length: 17 }, (_, i) => ({
       name: `健康${i + 1}`,
@@ -56,9 +56,9 @@ const PLANETS: PlanetConfig[] = [
     name: 'AI / 大模型',
     color: '#a78bfa',
     emissiveHex: '#7c3aed',
-    size: 0.45,
+    size: 0.52,
     orbitRadius: 8.0,
-    orbitSpeed: 0.09,
+    orbitSpeed: 0.10,
     tilt: -0.1,
     ringColor: '#7c3aed',
     satellites: Array.from({ length: 7 }, (_, i) => ({
@@ -73,9 +73,9 @@ const PLANETS: PlanetConfig[] = [
     name: 'Web 开发',
     color: '#fb923c',
     emissiveHex: '#ea580c',
-    size: 0.40,
+    size: 0.46,
     orbitRadius: 10.5,
-    orbitSpeed: 0.07,
+    orbitSpeed: 0.08,
     tilt: 0.2,
     satellites: Array.from({ length: 4 }, (_, i) => ({
       name: `Web${i + 1}`,
@@ -89,9 +89,9 @@ const PLANETS: PlanetConfig[] = [
     name: '创意',
     color: '#facc15',
     emissiveHex: '#ca8a04',
-    size: 0.32,
+    size: 0.38,
     orbitRadius: 13.0,
-    orbitSpeed: 0.05,
+    orbitSpeed: 0.06,
     tilt: -0.25,
     ringColor: '#ca8a04',
     satellites: [
@@ -102,9 +102,9 @@ const PLANETS: PlanetConfig[] = [
     name: '学术研究',
     color: '#2dd4bf',
     emissiveHex: '#0d9488',
-    size: 0.36,
+    size: 0.42,
     orbitRadius: 15.5,
-    orbitSpeed: 0.04,
+    orbitSpeed: 0.045,
     tilt: 0.12,
     satellites: Array.from({ length: 3 }, (_, i) => ({
       name: `学术${i + 1}`,
@@ -188,16 +188,19 @@ const sunFragmentShader = `
   }
 
   void main() {
+    // Inner pulsing — modulates surface brightness
+    float pulse = 0.88 + 0.12 * sin(uTime * 2.0) * sin(uTime * 0.7 + 1.3);
+
     // Surface detail
     float n1 = snoise(vPosition * 2.0 + uTime * 0.15);
     float n2 = snoise(vPosition * 4.0 - uTime * 0.1);
     float n3 = snoise(vPosition * 8.0 + uTime * 0.2);
     float noise = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
 
-    // Warm solar colors: deep amber → orange → soft yellow
-    vec3 core = vec3(1.0, 0.85, 0.4);    // warm gold
+    // Warm solar colors: deep amber → orange → soft yellow → white-hot core
+    vec3 core = vec3(1.0, 0.92, 0.6);    // white-hot gold
     vec3 mid  = vec3(1.0, 0.55, 0.15);    // orange
-    vec3 edge = vec3(0.8, 0.25, 0.05);    // deep amber
+    vec3 edge = vec3(0.85, 0.28, 0.05);   // deep amber
 
     float fresnel = 1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0));
     fresnel = pow(fresnel, 1.8);
@@ -207,13 +210,13 @@ const sunFragmentShader = `
 
     // Brighten surface noise spots
     float hotSpot = smoothstep(0.3, 0.7, noise);
-    baseColor += vec3(0.3, 0.15, 0.0) * hotSpot;
+    baseColor += vec3(0.35, 0.2, 0.0) * hotSpot;
 
     // Dark spots (sunspots)
     float spot = smoothstep(0.65, 0.7, snoise(vPosition * 6.0 + uTime * 0.05));
     baseColor *= 1.0 - spot * 0.3;
 
-    float brightness = 0.9 + noise * 0.15;
+    float brightness = (0.95 + noise * 0.2) * pulse;
     gl_FragColor = vec4(baseColor * brightness, 1.0);
   }
 `;
@@ -237,10 +240,10 @@ const coronaFragmentShader = `
 
   void main() {
     float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.5);
-    // Pulsing
-    float pulse = 0.8 + 0.2 * sin(uTime * 1.5);
-    vec3 glow = uColor * intensity * pulse * 1.8;
-    float alpha = intensity * 0.6 * pulse;
+    // Dramatic dual-frequency pulsing
+    float pulse = 0.7 + 0.2 * sin(uTime * 2.0) + 0.1 * sin(uTime * 5.3 + 0.8);
+    vec3 glow = uColor * intensity * pulse * 2.4;
+    float alpha = intensity * 0.7 * pulse;
     gl_FragColor = vec4(glow, alpha);
   }
 `;
@@ -268,8 +271,8 @@ function Sun() {
   );
 
   const sunGeo = useMemo(() => new THREE.SphereGeometry(0.9, 64, 64), []);
-  const coronaGeo = useMemo(() => new THREE.SphereGeometry(1.25, 48, 48), []);
-  const outerGeo = useMemo(() => new THREE.SphereGeometry(1.8, 32, 32), []);
+  const coronaGeo = useMemo(() => new THREE.SphereGeometry(1.3, 48, 48), []);
+  const outerGeo = useMemo(() => new THREE.SphereGeometry(2.2, 32, 32), []);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -277,6 +280,15 @@ function Sun() {
     coronaUniforms.uTime.value = t;
     if (meshRef.current) {
       meshRef.current.rotation.y = t * 0.05;
+    }
+    // Inner pulsing scale
+    if (coronaRef.current) {
+      const s = 1.0 + 0.06 * Math.sin(t * 2.0) + 0.03 * Math.sin(t * 5.3);
+      coronaRef.current.scale.setScalar(s);
+    }
+    if (outerRef.current) {
+      const s = 1.0 + 0.04 * Math.sin(t * 1.5 + 0.5);
+      outerRef.current.scale.setScalar(s);
     }
   });
 
@@ -290,10 +302,10 @@ function Sun() {
 
   return (
     <group>
-      {/* Soft warm point light, NOT blinding */}
-      <pointLight intensity={4} distance={40} decay={2} color="#ffaa55" />
+      {/* Stronger warm point light for dramatic illumination */}
+      <pointLight intensity={6} distance={50} decay={2} color="#ffaa55" />
 
-      {/* Sun core — custom shader with noise */}
+      {/* Sun core — custom shader with noise + inner pulse */}
       <mesh ref={meshRef} geometry={sunGeo}>
         <shaderMaterial
           vertexShader={sunVertexShader}
@@ -302,7 +314,7 @@ function Sun() {
         />
       </mesh>
 
-      {/* Inner corona glow */}
+      {/* Inner corona glow — larger, more intense */}
       <mesh ref={coronaRef} geometry={coronaGeo}>
         <shaderMaterial
           vertexShader={coronaVertexShader}
@@ -315,12 +327,12 @@ function Sun() {
         />
       </mesh>
 
-      {/* Outer haze */}
-      <mesh geometry={outerGeo}>
+      {/* Outer haze — bigger, warmer glow */}
+      <mesh ref={outerRef} geometry={outerGeo}>
         <meshBasicMaterial
           color="#ff8833"
           transparent
-          opacity={0.04}
+          opacity={0.06}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -359,9 +371,9 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
       new THREE.MeshStandardMaterial({
         color: colorObj,
         emissive: emissiveObj,
-        emissiveIntensity: 0.15,
-        roughness: 0.55,
-        metalness: 0.25,
+        emissiveIntensity: 0.25,
+        roughness: 0.5,
+        metalness: 0.35,
       }),
     [colorObj, emissiveObj],
   );
@@ -372,7 +384,7 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
       new THREE.MeshBasicMaterial({
         color: colorObj,
         transparent: true,
-        opacity: 0.08,
+        opacity: 0.12,
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -389,7 +401,7 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
       new THREE.MeshBasicMaterial({
         color: new THREE.Color(ringColor ?? color),
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.15,
         side: THREE.DoubleSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -405,8 +417,8 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
     meshRef.current.scale.setScalar(scaleRef.current);
     if (atmosRef.current) atmosRef.current.scale.setScalar(scaleRef.current * 1.12);
     if (ringRef.current) ringRef.current.scale.setScalar(scaleRef.current);
-    mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, hovered ? 0.5 : 0.15, delta * 5);
-    atmosMat.opacity = THREE.MathUtils.lerp(atmosMat.opacity, hovered ? 0.2 : 0.08, delta * 5);
+    mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, hovered ? 0.6 : 0.25, delta * 5);
+    atmosMat.opacity = THREE.MathUtils.lerp(atmosMat.opacity, hovered ? 0.25 : 0.12, delta * 5);
   });
 
   useEffect(() => {
@@ -448,9 +460,9 @@ function Satellite({ config, parentColor }: { config: SatelliteConfig; parentCol
       new THREE.MeshStandardMaterial({
         color: new THREE.Color(parentColor).lerp(new THREE.Color('#ffffff'), 0.4),
         emissive: new THREE.Color(parentColor),
-        emissiveIntensity: 0.08,
-        roughness: 0.6,
-        metalness: 0.15,
+        emissiveIntensity: 0.12,
+        roughness: 0.55,
+        metalness: 0.2,
       }),
     [parentColor],
   );
@@ -476,14 +488,11 @@ function OrbitRing({ radius, color }: { radius: number; color: string }) {
   const geo = useMemo(() => {
     const segments = 256;
     const positions = new Float32Array((segments + 1) * 3);
-    const alphas = new Float32Array(segments + 1);
     for (let i = 0; i <= segments; i++) {
       const a = (i / segments) * Math.PI * 2;
       positions[i * 3] = Math.cos(a) * radius;
       positions[i * 3 + 1] = 0;
       positions[i * 3 + 2] = Math.sin(a) * radius;
-      // Fade at top and bottom of orbit for depth effect
-      alphas[i] = 0.12 + 0.08 * Math.sin(a * 2);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -495,7 +504,7 @@ function OrbitRing({ radius, color }: { radius: number; color: string }) {
       new THREE.LineBasicMaterial({
         color: new THREE.Color(color),
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.14,
       }),
     [color],
   );
@@ -510,12 +519,77 @@ function OrbitRing({ radius, color }: { radius: number; color: string }) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Orbit Trail Particles                                              */
+/* ------------------------------------------------------------------ */
+
+function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: string; count?: number }) {
+  const ref = useRef<THREE.Points>(null);
+  const angleOffsets = useRef<Float32Array>(new Float32Array(0));
+
+  const { positions, alphas } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const alp = new Float32Array(count);
+    const offsets = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      const a = (i / count) * Math.PI * 2;
+      // Slight vertical scatter for depth
+      pos[i * 3] = Math.cos(a) * radius + (Math.random() - 0.5) * 0.3;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 0.15;
+      pos[i * 3 + 2] = Math.sin(a) * radius + (Math.random() - 0.5) * 0.3;
+      alp[i] = 0.15 + Math.random() * 0.25;
+      offsets[i] = a;
+    }
+    angleOffsets.current = offsets;
+    return { positions: pos, alphas: alp };
+  }, [radius, count]);
+
+  const geo = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    return g;
+  }, [positions]);
+
+  const mat = useMemo(
+    () =>
+      new THREE.PointsMaterial({
+        color: new THREE.Color(color),
+        size: 0.06,
+        transparent: true,
+        opacity: 0.35,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      }),
+    [color],
+  );
+
+  useEffect(() => () => { geo.dispose(); mat.dispose(); }, [geo, mat]);
+
+  // Subtle drift animation
+  useFrame((_, delta) => {
+    if (!ref.current) return;
+    const posAttr = ref.current.geometry.getAttribute('position') as THREE.BufferAttribute;
+    const arr = posAttr.array as Float32Array;
+    const offsets = angleOffsets.current;
+    const speed = 0.02;
+    for (let i = 0; i < count; i++) {
+      offsets[i] += speed * delta;
+      arr[i * 3] = Math.cos(offsets[i]) * radius + Math.sin(offsets[i] * 3) * 0.1;
+      arr[i * 3 + 2] = Math.sin(offsets[i]) * radius + Math.cos(offsets[i] * 2) * 0.1;
+    }
+    posAttr.needsUpdate = true;
+  });
+
+  return <points ref={ref} geometry={geo} material={mat} />;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Cosmic Dust (deep-space particles)                                 */
 /* ------------------------------------------------------------------ */
 
 function CosmicDust() {
   const ref = useRef<THREE.Points>(null);
-  const count = 3000;
+  const count = 3500;
 
   const { positions, colors, sizes } = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -531,17 +605,22 @@ function CosmicDust() {
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
 
-      // Varied star colors: warm white, cool blue, faint gold
+      // Varied star colors: warm white, cool blue, purple, faint gold
       const type = Math.random();
-      if (type < 0.6) {
+      if (type < 0.45) {
         // Warm white
         const b = 0.6 + Math.random() * 0.4;
         col[i * 3] = b; col[i * 3 + 1] = b * 0.95; col[i * 3 + 2] = b * 0.85;
-      } else if (type < 0.85) {
+      } else if (type < 0.65) {
         // Cool blue
-        col[i * 3] = 0.4 + Math.random() * 0.2;
-        col[i * 3 + 1] = 0.5 + Math.random() * 0.3;
-        col[i * 3 + 2] = 0.8 + Math.random() * 0.2;
+        col[i * 3] = 0.3 + Math.random() * 0.2;
+        col[i * 3 + 1] = 0.45 + Math.random() * 0.3;
+        col[i * 3 + 2] = 0.85 + Math.random() * 0.15;
+      } else if (type < 0.82) {
+        // Purple / violet
+        col[i * 3] = 0.5 + Math.random() * 0.25;
+        col[i * 3 + 1] = 0.2 + Math.random() * 0.2;
+        col[i * 3 + 2] = 0.7 + Math.random() * 0.3;
       } else {
         // Faint gold / amber
         col[i * 3] = 0.8 + Math.random() * 0.2;
@@ -565,10 +644,10 @@ function CosmicDust() {
   const mat = useMemo(
     () =>
       new THREE.PointsMaterial({
-        size: 0.12,
+        size: 0.13,
         vertexColors: true,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.75,
         sizeAttenuation: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -591,23 +670,24 @@ function CosmicDust() {
 
 function NebulaClouds() {
   const groupRef = useRef<THREE.Group>(null);
-  const count = 8;
+  const count = 12;
 
   const meshes = useMemo(() => {
     const items: { position: [number, number, number]; scale: number; color: string; opacity: number }[] = [];
-    const colors = ['#1a0533', '#0a1628', '#0d2137', '#1a0a2e', '#051a2c'];
+    // Blue, purple, teal, deep indigo palette
+    const colors = ['#1a0a4e', '#0a1628', '#0d3756', '#1a0a2e', '#052a4c', '#12083a', '#0a2d5e', '#1e0845', '#083040', '#150a50', '#0a2845', '#1c0842'];
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2;
-      const r = 40 + Math.random() * 30;
+      const r = 38 + Math.random() * 35;
       items.push({
         position: [
           Math.cos(angle) * r,
-          (Math.random() - 0.5) * 30,
+          (Math.random() - 0.5) * 35,
           Math.sin(angle) * r,
         ],
-        scale: 15 + Math.random() * 25,
+        scale: 18 + Math.random() * 30,
         color: colors[i % colors.length],
-        opacity: 0.15 + Math.random() * 0.1,
+        opacity: 0.12 + Math.random() * 0.12,
       });
     }
     return items;
@@ -654,6 +734,34 @@ function NebulaClouds() {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Camera Auto-Dolly (subtle zoom in/out)                             */
+/* ------------------------------------------------------------------ */
+
+function CameraAutoDolly() {
+  const { camera } = useThree();
+  const baseDistance = useRef(0);
+  const initialized = useRef(false);
+
+  useFrame((state) => {
+    if (!initialized.current) {
+      baseDistance.current = camera.position.length();
+      initialized.current = true;
+    }
+    const t = state.clock.elapsedTime;
+    // Slow, gentle breathing zoom: ~20-second cycle
+    const dollyFactor = 1.0 + 0.06 * Math.sin(t * 0.15) + 0.02 * Math.sin(t * 0.08 + 1.0);
+    const dir = camera.position.clone().normalize();
+    const targetDist = baseDistance.current * dollyFactor;
+    const currentDist = camera.position.length();
+    // Smooth interpolation toward target distance
+    const newDist = THREE.MathUtils.lerp(currentDist, targetDist, 0.02);
+    camera.position.copy(dir.multiplyScalar(newDist));
+  });
+
+  return null;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Complete Planet System (planet + orbit + satellites)               */
 /* ------------------------------------------------------------------ */
 
@@ -671,6 +779,7 @@ function PlanetSystem({ config }: { config: PlanetConfig }) {
   return (
     <>
       <OrbitRing radius={config.orbitRadius} color={config.color} />
+      <OrbitTrail radius={config.orbitRadius} color={config.color} count={50} />
       <group ref={groupRef}>
         <PlanetBody
           name={config.name}
@@ -695,7 +804,7 @@ function PlanetSystem({ config }: { config: PlanetConfig }) {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.08} color="#334466" />
+      <ambientLight intensity={0.1} color="#334466" />
       <Sun />
       <CosmicDust />
       <NebulaClouds />
@@ -713,6 +822,7 @@ function Scene() {
         maxPolarAngle={Math.PI * 0.7}
         minPolarAngle={Math.PI * 0.3}
       />
+      <CameraAutoDolly />
     </>
   );
 }
@@ -745,11 +855,11 @@ export default function SolarSystem() {
       <Suspense fallback={<LoadingFallback />}>
         <Scene />
       </Suspense>
-      {/* Post-processing: bloom for glow, vignette for depth */}
+      {/* Post-processing: stronger bloom for dramatic sun glow */}
       <EffectComposer>
         <Bloom
-          intensity={0.6}
-          luminanceThreshold={0.2}
+          intensity={1.2}
+          luminanceThreshold={0.15}
           luminanceSmoothing={0.9}
           mipmapBlur
         />

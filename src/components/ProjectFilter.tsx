@@ -38,33 +38,49 @@ export default function ProjectFilter({
               ? '全部'
               : businessLineLabels[filter.label as BusinessLine]?.name ?? filter.label;
 
+          // Get business line color for active glow
+          const lineColor =
+            filter.label === '全部'
+              ? '#8b5cf6'
+              : businessLineLabels[filter.label as BusinessLine]?.color ?? '#8b5cf6';
+
           return (
             <motion.button
               key={filter.label}
               onClick={() => onFilterChange(filter.label)}
               className={`
                 relative flex items-center gap-1.5 whitespace-nowrap rounded-full
-                px-4 py-2 text-sm font-medium transition-colors duration-200
+                px-4 py-2 text-sm font-medium transition-all duration-300
                 border
                 ${
                   isActive
-                    ? 'bg-violet-500/15 text-violet-300 border-violet-500/40'
-                    : 'bg-white/[0.03] text-zinc-400 border-white/[0.06] hover:bg-white/[0.06] hover:text-zinc-300'
+                    ? 'text-white border-transparent'
+                    : 'bg-white/[0.03] text-zinc-400 border-white/[0.06] hover:bg-white/[0.06] hover:text-zinc-300 hover:border-white/[0.12]'
                 }
               `}
+              style={
+                isActive
+                  ? {
+                      background: `linear-gradient(135deg, ${lineColor}20, ${lineColor}10)`,
+                      borderColor: `${lineColor}50`,
+                      boxShadow: `0 0 20px ${lineColor}30, 0 0 8px ${lineColor}20, 0 0 2px ${lineColor}40, inset 0 1px 0 ${lineColor}25`,
+                    }
+                  : undefined
+              }
               whileTap={{ scale: 0.96 }}
               layout
             >
               <span className="text-base">{filter.emoji}</span>
               <span>{displayLabel}</span>
 
-              {/* Active glow indicator */}
+              {/* Active glow indicator with enhanced glow */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 rounded-full border border-violet-400/30"
+                  className="absolute inset-0 rounded-full"
                   layoutId="activeFilterGlow"
                   style={{
-                    boxShadow: '0 0 12px rgba(139, 92, 246, 0.2)',
+                    border: `1.5px solid ${lineColor}60`,
+                    boxShadow: `0 0 16px ${lineColor}35, 0 0 32px ${lineColor}12, inset 0 0 8px ${lineColor}10`,
                   }}
                   transition={{
                     type: 'spring',

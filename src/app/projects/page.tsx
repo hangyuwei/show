@@ -19,8 +19,35 @@ export default function ProjectsPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-black">
+      {/* Enhanced dot grid pattern background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+          maskImage:
+            'radial-gradient(ellipse 80% 70% at 50% 30%, black 10%, transparent 100%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse 80% 70% at 50% 30%, black 10%, transparent 100%)',
+        }}
+      />
+      {/* Subtle grid lines overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
+          maskImage:
+            'radial-gradient(ellipse 70% 60% at 50% 40%, black 15%, transparent 100%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse 70% 60% at 50% 40%, black 15%, transparent 100%)',
+        }}
+      />
+
       {/* Main content */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         {/* Section title */}
         <SectionTitle
           title="项目宇宙"
@@ -56,7 +83,6 @@ export default function ProjectsPage() {
           </div>
         )}
       </main>
-
     </div>
   );
 }
