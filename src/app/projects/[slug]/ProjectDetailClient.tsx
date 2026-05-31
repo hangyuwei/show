@@ -94,22 +94,23 @@ function SectionTitle({
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.5 }}
-      className="mb-10 flex items-center gap-4 sm:gap-5"
+      className="mb-12 flex items-center gap-4 sm:gap-5"
     >
       {step && (
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500/20 text-base font-bold text-indigo-400 ring-1 ring-indigo-500/30 sm:h-12 sm:w-12 sm:text-lg">
+        <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/25 to-purple-500/20 text-base font-bold text-indigo-300 ring-1 ring-indigo-400/25 shadow-[0_0_20px_rgba(99,102,241,0.15)] sm:h-12 sm:w-12 sm:text-lg">
           {step}
+          <span className="absolute inset-0 rounded-xl bg-indigo-400/10 blur-md" />
         </span>
       )}
       <div className="min-w-0">
-        <h2 className="text-2xl font-bold text-zinc-100 sm:text-3xl lg:text-4xl">
+        <h2 className="text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl lg:text-4xl">
           {children}
         </h2>
-        <div className="mt-2 h-[2px] w-16 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-transparent">
-          <div className="h-full w-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-transparent blur-sm opacity-50" />
+        <div className="mt-2.5 h-[2px] w-20 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500/80 to-transparent">
+          <div className="h-full w-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500/80 to-transparent blur-sm opacity-50" />
         </div>
       </div>
-      <div className="h-px flex-1 bg-gradient-to-r from-zinc-700/60 to-transparent" />
+      <div className="h-px flex-1 bg-gradient-to-r from-zinc-700/40 via-zinc-800/20 to-transparent" />
     </motion.div>
   );
 }
@@ -184,17 +185,17 @@ function TechPill({ tech }: { tech: string }) {
   const color = getTechColor(tech);
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur-sm transition-transform hover:scale-105"
+      className="group relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:-translate-y-0.5"
       style={{
-        background: `${color}15`,
-        border: `1px solid ${color}35`,
+        background: `linear-gradient(135deg, ${color}18, ${color}08)`,
+        border: `1px solid ${color}30`,
         color: `${color}dd`,
-        boxShadow: `0 0 12px ${color}08`,
+        boxShadow: `0 0 12px ${color}06, inset 0 1px 0 ${color}10`,
       }}
     >
       <span
-        className="h-2 w-2 rounded-full"
-        style={{ background: color, boxShadow: `0 0 6px ${color}60` }}
+        className="h-1.5 w-1.5 rounded-full transition-all duration-200 group-hover:h-2 group-hover:w-2"
+        style={{ background: color, boxShadow: `0 0 8px ${color}70` }}
       />
       {tech}
     </span>
@@ -208,27 +209,27 @@ function Breadcrumb({ project }: { project: Project }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
       aria-label="Breadcrumb"
-      className="flex items-center gap-2 text-sm text-zinc-500"
+      className="inline-flex items-center gap-2 rounded-full border border-zinc-800/60 bg-zinc-900/40 px-4 py-2 text-sm backdrop-blur-sm"
     >
       <Link
         href="/"
-        className="transition-colors hover:text-zinc-300"
+        className="text-zinc-500 transition-colors duration-200 hover:text-zinc-200"
       >
         首页
       </Link>
-      <svg className="h-3.5 w-3.5 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <svg className="h-3 w-3 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
       </svg>
       <Link
         href="/projects"
-        className="transition-colors hover:text-zinc-300"
+        className="text-zinc-500 transition-colors duration-200 hover:text-zinc-200"
       >
         项目
       </Link>
-      <svg className="h-3.5 w-3.5 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <svg className="h-3 w-3 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-      <span className="text-zinc-300">{project.name}</span>
+      <span className="font-medium text-zinc-200">{project.name}</span>
     </motion.nav>
   );
 }
@@ -238,28 +239,52 @@ function Breadcrumb({ project }: { project: Project }) {
 /* ------------------------------------------------------------------ */
 
 function TableOfContents({ activeId }: { activeId: string }) {
+  const activeIndex = SECTION_IDS.findIndex((s) => s.id === activeId);
+  const progress = SECTION_IDS.length > 0 ? ((activeIndex + 1) / SECTION_IDS.length) * 100 : 0;
+
   return (
     <nav className="hidden xl:block" aria-label="Table of contents">
       <div className="sticky top-24">
-        <p className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
           目录
         </p>
-        <ul className="space-y-1">
-          {SECTION_IDS.map((section) => {
+        {/* Progress bar */}
+        <div className="mb-4 h-[2px] w-full overflow-hidden rounded-full bg-zinc-800/60">
+          <motion.div
+            className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          />
+        </div>
+        <ul className="space-y-0.5">
+          {SECTION_IDS.map((section, index) => {
             const isActive = activeId === section.id;
+            const isPast = index < activeIndex;
             return (
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}
-                  className={`group relative block rounded-lg py-2 pl-3 pr-4 text-sm transition-all duration-200 ${
+                  className={`group relative flex items-center gap-2.5 rounded-lg py-2 pl-3 pr-4 text-sm transition-all duration-200 ${
                     isActive
-                      ? 'text-indigo-400 bg-indigo-500/10'
-                      : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.03]'
+                      ? 'text-indigo-300 bg-indigo-500/10'
+                      : isPast
+                        ? 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
+                        : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.03]'
                   }`}
                 >
                   {isActive && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-r-full bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-r-full bg-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
                   )}
+                  <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-semibold ${
+                    isActive
+                      ? 'bg-indigo-500/20 text-indigo-300'
+                      : isPast
+                        ? 'bg-zinc-800/60 text-zinc-500'
+                        : 'bg-zinc-800/40 text-zinc-600'
+                  }`}>
+                    {index + 1}
+                  </span>
                   {section.label}
                 </a>
               </li>
@@ -277,7 +302,12 @@ function TableOfContents({ activeId }: { activeId: string }) {
 
 function TimelineConnector() {
   return (
-    <div className="absolute left-[22px] top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/40 via-purple-500/30 to-transparent sm:left-[23px]" />
+    <div className="absolute left-[22px] top-0 bottom-0 w-px sm:left-[23px]">
+      {/* Main line with gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/50 via-purple-500/30 to-indigo-500/10" />
+      {/* Subtle glow alongside the line */}
+      <div className="absolute inset-0 w-3 -translate-x-1 bg-gradient-to-b from-indigo-500/10 via-purple-500/5 to-transparent blur-sm" />
+    </div>
   );
 }
 
@@ -302,13 +332,13 @@ function BackToTop() {
     <AnimatePresence>
       {visible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 10 }}
+          transition={{ duration: 0.25 }}
           onClick={scrollToTop}
           aria-label="Back to top"
-          className="fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-zinc-800/80 text-zinc-400 shadow-lg ring-1 ring-white/10 backdrop-blur-sm transition-colors hover:bg-zinc-700 hover:text-white"
+          className="fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-zinc-800/90 text-zinc-400 shadow-lg shadow-black/20 ring-1 ring-white/[0.08] backdrop-blur-md transition-colors duration-200 hover:bg-zinc-700 hover:text-white hover:ring-white/15"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -418,7 +448,7 @@ app.start();`;
             <section id="overview" className="py-16 sm:py-24">
               <SectionTitle>项目概述</SectionTitle>
               <FadeInSection>
-                <h3 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
+                <h3 className="mb-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
                   {project.name}
                 </h3>
                 <p className="mb-8 text-lg leading-relaxed text-zinc-400">
@@ -437,6 +467,10 @@ app.start();`;
                   <span className="text-sm text-zinc-500">{project.year}</span>
                 </div>
               </FadeInSection>
+              {/* Subtle divider after overview */}
+              <div className="mt-16 flex items-center gap-3 sm:mt-20">
+                <div className="h-px flex-1 bg-gradient-to-r from-indigo-500/30 via-zinc-700/40 to-transparent" />
+              </div>
             </section>
 
             {/* 4. Timeline-style thought-chain sections with connector line */}
@@ -447,20 +481,24 @@ app.start();`;
               <section id="requirements" className="relative py-12 sm:py-16">
                 <SectionTitle step="①">需求分析</SectionTitle>
                 <FadeInSection>
-                  <div className="relative ml-5 border-l-2 border-indigo-500/30 pl-8 sm:ml-6">
+                  <div className="relative ml-5 border-l border-indigo-500/20 pl-8 sm:ml-6">
+                    {/* Decorative dot at top of border */}
+                    <div className="absolute -left-[4.5px] top-0 h-2 w-2 rounded-full border border-indigo-500/40 bg-indigo-500/60 shadow-[0_0_8px_rgba(99,102,241,0.3)]" />
                     <div className="mb-8">
-                      <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-indigo-400">
+                      <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-indigo-400">
+                        <span className="inline-block h-px w-4 bg-indigo-400/40" />
                         问题
                       </h4>
-                      <p className="text-lg leading-relaxed text-zinc-300">
+                      <p className="text-lg leading-relaxed text-zinc-300/90">
                         {project.thoughtChain.problem}
                       </p>
                     </div>
                     <div>
-                      <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-cyan-400">
+                      <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-cyan-400">
+                        <span className="inline-block h-px w-4 bg-cyan-400/40" />
                         分析
                       </h4>
-                      <p className="text-lg leading-relaxed text-zinc-300">
+                      <p className="text-lg leading-relaxed text-zinc-300/90">
                         {project.thoughtChain.analysis}
                       </p>
                     </div>
@@ -472,11 +510,13 @@ app.start();`;
               <section id="design" className="relative py-12 sm:py-16">
                 <SectionTitle step="②">方案设计</SectionTitle>
                 <FadeInSection>
-                  <p className="mb-6 text-lg leading-relaxed text-zinc-300">
+                  <p className="mb-6 text-lg leading-relaxed text-zinc-300/90">
                     {project.thoughtChain.design}
                   </p>
-                  <div className="overflow-hidden rounded-xl border border-zinc-700/50 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-8">
-                    <div className="flex items-center gap-2 text-sm text-zinc-500">
+                  <div className="relative overflow-hidden rounded-xl border border-zinc-700/40 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.06] to-pink-500/[0.04] p-8 ring-1 ring-white/[0.03]">
+                    {/* Subtle corner accent */}
+                    <div className="absolute top-0 right-0 h-24 w-24 bg-gradient-to-bl from-indigo-500/10 to-transparent" />
+                    <div className="relative flex items-center gap-2 text-sm text-zinc-400">
                       <svg
                         className="h-5 w-5"
                         fill="none"
@@ -490,13 +530,13 @@ app.start();`;
                           d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"
                         />
                       </svg>
-                      技术架构图
+                      <span className="font-medium">技术架构图</span>
                     </div>
-                    <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+                    <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                       {project.techStack.map((tech) => (
                         <div
                           key={tech}
-                          className="flex items-center justify-center rounded-lg border border-zinc-600/30 bg-zinc-800/50 px-4 py-6 text-center text-sm font-medium text-zinc-300 backdrop-blur-sm"
+                          className="flex items-center justify-center rounded-lg border border-zinc-600/20 bg-zinc-800/40 px-4 py-5 text-center text-sm font-medium text-zinc-300 backdrop-blur-sm transition-colors duration-200 hover:border-zinc-500/30 hover:bg-zinc-800/60"
                         >
                           {tech}
                         </div>
@@ -543,36 +583,38 @@ app.start();`;
               {/* f) Step 4: Challenges */}
               <section id="challenges" className="relative py-12 sm:py-16">
                 <SectionTitle step="④">难点与解决方案</SectionTitle>
-                <div className="space-y-6">
+                <div className="space-y-5">
                   {project.thoughtChain.challenges.map((challenge, i) => (
                     <FadeInSection key={i} delay={i * 0.1}>
-                      <div className="rounded-xl border border-zinc-700/50 bg-zinc-900/50 p-6 backdrop-blur-sm">
-                        <h4 className="mb-2 text-lg font-semibold text-zinc-100">
+                      <div className="relative rounded-xl border border-zinc-700/40 bg-zinc-900/40 p-6 backdrop-blur-sm transition-colors duration-200 hover:border-zinc-600/40">
+                        <h4 className="mb-3 text-lg font-semibold text-zinc-100">
                           {challenge.title}
                         </h4>
-                        <p className="mb-4 text-zinc-400">
+                        <p className="mb-5 leading-relaxed text-zinc-400">
                           {challenge.description}
                         </p>
-                        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
+                        <div className="rounded-lg border border-emerald-500/15 bg-emerald-500/[0.04] p-4">
                           <div className="mb-2 flex items-center gap-2">
-                            <svg
-                              className="h-4 w-4 text-emerald-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15">
+                              <svg
+                                className="h-3 w-3 text-emerald-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2.5}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                              </svg>
+                            </div>
                             <span className="text-sm font-semibold text-emerald-400">
                               解决方案
                             </span>
                           </div>
-                          <p className="text-sm text-zinc-300">
+                          <p className="text-sm leading-relaxed text-zinc-300/90">
                             {challenge.solution}
                           </p>
                         </div>
@@ -586,14 +628,14 @@ app.start();`;
               <section id="outcome" className="relative py-12 sm:py-16">
                 <SectionTitle step="⑤">项目成果</SectionTitle>
                 <FadeInSection>
-                  <p className="mb-8 text-lg leading-relaxed text-zinc-300">
+                  <p className="mb-8 text-lg leading-relaxed text-zinc-300/90">
                     {project.thoughtChain.outcome}
                   </p>
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                     {[1, 2, 3].map((n) => (
                       <div
                         key={n}
-                        className="flex aspect-video items-center justify-center rounded-lg border border-zinc-700/50 bg-zinc-800/50 text-sm text-zinc-500"
+                        className="group flex aspect-video items-center justify-center rounded-lg border border-zinc-700/30 bg-zinc-800/30 text-sm text-zinc-500 backdrop-blur-sm transition-all duration-200 hover:border-zinc-600/40 hover:bg-zinc-800/50"
                       >
                         截图 {n}
                       </div>
@@ -604,9 +646,15 @@ app.start();`;
             </div>
 
             {/* h) External Links */}
-            <section className="border-t border-zinc-800 py-12 sm:py-16">
+            <section className="relative py-12 sm:py-16">
+              {/* Premium divider */}
+              <div className="absolute top-0 left-0 right-0 flex items-center gap-3">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent" />
+                <div className="h-1.5 w-1.5 rounded-full bg-zinc-600/60" />
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent" />
+              </div>
               <FadeInSection>
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4 pt-4">
                   {project.githubUrl && (
                     <a
                       href={project.githubUrl}

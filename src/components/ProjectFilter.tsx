@@ -30,8 +30,8 @@ export default function ProjectFilter({
 }: ProjectFilterProps) {
   return (
     <div className="w-full overflow-x-auto scrollbar-hide py-2">
-      <div className="flex gap-2 min-w-max px-1">
-        {FILTERS.map((filter) => {
+      <div className="flex gap-2.5 min-w-max px-1">
+        {FILTERS.map((filter, filterIdx) => {
           const isActive = activeFilter === filter.label;
           const displayLabel =
             filter.label === '全部'
@@ -49,43 +49,79 @@ export default function ProjectFilter({
               key={filter.label}
               onClick={() => onFilterChange(filter.label)}
               className={`
-                relative flex items-center gap-1.5 whitespace-nowrap rounded-full
-                px-4 py-2 text-sm font-medium transition-all duration-300
-                border
+                relative flex items-center gap-2 whitespace-nowrap rounded-full
+                px-5 py-2.5 text-sm font-medium
+                border transition-all duration-300
                 ${
                   isActive
                     ? 'text-white border-transparent'
-                    : 'bg-white/[0.03] text-zinc-400 border-white/[0.06] hover:bg-white/[0.06] hover:text-zinc-300 hover:border-white/[0.12]'
+                    : 'bg-white/[0.02] text-zinc-500 border-white/[0.06] hover:bg-white/[0.05] hover:text-zinc-300 hover:border-white/[0.1]'
                 }
               `}
               style={
                 isActive
                   ? {
-                      background: `linear-gradient(135deg, ${lineColor}20, ${lineColor}10)`,
-                      borderColor: `${lineColor}50`,
-                      boxShadow: `0 0 20px ${lineColor}30, 0 0 8px ${lineColor}20, 0 0 2px ${lineColor}40, inset 0 1px 0 ${lineColor}25`,
+                      background: `linear-gradient(135deg, ${lineColor}18, ${lineColor}08)`,
+                      borderColor: 'transparent',
+                      boxShadow: `
+                        0 0 24px ${lineColor}25,
+                        0 0 8px ${lineColor}15,
+                        0 0 2px ${lineColor}35,
+                        inset 0 1px 0 ${lineColor}20},
+                        inset 0 0 12px ${lineColor}08`,
                     }
                   : undefined
               }
-              whileTap={{ scale: 0.96 }}
+              whileTap={{ scale: 0.95 }}
+              whileHover={!isActive ? {
+                backgroundColor: 'rgba(255,255,255,0.04)',
+                borderColor: 'rgba(255,255,255,0.1)',
+              } : {}}
               layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.3,
+                delay: filterIdx * 0.04,
+                ease: [0.22, 0.61, 0.36, 1],
+              }}
             >
-              <span className="text-base">{filter.emoji}</span>
+              <span className="text-base leading-none">{filter.emoji}</span>
               <span>{displayLabel}</span>
 
-              {/* Active glow indicator with enhanced glow */}
+              {/* Active indicator pill with layered glow */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 rounded-full"
                   layoutId="activeFilterGlow"
                   style={{
-                    border: `1.5px solid ${lineColor}60`,
-                    boxShadow: `0 0 16px ${lineColor}35, 0 0 32px ${lineColor}12, inset 0 0 8px ${lineColor}10`,
+                    border: `1.5px solid ${lineColor}50`,
+                    boxShadow: `
+                      0 0 20px ${lineColor}30,
+                      0 0 40px ${lineColor}10,
+                      inset 0 0 10px ${lineColor}08`,
                   }}
                   transition={{
                     type: 'spring',
-                    stiffness: 380,
-                    damping: 30,
+                    stiffness: 400,
+                    damping: 32,
+                  }}
+                />
+              )}
+
+              {/* Active dot indicator */}
+              {isActive && (
+                <motion.span
+                  layoutId="activeDot"
+                  className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full"
+                  style={{
+                    background: lineColor,
+                    boxShadow: `0 0 6px ${lineColor}80, 0 0 2px ${lineColor}`,
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 500,
+                    damping: 35,
                   }}
                 />
               )}

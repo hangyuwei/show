@@ -1,31 +1,101 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 
-function FloatingParticle({ delay, x, y, size, duration }: {
-  delay: number;
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+  },
+};
+
+function GlitchDigit({ digit }: { digit: string }) {
+  return (
+    <motion.span
+      className="inline-block"
+      animate={{
+        textShadow: [
+          '2px 0 #2196ff, -2px 0 #8b5cf6',
+          '-1px 0 #2196ff, 1px 0 #8b5cf6',
+          '0 0 0 transparent',
+          '1px 0 #2196ff, -1px 0 #8b5cf6',
+          '0 0 0 transparent',
+        ],
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: 'linear',
+      }}
+    >
+      {digit}
+    </motion.span>
+  );
+}
+
+function ScanningLine() {
+  return (
+    <motion.div
+      className="absolute left-0 right-0 h-px pointer-events-none"
+      style={{
+        background:
+          'linear-gradient(90deg, transparent 0%, rgba(33,150,255,0.4) 30%, rgba(139,92,246,0.6) 50%, rgba(33,150,255,0.4) 70%, transparent 100%)',
+        boxShadow: '0 0 12px 2px rgba(33,150,255,0.15)',
+      }}
+      animate={{ top: ['0%', '100%'] }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: 'linear',
+      }}
+    />
+  );
+}
+
+function FloatingOrb({
+  x,
+  y,
+  size,
+  color,
+  delay,
+}: {
   x: string;
   y: string;
   size: number;
-  duration: number;
+  color: string;
+  delay: number;
 }) {
   return (
     <motion.div
-      className="absolute rounded-full bg-glow/30"
+      className="absolute rounded-full pointer-events-none"
       style={{
         left: x,
         top: y,
         width: size,
         height: size,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
       }}
       animate={{
-        y: [0, -30, 0],
-        opacity: [0.2, 0.8, 0.2],
-        scale: [1, 1.2, 1],
+        y: [0, -20, 0],
+        opacity: [0.15, 0.4, 0.15],
+        scale: [1, 1.1, 1],
       }}
       transition={{
-        duration,
+        duration: 5,
         delay,
         repeat: Infinity,
         ease: 'easeInOut',
@@ -34,116 +104,140 @@ function FloatingParticle({ delay, x, y, size, duration }: {
   );
 }
 
-function SpaceParticleField() {
-  const particles = [
-    { delay: 0, x: '10%', y: '20%', size: 4, duration: 4 },
-    { delay: 0.5, x: '25%', y: '60%', size: 3, duration: 5 },
-    { delay: 1, x: '40%', y: '30%', size: 5, duration: 3.5 },
-    { delay: 1.5, x: '55%', y: '70%', size: 3, duration: 4.5 },
-    { delay: 0.3, x: '70%', y: '25%', size: 4, duration: 5.5 },
-    { delay: 0.8, x: '85%', y: '55%', size: 3, duration: 4 },
-    { delay: 1.2, x: '15%', y: '80%', size: 5, duration: 3 },
-    { delay: 0.6, x: '50%', y: '45%', size: 6, duration: 6 },
-    { delay: 1.8, x: '75%', y: '85%', size: 3, duration: 4.5 },
-    { delay: 0.2, x: '35%', y: '10%', size: 4, duration: 5 },
-    { delay: 1.4, x: '90%', y: '40%', size: 3, duration: 3.5 },
-    { delay: 0.9, x: '5%', y: '50%', size: 5, duration: 4 },
-    { delay: 1.6, x: '60%', y: '15%', size: 4, duration: 5.5 },
-    { delay: 0.4, x: '80%', y: '70%', size: 3, duration: 4 },
-    { delay: 1.1, x: '45%', y: '90%', size: 4, duration: 3.5 },
-  ];
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {particles.map((p, i) => (
-        <FloatingParticle key={i} {...p} />
-      ))}
-    </div>
-  );
-}
-
 export default function NotFound() {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-bg-primary overflow-hidden px-4">
-      {/* Particle field */}
-      <SpaceParticleField />
+    <div className="relative flex flex-col items-center justify-center min-h-[80vh] bg-bg-primary overflow-hidden px-4">
+      {/* Ambient orbs */}
+      <FloatingOrb x="10%" y="15%" size={80} color="rgba(33,150,255,0.15)" delay={0} />
+      <FloatingOrb x="80%" y="20%" size={60} color="rgba(139,92,246,0.15)" delay={1} />
+      <FloatingOrb x="25%" y="75%" size={70} color="rgba(20,184,166,0.12)" delay={0.5} />
+      <FloatingOrb x="70%" y="70%" size={90} color="rgba(33,150,255,0.1)" delay={1.5} />
+      <FloatingOrb x="50%" y="40%" size={100} color="rgba(139,92,246,0.08)" delay={2} />
 
-      {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
-        }}
-        aria-hidden="true"
-      />
+      {/* Scanning line */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <ScanningLine />
+      </div>
 
       {/* Content */}
       <motion.div
         className="relative z-10 text-center max-w-lg"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
         {/* 404 Number */}
         <motion.div
-          className="text-[8rem] sm:text-[10rem] font-bold leading-none tracking-tighter"
+          className="text-[7rem] sm:text-[9rem] md:text-[11rem] font-bold leading-none tracking-tighter select-none"
           style={{
-            background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%)',
+            background: 'linear-gradient(135deg, #2196ff 0%, #8b5cf6 50%, #06b6d4 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
           }}
-          animate={{ scale: [1, 1.02, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          variants={itemVariants}
         >
-          404
+          <GlitchDigit digit="4" />
+          <GlitchDigit digit="0" />
+          <GlitchDigit digit="4" />
         </motion.div>
+
+        {/* Decorative line */}
+        <motion.div
+          className="mx-auto mt-4 mb-6 h-px w-24 sm:w-32"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(33,150,255,0.5) 30%, rgba(139,92,246,0.5) 50%, rgba(20,184,166,0.5) 70%, transparent 100%)',
+          }}
+          variants={itemVariants}
+        />
 
         {/* Title */}
         <motion.h1
-          className="text-2xl sm:text-3xl font-bold text-text-primary mt-4 mb-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-xl sm:text-2xl md:text-3xl font-bold text-text-primary mb-3"
+          variants={itemVariants}
         >
           Lost in Space
         </motion.h1>
 
         {/* Description */}
         <motion.p
-          className="text-text-secondary text-base sm:text-lg mb-8 leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-text-secondary text-sm sm:text-base md:text-lg mb-10 leading-relaxed max-w-sm mx-auto"
+          variants={itemVariants}
         >
           The page you are looking for has drifted beyond the stars.
-          <br />
+          <br className="hidden sm:block" />
+          <span className="sm:hidden"> </span>
           Let&apos;s navigate you back to known space.
         </motion.p>
 
-        {/* Back button */}
+        {/* Actions */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3"
+          variants={itemVariants}
         >
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
               bg-glow/20 text-white border border-glow/30
-              hover:bg-glow/30 hover:border-glow/50 transition-all duration-300"
-            style={{ boxShadow: '0 0 20px rgba(59, 130, 246, 0.15)' }}
+              hover:bg-glow/30 hover:border-glow/50 transition-all duration-300
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-glow/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+            style={{ boxShadow: '0 0 20px rgba(33, 150, 255, 0.12)' }}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
             </svg>
             Return to Home
           </Link>
+
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
+              text-text-secondary border border-white/10
+              hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-300
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
+              />
+            </svg>
+            Browse Projects
+          </Link>
         </motion.div>
+
+        {/* Error code hint */}
+        <motion.p
+          className="mt-10 text-xs text-white/20 font-mono"
+          variants={itemVariants}
+        >
+          ERROR_CODE: 404 &middot; PAGE_NOT_FOUND
+        </motion.p>
       </motion.div>
 
-      {/* Bottom stars decoration */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-primary to-transparent pointer-events-none" aria-hidden="true" />
+      {/* Bottom fade */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-primary to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
     </div>
   );
 }

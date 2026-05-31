@@ -1,7 +1,7 @@
 'use client';
 
-import { Suspense, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
+import { Suspense, useMemo, useRef, useEffect } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -38,8 +38,8 @@ interface PlanetConfig {
 const PLANETS: PlanetConfig[] = [
   {
     name: '大健康',
-    color: '#0ea5e9',
-    emissiveHex: '#0284c7',
+    color: '#38bdf8',
+    emissiveHex: '#0ea5e9',
     size: 0.6,
     orbitRadius: 5.5,
     orbitSpeed: 0.14,
@@ -54,13 +54,13 @@ const PLANETS: PlanetConfig[] = [
   },
   {
     name: 'AI / 大模型',
-    color: '#a78bfa',
-    emissiveHex: '#7c3aed',
+    color: '#c4b5fd',
+    emissiveHex: '#8b5cf6',
     size: 0.52,
     orbitRadius: 8.0,
     orbitSpeed: 0.10,
     tilt: -0.1,
-    ringColor: '#7c3aed',
+    ringColor: '#8b5cf6',
     satellites: Array.from({ length: 7 }, (_, i) => ({
       name: `AI${i + 1}`,
       size: 0.055,
@@ -71,8 +71,8 @@ const PLANETS: PlanetConfig[] = [
   },
   {
     name: 'Web 开发',
-    color: '#fb923c',
-    emissiveHex: '#ea580c',
+    color: '#fdba74',
+    emissiveHex: '#f97316',
     size: 0.46,
     orbitRadius: 10.5,
     orbitSpeed: 0.08,
@@ -87,21 +87,21 @@ const PLANETS: PlanetConfig[] = [
   },
   {
     name: '创意',
-    color: '#facc15',
-    emissiveHex: '#ca8a04',
+    color: '#fde047',
+    emissiveHex: '#eab308',
     size: 0.38,
     orbitRadius: 13.0,
     orbitSpeed: 0.06,
     tilt: -0.25,
-    ringColor: '#ca8a04',
+    ringColor: '#eab308',
     satellites: [
       { name: '创意1', size: 0.045, orbitRadius: 0.75, orbitSpeed: 0.7, orbitOffset: 0 },
     ],
   },
   {
     name: '学术研究',
-    color: '#2dd4bf',
-    emissiveHex: '#0d9488',
+    color: '#5eead4',
+    emissiveHex: '#14b8a6',
     size: 0.42,
     orbitRadius: 15.5,
     orbitSpeed: 0.045,
@@ -238,12 +238,52 @@ const coronaFragmentShader = `
   varying vec3 vNormal;
   varying vec3 vWorldPosition;
 
+  // Simple hash for ray-like variation
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+  }
+
   void main() {
-    float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.5);
-    // Dramatic dual-frequency pulsing
-    float pulse = 0.7 + 0.2 * sin(uTime * 2.0) + 0.1 * sin(uTime * 5.3 + 0.8);
-    vec3 glow = uColor * intensity * pulse * 2.4;
-    float alpha = intensity * 0.7 * pulse;
+    float fresnel = 0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0));
+    float intensity = pow(fresnel, 2.2);
+
+    // Ray-like streaks using angular noise
+    vec3 dir = normalize(vWorldPosition);
+    float angle = atan(dir.z, dir.x);
+    float streak = 0.7 + 0.3 * sin(angle * 8.0 + uTime * 0.8);
+    streak *= 0.8 + 0.2 * sin(angle * 13.0 - uTime * 1.2);
+
+    // Multi-frequency pulsing
+    float pulse = 0.7 + 0.18 * sin(uTime * 1.8) + 0.12 * sin(uTime * 4.7 + 0.8) + 0.05 * sin(uTime * 8.1 + 2.0);
+
+    vec3 innerColor = vec3(1.0, 0.85, 0.5);
+    vec3 outerColor = uColor;
+    vec3 glow = mix(innerColor, outerColor, pow(fresnel, 0.8)) * intensity * streak * pulse * 2.8;
+    float alpha = intensity * 0.75 * pulse * streak;
+    gl_FragColor = vec4(glow, alpha);
+  }
+`;
+
+/* Outer corona with radial ray streaks */
+const outerCoronaFragmentShader = `
+  uniform float uTime;
+  varying vec3 vNormal;
+  varying vec3 vWorldPosition;
+
+  void main() {
+    float fresnel = 0.55 - dot(vNormal, vec3(0.0, 0.0, 1.0));
+    float intensity = pow(max(fresnel, 0.0), 3.0);
+
+    vec3 dir = normalize(vWorldPosition);
+    float angle = atan(dir.z, dir.x);
+    float rays = 0.6 + 0.4 * sin(angle * 12.0 + uTime * 0.5);
+    rays *= 0.75 + 0.25 * cos(angle * 5.0 - uTime * 0.3);
+
+    float pulse = 0.8 + 0.15 * sin(uTime * 1.2) + 0.05 * sin(uTime * 3.1);
+
+    vec3 color = mix(vec3(1.0, 0.65, 0.2), vec3(0.9, 0.35, 0.08), intensity);
+    vec3 glow = color * intensity * rays * pulse * 1.8;
+    float alpha = intensity * rays * pulse * 0.4;
     gl_FragColor = vec4(glow, alpha);
   }
 `;
@@ -255,6 +295,7 @@ const coronaFragmentShader = `
 function Sun() {
   const meshRef = useRef<THREE.Mesh>(null);
   const coronaRef = useRef<THREE.Mesh>(null);
+  const outerCoronaRef = useRef<THREE.Mesh>(null);
   const outerRef = useRef<THREE.Mesh>(null);
   const uniforms = useMemo(
     () => ({
@@ -269,25 +310,36 @@ function Sun() {
     }),
     [],
   );
+  const outerCoronaUniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+    }),
+    [],
+  );
 
   const sunGeo = useMemo(() => new THREE.SphereGeometry(0.9, 64, 64), []);
-  const coronaGeo = useMemo(() => new THREE.SphereGeometry(1.3, 48, 48), []);
-  const outerGeo = useMemo(() => new THREE.SphereGeometry(2.2, 32, 32), []);
+  const coronaGeo = useMemo(() => new THREE.SphereGeometry(1.35, 48, 48), []);
+  const outerCoronaGeo = useMemo(() => new THREE.SphereGeometry(1.9, 48, 48), []);
+  const outerGeo = useMemo(() => new THREE.SphereGeometry(2.8, 32, 32), []);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     uniforms.uTime.value = t;
     coronaUniforms.uTime.value = t;
+    outerCoronaUniforms.uTime.value = t;
     if (meshRef.current) {
       meshRef.current.rotation.y = t * 0.05;
     }
-    // Inner pulsing scale
     if (coronaRef.current) {
-      const s = 1.0 + 0.06 * Math.sin(t * 2.0) + 0.03 * Math.sin(t * 5.3);
+      const s = 1.0 + 0.07 * Math.sin(t * 2.0) + 0.04 * Math.sin(t * 5.3);
       coronaRef.current.scale.setScalar(s);
     }
+    if (outerCoronaRef.current) {
+      const s = 1.0 + 0.05 * Math.sin(t * 1.4 + 0.7) + 0.03 * Math.sin(t * 3.8);
+      outerCoronaRef.current.scale.setScalar(s);
+    }
     if (outerRef.current) {
-      const s = 1.0 + 0.04 * Math.sin(t * 1.5 + 0.5);
+      const s = 1.0 + 0.04 * Math.sin(t * 1.5 + 0.5) + 0.02 * Math.sin(t * 2.7);
       outerRef.current.scale.setScalar(s);
     }
   });
@@ -296,16 +348,19 @@ function Sun() {
     return () => {
       sunGeo.dispose();
       coronaGeo.dispose();
+      outerCoronaGeo.dispose();
       outerGeo.dispose();
     };
-  }, [sunGeo, coronaGeo, outerGeo]);
+  }, [sunGeo, coronaGeo, outerCoronaGeo, outerGeo]);
 
   return (
     <group>
-      {/* Stronger warm point light for dramatic illumination */}
-      <pointLight intensity={6} distance={50} decay={2} color="#ffaa55" />
+      {/* Primary warm point light */}
+      <pointLight intensity={7} distance={55} decay={2} color="#ffaa55" />
+      {/* Secondary fill light for softer ambient bounce */}
+      <pointLight intensity={1.5} distance={25} decay={2} color="#ff8844" />
 
-      {/* Sun core — custom shader with noise + inner pulse */}
+      {/* Sun core */}
       <mesh ref={meshRef} geometry={sunGeo}>
         <shaderMaterial
           vertexShader={sunVertexShader}
@@ -314,7 +369,7 @@ function Sun() {
         />
       </mesh>
 
-      {/* Inner corona glow — larger, more intense */}
+      {/* Inner corona glow with ray streaks */}
       <mesh ref={coronaRef} geometry={coronaGeo}>
         <shaderMaterial
           vertexShader={coronaVertexShader}
@@ -327,12 +382,25 @@ function Sun() {
         />
       </mesh>
 
-      {/* Outer haze — bigger, warmer glow */}
+      {/* Outer corona with radial rays */}
+      <mesh ref={outerCoronaRef} geometry={outerCoronaGeo}>
+        <shaderMaterial
+          vertexShader={coronaVertexShader}
+          fragmentShader={outerCoronaFragmentShader}
+          uniforms={outerCoronaUniforms}
+          transparent
+          blending={THREE.AdditiveBlending}
+          side={THREE.BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Diffuse outer haze */}
       <mesh ref={outerRef} geometry={outerGeo}>
         <meshBasicMaterial
-          color="#ff8833"
+          color="#ff7722"
           transparent
-          opacity={0.06}
+          opacity={0.045}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -371,20 +439,20 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
       new THREE.MeshStandardMaterial({
         color: colorObj,
         emissive: emissiveObj,
-        emissiveIntensity: 0.25,
-        roughness: 0.5,
-        metalness: 0.35,
+        emissiveIntensity: 0.3,
+        roughness: 0.45,
+        metalness: 0.4,
       }),
     [colorObj, emissiveObj],
   );
 
-  const atmosGeo = useMemo(() => new THREE.SphereGeometry(1.12, 32, 32), []);
+  const atmosGeo = useMemo(() => new THREE.SphereGeometry(1.15, 32, 32), []);
   const atmosMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         color: colorObj,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.15,
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -401,7 +469,7 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
       new THREE.MeshBasicMaterial({
         color: new THREE.Color(ringColor ?? color),
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.18,
         side: THREE.DoubleSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -415,10 +483,10 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
     const target = hovered ? 1.25 : 1;
     scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, target, delta * 6);
     meshRef.current.scale.setScalar(scaleRef.current);
-    if (atmosRef.current) atmosRef.current.scale.setScalar(scaleRef.current * 1.12);
+    if (atmosRef.current) atmosRef.current.scale.setScalar(scaleRef.current * 1.15);
     if (ringRef.current) ringRef.current.scale.setScalar(scaleRef.current);
-    mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, hovered ? 0.6 : 0.25, delta * 5);
-    atmosMat.opacity = THREE.MathUtils.lerp(atmosMat.opacity, hovered ? 0.25 : 0.12, delta * 5);
+    mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, hovered ? 0.7 : 0.3, delta * 5);
+    atmosMat.opacity = THREE.MathUtils.lerp(atmosMat.opacity, hovered ? 0.3 : 0.15, delta * 5);
   });
 
   useEffect(() => {
@@ -532,11 +600,12 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
     const offsets = new Float32Array(count);
     for (let i = 0; i < count; i++) {
       const a = (i / count) * Math.PI * 2;
-      // Slight vertical scatter for depth
-      pos[i * 3] = Math.cos(a) * radius + (Math.random() - 0.5) * 0.3;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 0.15;
-      pos[i * 3 + 2] = Math.sin(a) * radius + (Math.random() - 0.5) * 0.3;
-      alp[i] = 0.15 + Math.random() * 0.25;
+      // Slight vertical scatter and radial variation for depth
+      const radialJitter = (Math.random() - 0.5) * 0.25;
+      pos[i * 3] = Math.cos(a) * (radius + radialJitter) + (Math.random() - 0.5) * 0.15;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 0.1;
+      pos[i * 3 + 2] = Math.sin(a) * (radius + radialJitter) + (Math.random() - 0.5) * 0.15;
+      alp[i] = 0.12 + Math.random() * 0.2;
       offsets[i] = a;
     }
     angleOffsets.current = offsets;
@@ -553,9 +622,9 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
     () =>
       new THREE.PointsMaterial({
         color: new THREE.Color(color),
-        size: 0.06,
+        size: 0.05,
         transparent: true,
-        opacity: 0.35,
+        opacity: 0.3,
         sizeAttenuation: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -571,11 +640,11 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
     const posAttr = ref.current.geometry.getAttribute('position') as THREE.BufferAttribute;
     const arr = posAttr.array as Float32Array;
     const offsets = angleOffsets.current;
-    const speed = 0.02;
+    const speed = 0.025;
     for (let i = 0; i < count; i++) {
       offsets[i] += speed * delta;
-      arr[i * 3] = Math.cos(offsets[i]) * radius + Math.sin(offsets[i] * 3) * 0.1;
-      arr[i * 3 + 2] = Math.sin(offsets[i]) * radius + Math.cos(offsets[i] * 2) * 0.1;
+      arr[i * 3] = Math.cos(offsets[i]) * radius + Math.sin(offsets[i] * 3) * 0.08;
+      arr[i * 3 + 2] = Math.sin(offsets[i]) * radius + Math.cos(offsets[i] * 2) * 0.08;
     }
     posAttr.needsUpdate = true;
   });
@@ -589,47 +658,67 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
 
 function CosmicDust() {
   const ref = useRef<THREE.Points>(null);
-  const count = 3500;
+  const count = 4000;
+  const twinklePhases = useRef<Float32Array>(new Float32Array(0));
+  const baseSizes = useRef<Float32Array>(new Float32Array(0));
 
   const { positions, colors, sizes } = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const sz = new Float32Array(count);
+    const phases = new Float32Array(count);
+    const bSizes = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      // Shell distribution for depth
-      const r = 25 + Math.random() * 80;
+      // Shell distribution with denser inner ring
+      const shell = Math.random();
+      const r = shell < 0.3 ? 18 + Math.random() * 30 : 25 + Math.random() * 85;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.6; // flatten slightly for galactic plane feel
       pos[i * 3 + 2] = r * Math.cos(phi);
 
       // Varied star colors: warm white, cool blue, purple, faint gold
       const type = Math.random();
-      if (type < 0.45) {
+      if (type < 0.40) {
         // Warm white
-        const b = 0.6 + Math.random() * 0.4;
+        const b = 0.65 + Math.random() * 0.35;
         col[i * 3] = b; col[i * 3 + 1] = b * 0.95; col[i * 3 + 2] = b * 0.85;
-      } else if (type < 0.65) {
+      } else if (type < 0.60) {
         // Cool blue
         col[i * 3] = 0.3 + Math.random() * 0.2;
-        col[i * 3 + 1] = 0.45 + Math.random() * 0.3;
-        col[i * 3 + 2] = 0.85 + Math.random() * 0.15;
-      } else if (type < 0.82) {
+        col[i * 3 + 1] = 0.5 + Math.random() * 0.3;
+        col[i * 3 + 2] = 0.9 + Math.random() * 0.1;
+      } else if (type < 0.78) {
         // Purple / violet
         col[i * 3] = 0.5 + Math.random() * 0.25;
         col[i * 3 + 1] = 0.2 + Math.random() * 0.2;
         col[i * 3 + 2] = 0.7 + Math.random() * 0.3;
-      } else {
+      } else if (type < 0.90) {
         // Faint gold / amber
         col[i * 3] = 0.8 + Math.random() * 0.2;
         col[i * 3 + 1] = 0.6 + Math.random() * 0.2;
-        col[i * 3 + 2] = 0.2 + Math.random() * 0.1;
+        col[i * 3 + 2] = 0.2 + Math.random() * 0.15;
+      } else {
+        // Bright accent stars
+        col[i * 3] = 0.9 + Math.random() * 0.1;
+        col[i * 3 + 1] = 0.85 + Math.random() * 0.15;
+        col[i * 3 + 2] = 0.95 + Math.random() * 0.05;
       }
 
-      sz[i] = 0.05 + Math.random() * 0.2;
+      // Size: mostly small, few bright ones
+      const sizeRoll = Math.random();
+      if (sizeRoll > 0.95) {
+        bSizes[i] = 0.15 + Math.random() * 0.2; // bright stars
+      } else {
+        bSizes[i] = 0.03 + Math.random() * 0.1; // dim stars
+      }
+      sz[i] = bSizes[i];
+      phases[i] = Math.random() * Math.PI * 2; // random twinkle phase
     }
+    twinklePhases.current = phases;
+    baseSizes.current = bSizes;
     return { positions: pos, colors: col, sizes: sz };
   }, []);
 
@@ -637,17 +726,16 @@ function CosmicDust() {
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    g.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     return g;
-  }, [positions, colors, sizes]);
+  }, [positions, colors]);
 
   const mat = useMemo(
     () =>
       new THREE.PointsMaterial({
-        size: 0.13,
+        size: 0.12,
         vertexColors: true,
         transparent: true,
-        opacity: 0.75,
+        opacity: 0.8,
         sizeAttenuation: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -657,8 +745,13 @@ function CosmicDust() {
 
   useEffect(() => () => { geo.dispose(); mat.dispose(); }, [geo, mat]);
 
-  useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.003;
+  useFrame((state, delta) => {
+    if (!ref.current) return;
+    ref.current.rotation.y += delta * 0.002;
+    const t = state.clock.elapsedTime;
+    // Twinkle via material-level opacity and size modulation
+    mat.opacity = 0.75 + 0.08 * Math.sin(t * 0.5) + 0.04 * Math.sin(t * 1.7);
+    mat.size = 0.12 + 0.015 * Math.sin(t * 0.8);
   });
 
   return <points ref={ref} geometry={geo} material={mat} />;
@@ -670,24 +763,29 @@ function CosmicDust() {
 
 function NebulaClouds() {
   const groupRef = useRef<THREE.Group>(null);
-  const count = 12;
+  const count = 18;
 
   const meshes = useMemo(() => {
-    const items: { position: [number, number, number]; scale: number; color: string; opacity: number }[] = [];
-    // Blue, purple, teal, deep indigo palette
-    const colors = ['#1a0a4e', '#0a1628', '#0d3756', '#1a0a2e', '#052a4c', '#12083a', '#0a2d5e', '#1e0845', '#083040', '#150a50', '#0a2845', '#1c0842'];
+    const items: { position: [number, number, number]; scale: number; color: string; opacity: number; pulseSpeed: number; pulsePhase: number }[] = [];
+    const colors = [
+      '#1a0a4e', '#0a1628', '#0d3756', '#1a0a2e', '#052a4c', '#12083a',
+      '#0a2d5e', '#1e0845', '#083040', '#150a50', '#0a2845', '#1c0842',
+      '#0b1a3e', '#180a56', '#062040', '#200a50', '#0a3560', '#140840',
+    ];
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2;
-      const r = 38 + Math.random() * 35;
+      const r = 35 + Math.random() * 40;
       items.push({
         position: [
           Math.cos(angle) * r,
-          (Math.random() - 0.5) * 35,
+          (Math.random() - 0.5) * 40,
           Math.sin(angle) * r,
         ],
-        scale: 18 + Math.random() * 30,
+        scale: 15 + Math.random() * 35,
         color: colors[i % colors.length],
-        opacity: 0.12 + Math.random() * 0.12,
+        opacity: 0.10 + Math.random() * 0.13,
+        pulseSpeed: 0.3 + Math.random() * 0.4,
+        pulsePhase: Math.random() * Math.PI * 2,
       });
     }
     return items;
@@ -720,8 +818,17 @@ function NebulaClouds() {
     };
   }, [sharedGeo, cloudMaterials]);
 
-  useFrame((_, delta) => {
-    if (groupRef.current) groupRef.current.rotation.y += delta * 0.001;
+  useFrame((state, delta) => {
+    if (!groupRef.current) return;
+    groupRef.current.rotation.y += delta * 0.0008;
+    // Subtle opacity pulsing per cloud
+    const t = state.clock.elapsedTime;
+    meshes.forEach((m, i) => {
+      if (cloudMaterials[i]) {
+        const base = m.opacity;
+        cloudMaterials[i].opacity = base + base * 0.15 * Math.sin(t * m.pulseSpeed + m.pulsePhase);
+      }
+    });
   });
 
   return (
@@ -748,14 +855,18 @@ function CameraAutoDolly() {
       initialized.current = true;
     }
     const t = state.clock.elapsedTime;
-    // Slow, gentle breathing zoom: ~20-second cycle
-    const dollyFactor = 1.0 + 0.06 * Math.sin(t * 0.15) + 0.02 * Math.sin(t * 0.08 + 1.0);
+    // Breathing zoom: ~20-second cycle
+    const dollyFactor = 1.0 + 0.05 * Math.sin(t * 0.12) + 0.02 * Math.sin(t * 0.07 + 1.0);
     const dir = camera.position.clone().normalize();
     const targetDist = baseDistance.current * dollyFactor;
     const currentDist = camera.position.length();
-    // Smooth interpolation toward target distance
-    const newDist = THREE.MathUtils.lerp(currentDist, targetDist, 0.02);
+    const newDist = THREE.MathUtils.lerp(currentDist, targetDist, 0.015);
     camera.position.copy(dir.multiplyScalar(newDist));
+
+    // Gentle vertical sway for cinematic feel
+    const sway = 0.3 * Math.sin(t * 0.08) + 0.15 * Math.sin(t * 0.13 + 0.5);
+    const normalizedY = camera.position.y / currentDist;
+    camera.position.y = newDist * (normalizedY + sway * 0.003);
   });
 
   return null;
@@ -858,12 +969,12 @@ export default function SolarSystem() {
       {/* Post-processing: stronger bloom for dramatic sun glow */}
       <EffectComposer>
         <Bloom
-          intensity={1.2}
-          luminanceThreshold={0.15}
-          luminanceSmoothing={0.9}
+          intensity={1.4}
+          luminanceThreshold={0.2}
+          luminanceSmoothing={0.95}
           mipmapBlur
         />
-        <Vignette eskil={false} offset={0.3} darkness={0.6} />
+        <Vignette eskil={false} offset={0.25} darkness={0.55} />
       </EffectComposer>
     </Canvas>
   );
