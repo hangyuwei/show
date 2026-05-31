@@ -37,6 +37,7 @@ const SLOGANS = [
 function TypewriterSlogan() {
   const [renderText, setRenderText] = useState('');
   const [charIndex, setCharIndex] = useState(-1);
+  const [isPaused, setIsPaused] = useState(false);
   const stateRef = useRef({
     sloganIndex: 0,
     isDeleting: false,
@@ -55,20 +56,25 @@ function TypewriterSlogan() {
           s.displayText = current.slice(0, s.displayText.length + 1);
           setRenderText(s.displayText);
           setCharIndex(s.displayText.length);
-          timer = setTimeout(tick, 80 + Math.random() * 40);
+          setIsPaused(false);
+          // Natural typing rhythm: faster for common chars, pause on punctuation
+          const lastChar = s.displayText[s.displayText.length - 1];
+          const isPunctuation = /[，。·、！？,.]/.test(lastChar);
+          timer = setTimeout(tick, isPunctuation ? 140 + Math.random() * 60 : 65 + Math.random() * 45);
         } else {
           s.isDeleting = true;
-          timer = setTimeout(tick, 3200);
+          setIsPaused(true);
+          timer = setTimeout(tick, 2800);
         }
       } else {
         if (s.displayText.length > 0) {
           s.displayText = s.displayText.slice(0, -1);
           setRenderText(s.displayText);
-          timer = setTimeout(tick, 28);
+          timer = setTimeout(tick, 22);
         } else {
           s.isDeleting = false;
           s.sloganIndex = (s.sloganIndex + 1) % SLOGANS.length;
-          timer = setTimeout(tick, 500);
+          timer = setTimeout(tick, 400);
         }
       }
     };
@@ -80,33 +86,46 @@ function TypewriterSlogan() {
   return (
     <span className="inline-flex min-h-[1.5em] items-center">
       <span className="text-white/60">
-        {renderText.split('').map((ch, i) => (
-          <span
-            key={`${ch}-${i}`}
-            className="inline-block transition-all duration-300"
-            style={{
-              opacity: i <= charIndex ? 1 : 0,
-              color: i === charIndex && charIndex > 0
-                ? 'rgba(147, 197, 253, 0.9)'
-                : undefined,
-              textShadow: i === charIndex && charIndex > 0
-                ? '0 0 12px rgba(33,150,255,0.4), 0 0 24px rgba(139,92,246,0.15)'
-                : 'none',
-              transform: i === charIndex ? 'translateY(-1px)' : 'translateY(0)',
-            }}
-          >
-            {ch}
-          </span>
-        ))}
+        {renderText.split('').map((ch, i) => {
+          const isLatest = i === charIndex && charIndex > 0;
+          const distance = charIndex - i;
+          // Characters near the cursor get a subtle gradient fade
+          const isNearCursor = distance >= 0 && distance <= 2;
+          return (
+            <span
+              key={`${ch}-${i}`}
+              className="inline-block"
+              style={{
+                opacity: i <= charIndex ? 1 : 0,
+                color: isLatest
+                  ? 'rgba(167, 197, 253, 0.95)'
+                  : isNearCursor && !isLatest
+                    ? 'rgba(180, 200, 240, 0.8)'
+                    : 'rgba(255,255,255,0.6)',
+                textShadow: isLatest
+                  ? '0 0 14px rgba(96,165,250,0.5), 0 0 28px rgba(139,92,246,0.2), 0 0 48px rgba(96,165,250,0.08)'
+                  : isNearCursor
+                    ? '0 0 8px rgba(96,165,250,0.2), 0 0 16px rgba(139,92,246,0.08)'
+                    : 'none',
+                transform: isLatest
+                  ? 'translateY(-1.5px) scale(1.04)'
+                  : 'translateY(0) scale(1)',
+                transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+            >
+              {ch}
+            </span>
+          );
+        })}
       </span>
       <span
         className="ml-[3px] inline-block w-[2px] align-middle"
         style={{
-          height: '1.15em',
-          background: 'linear-gradient(180deg, #60a5fa 0%, #a78bfa 40%, #818cf8 70%, #2dd4bf 100%)',
+          height: '1.2em',
+          background: 'linear-gradient(180deg, #60a5fa 0%, #a78bfa 35%, #818cf8 60%, #2dd4bf 85%, transparent 100%)',
           borderRadius: '2px',
-          boxShadow: '0 0 6px rgba(96,165,250,0.6), 0 0 14px rgba(167,139,250,0.35), 0 0 28px rgba(45,212,191,0.15), 0 0 40px rgba(96,165,250,0.08)',
-          animation: 'cursor-blink 1s step-end infinite',
+          boxShadow: '0 0 8px rgba(96,165,250,0.7), 0 0 18px rgba(167,139,250,0.4), 0 0 32px rgba(45,212,191,0.18), 0 0 48px rgba(96,165,250,0.06)',
+          animation: isPaused ? 'cursor-blink-pause 1.2s ease-in-out infinite' : 'cursor-blink 1s step-end infinite',
         }}
       />
     </span>
@@ -218,6 +237,49 @@ function ConstellationLines() {
           />
         ))}
       </svg>
+    </div>
+  );
+}
+
+/* ── Subtle orbit rings behind content for cosmic depth ── */
+function OrbitRings() {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+      {/* Primary orbit ring — wide, tilted */}
+      <div
+        className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: 'min(900px, 120vw)',
+          height: 'min(900px, 120vw)',
+          borderRadius: '50%',
+          border: '1px solid rgba(96,165,250,0.04)',
+          boxShadow: '0 0 40px rgba(96,165,250,0.015), inset 0 0 40px rgba(96,165,250,0.01)',
+          animation: 'orbit-ring-spin 60s linear infinite',
+        }}
+      />
+      {/* Secondary orbit ring — smaller, offset color */}
+      <div
+        className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: 'min(620px, 85vw)',
+          height: 'min(620px, 85vw)',
+          borderRadius: '50%',
+          border: '1px solid rgba(167,139,250,0.035)',
+          boxShadow: '0 0 30px rgba(167,139,250,0.012), inset 0 0 30px rgba(167,139,250,0.008)',
+          animation: 'orbit-ring-spin 45s linear infinite reverse',
+        }}
+      />
+      {/* Tertiary ring — teal accent, faintest */}
+      <div
+        className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: 'min(400px, 55vw)',
+          height: 'min(400px, 55vw)',
+          borderRadius: '50%',
+          border: '1px solid rgba(45,212,191,0.03)',
+          animation: 'orbit-ring-spin 35s linear infinite',
+        }}
+      />
     </div>
   );
 }
@@ -364,7 +426,7 @@ function AnimatedDivider() {
           className="absolute left-1/2 top-1/2 h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[1px]"
           style={{
             background: 'linear-gradient(135deg, #60a5fa, #a78bfa, #2dd4bf)',
-            boxShadow: '0 0 5px rgba(96,165,250,0.65), 0 0 12px rgba(96,165,250,0.3), 0 0 24px rgba(167,139,250,0.18), 0 0 45px rgba(45,212,191,0.08)',
+            boxShadow: '0 0 6px rgba(96,165,250,0.70), 0 0 14px rgba(96,165,250,0.35), 0 0 28px rgba(167,139,250,0.20), 0 0 50px rgba(45,212,191,0.08)',
           }}
         />
         {/* Secondary dot accents - blue and teal */}
@@ -425,6 +487,11 @@ export default function Hero() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
         }
+        @keyframes cursor-blink-pause {
+          0%, 100% { opacity: 1; transform: scaleY(1); }
+          30% { opacity: 0.15; transform: scaleY(0.85); }
+          60% { opacity: 1; transform: scaleY(1); }
+        }
         @keyframes hero-shimmer {
           0% { transform: translateX(-180%); }
           100% { transform: translateX(350%); }
@@ -448,6 +515,10 @@ export default function Hero() {
               0 0 400px rgba(45,212,191,0.025),
               0 2px 4px rgba(0,0,0,0.85);
           }
+        }
+        @keyframes orbit-ring-spin {
+          from { transform: rotateX(72deg) rotateZ(0deg); }
+          to { transform: rotateX(72deg) rotateZ(360deg); }
         }
         @keyframes gradient-title-shift {
           0%, 100% {
@@ -485,7 +556,7 @@ export default function Hero() {
         }
         @keyframes scroll-float {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(7px); }
+          50% { transform: translateY(6px); }
         }
         @keyframes cta-border-spin {
           from { transform: rotate(0deg); }
@@ -503,6 +574,9 @@ export default function Hero() {
 
       {/* Constellation lines */}
       <ConstellationLines />
+
+      {/* Orbit rings for cosmic depth */}
+      <OrbitRings />
 
       {/* Ambient particles */}
       <AmbientParticles />
@@ -536,10 +610,10 @@ export default function Hero() {
           {/* ── Title: iridescent gradient with premium multi-layer glow ── */}
           <motion.h1
             {...fadeUp(0.15)}
-            className="mb-2 text-5xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7.5rem]"
+            className="mb-3 text-5xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7.5rem]"
             style={{
-              letterSpacing: '-0.035em',
-              lineHeight: 1.02,
+              letterSpacing: '-0.04em',
+              lineHeight: 1.0,
               animation: 'title-glow-breathe 7s ease-in-out infinite',
             }}
           >
@@ -547,10 +621,10 @@ export default function Hero() {
               className="relative inline-block bg-clip-text text-transparent"
               style={{
                 backgroundImage:
-                  'linear-gradient(135deg, #ffffff 0%, #e0e7ff 10%, #c7d2fe 18%, #a5b4fc 26%, #818cf8 36%, #93c5fd 44%, #a78bfa 52%, #c084fc 60%, #c4b5fd 68%, #bae6fd 76%, #e0e7ff 86%, #ffffff 100%)',
-                backgroundSize: '400% 400%',
-                animation: 'gradient-title-shift 12s ease infinite',
-                filter: 'drop-shadow(0 0 40px rgba(96,165,250,0.08)) drop-shadow(0 0 80px rgba(167,139,250,0.04))',
+                  'linear-gradient(135deg, #ffffff 0%, #eef2ff 8%, #dbe4ff 16%, #c7d2fe 22%, #a5b4fc 30%, #818cf8 38%, #93c5fd 44%, #a78bfa 50%, #c084fc 56%, #c4b5fd 62%, #bae6fd 70%, #99f6e4 78%, #bae6fd 85%, #e0e7ff 92%, #ffffff 100%)',
+                backgroundSize: '500% 500%',
+                animation: 'gradient-title-shift 14s ease infinite',
+                filter: 'drop-shadow(0 0 50px rgba(96,165,250,0.10)) drop-shadow(0 0 100px rgba(167,139,250,0.05)) drop-shadow(0 0 150px rgba(45,212,191,0.02))',
               }}
             >
               {/* Shimmer sweep overlay - premium iridescent sweep */}
@@ -564,10 +638,10 @@ export default function Hero() {
                 }}
               >
                 <span
-                  className="absolute inset-y-0 w-[60%] bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  className="absolute inset-y-0 w-[55%] bg-gradient-to-r from-transparent via-white/30 to-transparent"
                   style={{
-                    animation: 'hero-shimmer 7s ease-in-out infinite',
-                    filter: 'blur(1px)',
+                    animation: 'hero-shimmer 6s ease-in-out infinite',
+                    filter: 'blur(1.5px)',
                   }}
                 />
               </span>
@@ -582,10 +656,28 @@ export default function Hero() {
                 }}
               >
                 <span
-                  className="absolute inset-y-0 w-[35%] bg-gradient-to-r from-transparent via-blue-300/15 to-transparent"
+                  className="absolute inset-y-0 w-[30%] bg-gradient-to-r from-transparent via-blue-300/18 to-transparent"
                   style={{
                     animation: 'hero-shimmer 9s ease-in-out infinite',
-                    animationDelay: '3s',
+                    animationDelay: '3.5s',
+                  }}
+                />
+              </span>
+              {/* Tertiary teal shimmer for color richness */}
+              <span
+                className="pointer-events-none absolute inset-0 overflow-hidden"
+                aria-hidden
+                style={{
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                <span
+                  className="absolute inset-y-0 w-[25%] bg-gradient-to-r from-transparent via-teal-300/10 to-transparent"
+                  style={{
+                    animation: 'hero-shimmer 11s ease-in-out infinite',
+                    animationDelay: '6s',
                   }}
                 />
               </span>
@@ -601,11 +693,11 @@ export default function Hero() {
             {...fadeUp(0.45)}
             className="mb-8 bg-clip-text text-lg font-medium text-transparent sm:text-xl md:text-2xl"
             style={{
-              letterSpacing: '0.07em',
-              backgroundImage: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 30%, #a78bfa 55%, #2dd4bf 80%, #60a5fa 100%)',
-              backgroundSize: '200% 200%',
-              animation: 'gradient-title-shift 8s ease infinite',
-              filter: 'drop-shadow(0 0 12px rgba(96,165,250,0.15)) drop-shadow(0 0 35px rgba(167,139,250,0.07)) drop-shadow(0 0 60px rgba(45,212,191,0.03))',
+              letterSpacing: '0.08em',
+              backgroundImage: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 22%, #a78bfa 40%, #c084fc 55%, #a78bfa 68%, #2dd4bf 82%, #60a5fa 100%)',
+              backgroundSize: '250% 250%',
+              animation: 'gradient-title-shift 9s ease infinite',
+              filter: 'drop-shadow(0 0 14px rgba(96,165,250,0.18)) drop-shadow(0 0 40px rgba(167,139,250,0.08)) drop-shadow(0 0 70px rgba(45,212,191,0.04))',
             }}
           >
             全栈开发 · AI应用 · 大健康行业
@@ -628,14 +720,14 @@ export default function Hero() {
               whileTap={{ scale: 0.96 }}
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
               onClick={handleExplore}
-              className="group relative cursor-pointer rounded-full px-14 py-4.5 text-base font-semibold text-white backdrop-blur-xl transition-all duration-600 sm:text-lg"
+              className="group relative cursor-pointer rounded-full px-14 py-5 text-base font-semibold text-white backdrop-blur-xl transition-all duration-700 sm:text-lg"
             >
               {/* Deep expanding aurora aura */}
               <span
-                className="absolute -inset-6 rounded-full opacity-0 blur-2xl transition-all duration-800 group-hover:opacity-50"
+                className="absolute -inset-7 rounded-full opacity-0 blur-2xl transition-all duration-1000 group-hover:opacity-55"
                 style={{
                   background:
-                    'radial-gradient(ellipse, rgba(96,165,250,0.12) 0%, rgba(167,139,250,0.1) 35%, rgba(45,212,191,0.08) 65%, transparent 85%)',
+                    'radial-gradient(ellipse, rgba(96,165,250,0.14) 0%, rgba(167,139,250,0.10) 35%, rgba(45,212,191,0.08) 65%, transparent 85%)',
                 }}
               />
               {/* Mid glow halo - breathing ambient */}
@@ -653,7 +745,7 @@ export default function Hero() {
               />
               {/* Strong hover glow halo */}
               <span
-                className="absolute -inset-2 rounded-full opacity-0 blur-lg transition-all duration-700 group-hover:opacity-70"
+                className="absolute -inset-2 rounded-full opacity-0 blur-lg transition-all duration-700 group-hover:opacity-75"
                 style={{
                   background:
                     'linear-gradient(135deg, rgba(96,165,250,0.3), rgba(167,139,250,0.22), rgba(45,212,191,0.18))',
@@ -661,42 +753,42 @@ export default function Hero() {
               />
               {/* Animated gradient border - rotating conic sweep */}
               <span className="absolute inset-0 rounded-full overflow-hidden">
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-400/45 via-violet-400/45 to-teal-400/40 opacity-35 transition-opacity duration-500 group-hover:opacity-85" />
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-400/45 via-violet-400/45 to-teal-400/40 opacity-35 transition-opacity duration-500 group-hover:opacity-90" />
                 <motion.span
                   className="absolute inset-0"
                   style={{
-                    background: 'conic-gradient(from 0deg, transparent 0%, transparent 45%, rgba(255,255,255,0.28) 65%, transparent 85%)',
-                    animation: 'cta-border-spin 8s linear infinite',
+                    background: 'conic-gradient(from 0deg, transparent 0%, transparent 40%, rgba(255,255,255,0.30) 60%, transparent 80%)',
+                    animation: 'cta-border-spin 7s linear infinite',
                   }}
                 />
                 {/* Secondary conic sweep offset */}
                 <motion.span
                   className="absolute inset-0"
                   style={{
-                    background: 'conic-gradient(from 180deg, transparent 0%, transparent 55%, rgba(192,132,252,0.12) 72%, transparent 90%)',
-                    animation: 'cta-border-spin 12s linear infinite reverse',
+                    background: 'conic-gradient(from 180deg, transparent 0%, transparent 50%, rgba(192,132,252,0.14) 70%, transparent 90%)',
+                    animation: 'cta-border-spin 11s linear infinite reverse',
                   }}
                 />
               </span>
               {/* Inner glass background with premium depth */}
               <span
-                className="absolute inset-[1.5px] rounded-full transition-all duration-600"
+                className="absolute inset-[1.5px] rounded-full transition-all duration-700"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(8,12,35,0.9) 0%, rgba(4,8,24,0.94) 100%)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.12)',
+                  background: 'linear-gradient(180deg, rgba(8,12,35,0.92) 0%, rgba(4,8,24,0.95) 100%)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.15)',
                 }}
               />
               {/* Hover state inner highlight */}
               <span
-                className="absolute inset-[1.5px] rounded-full opacity-0 transition-opacity duration-600 group-hover:opacity-100"
+                className="absolute inset-[1.5px] rounded-full opacity-0 transition-opacity duration-700 group-hover:opacity-100"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(96,165,250,0.08) 0%, rgba(8,14,38,0.88) 100%)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), inset 0 0 30px rgba(96,165,250,0.05)',
+                  background: 'linear-gradient(180deg, rgba(96,165,250,0.10) 0%, rgba(8,14,38,0.90) 100%)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), inset 0 0 35px rgba(96,165,250,0.06)',
                 }}
               />
               {/* Button text with animated arrow */}
               <span className="relative z-10 flex items-center gap-3">
-                <span className="transition-all duration-400 group-hover:tracking-widest">
+                <span className="transition-all duration-500 group-hover:tracking-[0.12em]">
                   探索项目宇宙
                 </span>
                 <svg
@@ -704,7 +796,7 @@ export default function Hero() {
                   height="18"
                   viewBox="0 0 16 16"
                   fill="none"
-                  className="transition-all duration-500 group-hover:translate-x-2.5"
+                  className="transition-all duration-500 group-hover:translate-x-3"
                   style={{ opacity: 0.85 }}
                 >
                   <path
@@ -725,79 +817,78 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 3.4, duration: 2, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2"
+        transition={{ delay: 3.2, duration: 2, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
       >
         <motion.div
-          animate={{ y: [0, 7, 0] }}
-          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-3"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-2.5"
         >
           <span
-            className="text-[10px] font-medium uppercase tracking-[0.35em]"
+            className="text-[9px] font-semibold uppercase tracking-[0.4em]"
             style={{
-              color: 'rgba(255,255,255,0.18)',
-              textShadow: '0 0 20px rgba(96,165,250,0.15)',
+              color: 'rgba(255,255,255,0.15)',
+              textShadow: '0 0 20px rgba(96,165,250,0.12)',
             }}
           >
             Scroll
           </span>
           {/* Mouse shape with premium glow */}
-          <div className="relative flex h-12 w-[22px] items-start justify-center rounded-full border border-white/12 p-1.5">
+          <div className="relative flex h-10 w-[20px] items-start justify-center rounded-full border border-white/10 p-1.5">
             {/* Outer pulsing ring - large aurora ring */}
             <span
               className="absolute -inset-3 rounded-full"
               style={{
-                border: '1px solid rgba(96,165,250,0.08)',
-                animation: 'scroll-ring-pulse-outer 4s ease-in-out infinite',
+                border: '1px solid rgba(96,165,250,0.06)',
+                animation: 'scroll-ring-pulse-outer 4.5s ease-in-out infinite',
               }}
             />
             {/* Inner pulsing ring */}
             <span
               className="absolute -inset-2 rounded-full"
               style={{
-                border: '1px solid rgba(167,139,250,0.1)',
+                border: '1px solid rgba(167,139,250,0.08)',
                 animation: 'scroll-ring-pulse 3s ease-in-out infinite',
               }}
             />
             {/* Static ambient glow ring */}
             <span
-              className="absolute -inset-1 rounded-full opacity-25"
+              className="absolute -inset-1 rounded-full opacity-20"
               style={{
-                border: '1px solid rgba(96,165,250,0.1)',
-                boxShadow: '0 0 8px rgba(96,165,250,0.06), 0 0 16px rgba(167,139,250,0.03), 0 0 28px rgba(45,212,191,0.02)',
+                border: '1px solid rgba(96,165,250,0.08)',
+                boxShadow: '0 0 6px rgba(96,165,250,0.04), 0 0 14px rgba(167,139,250,0.02)',
               }}
             />
             {/* Scrolling dot with trailing glow */}
             <motion.div
-              className="relative h-1 w-1 rounded-full"
+              className="relative h-1 w-0.5 rounded-full"
               style={{
                 background: 'linear-gradient(180deg, #60a5fa, #a78bfa)',
-                boxShadow: '0 0 5px rgba(96,165,250,0.5), 0 0 12px rgba(167,139,250,0.25), 0 0 22px rgba(45,212,191,0.1)',
+                boxShadow: '0 0 4px rgba(96,165,250,0.5), 0 0 10px rgba(167,139,250,0.25)',
               }}
-              animate={{ y: [0, 16, 0], opacity: [1, 0.12, 1] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              animate={{ y: [0, 14, 0], opacity: [1, 0.15, 1] }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
             >
               {/* Dot glow trail */}
               <motion.span
-                className="absolute left-1/2 -translate-x-1/2 h-3 w-[3px] rounded-full"
+                className="absolute left-1/2 -translate-x-1/2 h-2.5 w-[2px] rounded-full"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(96,165,250,0.35), transparent)',
-                  top: '-8px',
+                  background: 'linear-gradient(180deg, rgba(96,165,250,0.30), transparent)',
+                  top: '-6px',
                 }}
-                animate={{ opacity: [0, 0.5, 0], scaleY: [0.5, 1, 0.5] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                animate={{ opacity: [0, 0.45, 0], scaleY: [0.5, 1, 0.5] }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
               />
             </motion.div>
           </div>
           {/* Down chevron with premium fade */}
           <svg
-            width="14"
-            height="14"
+            width="12"
+            height="12"
             viewBox="0 0 16 16"
             fill="none"
-            className="opacity-12"
-            style={{ animation: 'scroll-float 3.5s ease-in-out infinite' }}
+            style={{ opacity: 0.12, animation: 'scroll-float 4s ease-in-out infinite' }}
           >
             <path
               d="M4 6l4 4 4-4"

@@ -125,44 +125,76 @@ const timelineItemVariants = {
   }),
 };
 
+const fadeInScaleVariants = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
 const cardHoverShadow = '0 8px 32px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.15), 0 0 1px rgba(255,255,255,0.08)';
 const cardBaseShadow = '0 2px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1), 0 0 1px rgba(255,255,255,0.04)';
 
 /* ── Sub-Components ──────────────────────────────────────── */
 
-function SectionDivider() {
+function SectionDivider({ variant = 'default' }: { variant?: 'default' | 'warm' | 'cool' }) {
+  const colors = {
+    default: { left: '#2196ff', center: '#14b8a6', right: '#8b5cf6' },
+    warm: { left: '#8b5cf6', center: '#eab308', right: '#f43f5e' },
+    cool: { left: '#14b8a6', center: '#2196ff', right: '#8b5cf6' },
+  }[variant];
+
   return (
-    <div className="relative flex items-center justify-center my-8 sm:my-12">
-      {/* Background glow behind divider */}
+    <div className="relative flex items-center justify-center my-10 sm:my-14">
+      {/* Background glow behind divider — wider and softer */}
       <div
-        className="pointer-events-none absolute h-8 w-48 rounded-full opacity-[0.07]"
+        className="pointer-events-none absolute h-12 w-72 rounded-full opacity-[0.06]"
         style={{
-          background: 'radial-gradient(ellipse, #2196ff 0%, #8b5cf6 40%, transparent 70%)',
-          filter: 'blur(20px)',
+          background: `radial-gradient(ellipse, ${colors.left} 0%, ${colors.right} 40%, transparent 70%)`,
+          filter: 'blur(24px)',
         }}
       />
-      {/* Left tapering line */}
-      <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/6 to-white/10" />
-      <div className="h-px w-10 bg-gradient-to-r from-white/10 to-accent-blue/18" />
-      {/* Center ornament with multi-glow dots */}
-      <div className="mx-3 flex items-center gap-1.5 relative">
-        <div className="h-1 w-1 rounded-full bg-accent-blue/45 shadow-[0_0_5px_rgba(33,150,255,0.4)]" />
+      {/* Left tapering line — longer with gradient color */}
+      <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/[0.04] to-white/[0.08]" />
+      <div className="h-px w-14 bg-gradient-to-r from-white/[0.08] to-white/[0.14]" />
+      {/* Center ornament with enhanced multi-glow dots and diamond */}
+      <div className="mx-4 flex items-center gap-2 relative">
+        <div className="h-1 w-1 rounded-full bg-accent-blue/40 shadow-[0_0_6px_rgba(33,150,255,0.35)]" />
+        <div className="h-[2px] w-4 bg-gradient-to-r from-accent-blue/20 to-accent-teal/20 rounded-full" />
         <div className="h-[3px] w-[3px] rounded-full bg-white/20" />
-        <div className="h-1.5 w-1.5 rounded-full bg-accent-teal/55 shadow-[0_0_7px_rgba(20,184,166,0.45)]" />
+        {/* Center diamond — rotated square with glow */}
+        <div className="relative">
+          <div
+            className="w-2.5 h-2.5 rotate-45 rounded-[1px]"
+            style={{
+              background: `linear-gradient(135deg, ${colors.left}, ${colors.center})`,
+              boxShadow: `0 0 8px ${colors.left}50, 0 0 16px ${colors.center}25`,
+            }}
+          />
+          <div
+            className="absolute inset-0 w-2.5 h-2.5 rotate-45 rounded-[1px] opacity-40"
+            style={{
+              background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), transparent 60%)',
+            }}
+          />
+        </div>
         <div className="h-[3px] w-[3px] rounded-full bg-white/20" />
-        <div className="h-1 w-1 rounded-full bg-accent-purple/45 shadow-[0_0_5px_rgba(139,92,246,0.4)]" />
+        <div className="h-[2px] w-4 bg-gradient-to-r from-accent-teal/20 to-accent-purple/20 rounded-full" />
+        <div className="h-1 w-1 rounded-full bg-accent-purple/40 shadow-[0_0_6px_rgba(139,92,246,0.35)]" />
       </div>
       {/* Right tapering line with traveling shimmer */}
-      <div className="relative h-px w-10 bg-gradient-to-l from-white/10 to-accent-purple/18 overflow-hidden">
+      <div className="relative h-px w-14 bg-gradient-to-l from-white/[0.14] to-white/[0.08] overflow-hidden">
         <div
-          className="absolute inset-0 opacity-60"
+          className="absolute inset-0 opacity-50"
           style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.6) 50%, transparent 100%)',
-            animation: 'shimmer 3s ease-in-out infinite',
+            background: `linear-gradient(90deg, transparent 0%, ${colors.right}80 50%, transparent 100%)`,
+            animation: 'shimmer 3.5s ease-in-out infinite',
           }}
         />
       </div>
-      <div className="h-px w-20 bg-gradient-to-l from-transparent via-white/6 to-white/10" />
+      <div className="h-px w-24 bg-gradient-to-l from-transparent via-white/[0.04] to-white/[0.08]" />
     </div>
   );
 }
@@ -390,6 +422,14 @@ export default function AboutContent() {
             filter: 'blur(70px)',
           }}
         />
+        {/* Bridge gradient flowing down from hero — creates visual continuity */}
+        <div
+          className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[500px] h-32 opacity-[0.04]"
+          style={{
+            background: 'radial-gradient(ellipse, #2196ff 0%, #8b5cf6 50%, transparent 75%)',
+            filter: 'blur(40px)',
+          }}
+        />
 
         <SectionTitle subtitle="跨领域复合能力全景 — 涵盖工程、设计、数据与 AI">能力雷达</SectionTitle>
 
@@ -438,7 +478,7 @@ export default function AboutContent() {
         </div>
       </motion.section>
 
-      <SectionDivider />
+      <SectionDivider variant="cool" />
 
       {/* ── Bio Card with Premium Gradient Border ──────────── */}
       <motion.section
@@ -471,7 +511,7 @@ export default function AboutContent() {
         <div className="relative rounded-2xl p-px overflow-hidden group">
           {/* Rotating conic gradient border */}
           <div
-            className="absolute inset-0 rounded-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-700"
+            className="absolute inset-0 rounded-2xl opacity-35 group-hover:opacity-65 transition-opacity duration-700"
             style={{
               background: 'conic-gradient(from 0deg, #2196ff, #14b8a6, #8b5cf6, #eab308, #2196ff)',
               animation: 'border-spin-slow 10s linear infinite',
@@ -508,6 +548,13 @@ export default function AboutContent() {
                 background: 'radial-gradient(ellipse, #14b8a6, transparent 70%)',
                 filter: 'blur(18px)',
               }}
+            />
+            {/* Subtle corner accents — top-left and bottom-right */}
+            <div className="pointer-events-none absolute top-0 left-0 w-20 h-20 opacity-[0.04] group-hover:opacity-[0.07] transition-opacity duration-700"
+              style={{ background: 'radial-gradient(circle at 0% 0%, #2196ff, transparent 65%)', filter: 'blur(16px)' }}
+            />
+            <div className="pointer-events-none absolute bottom-0 right-0 w-20 h-20 opacity-[0.04] group-hover:opacity-[0.07] transition-opacity duration-700"
+              style={{ background: 'radial-gradient(circle at 100% 100%, #14b8a6, transparent 65%)', filter: 'blur(16px)' }}
             />
 
             <div className="flex flex-col sm:flex-row sm:items-start gap-6">
@@ -588,27 +635,34 @@ export default function AboutContent() {
                 </div>
 
                 {/* Role tags with enhanced glow hover */}
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-5">
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium text-accent-blue border border-accent-blue/30 transition-all duration-300 hover:border-accent-blue/55 hover:shadow-[0_0_12px_rgba(33,150,255,0.2)]"
-                    style={{ background: 'rgba(33, 150, 255, 0.08)' }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-accent-blue border border-accent-blue/25 transition-all duration-300 hover:border-accent-blue/50 hover:shadow-[0_0_14px_rgba(33,150,255,0.18)]"
+                    style={{ background: 'rgba(33, 150, 255, 0.06)' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-blue shadow-[0_0_4px_rgba(33,150,255,0.4)]" />
                     全栈开发
                   </span>
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border border-accent-teal/30 transition-all duration-300 hover:border-accent-teal/55 hover:shadow-[0_0_12px_rgba(20,184,166,0.2)]"
-                    style={{ background: 'rgba(20, 184, 166, 0.08)', color: '#14b8a6' }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-teal/25 transition-all duration-300 hover:border-accent-teal/50 hover:shadow-[0_0_14px_rgba(20,184,166,0.18)]"
+                    style={{ background: 'rgba(20, 184, 166, 0.06)', color: '#14b8a6' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-teal shadow-[0_0_4px_rgba(20,184,166,0.4)]" />
                     大健康行业
                   </span>
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border border-accent-purple/30 transition-all duration-300 hover:border-accent-purple/55 hover:shadow-[0_0_12px_rgba(139,92,246,0.2)]"
-                    style={{ background: 'rgba(139, 92, 246, 0.08)', color: '#8b5cf6' }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-purple/25 transition-all duration-300 hover:border-accent-purple/50 hover:shadow-[0_0_14px_rgba(139,92,246,0.18)]"
+                    style={{ background: 'rgba(139, 92, 246, 0.06)', color: '#8b5cf6' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-purple shadow-[0_0_4px_rgba(139,92,246,0.4)]" />
                     AI 应用
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-warm/25 transition-all duration-300 hover:border-accent-warm/50 hover:shadow-[0_0_14px_rgba(245,158,11,0.18)]"
+                    style={{ background: 'rgba(245, 158, 11, 0.06)', color: '#eab308' }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shadow-[0_0_4px_rgba(245,158,11,0.4)]" />
+                    创意可视化
                   </span>
                 </div>
 
@@ -623,7 +677,32 @@ export default function AboutContent() {
                   </p>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-white/[0.06]">
+                {/* Quick stats row with subtle dividers */}
+                <motion.div
+                  variants={fadeInScaleVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="mt-6 pt-5 border-t border-white/[0.06] flex flex-wrap gap-x-6 gap-y-3"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold font-mono" style={{ color: '#2196ff' }}>5+</span>
+                    <span className="text-xs text-white/30">年开发经验</span>
+                  </div>
+                  <div className="w-px h-4 bg-white/[0.08] self-center" />
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold font-mono" style={{ color: '#14b8a6' }}>20+</span>
+                    <span className="text-xs text-white/30">项目交付</span>
+                  </div>
+                  <div className="w-px h-4 bg-white/[0.08] self-center" />
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold font-mono" style={{ color: '#8b5cf6' }}>3+</span>
+                    <span className="text-xs text-white/30">行业领域</span>
+                  </div>
+                </motion.div>
+
+                {/* GitHub link with refined styling */}
+                <div className="mt-5 pt-4 border-t border-white/[0.04]">
                   <a
                     href="https://github.com/hangyuwei"
                     target="_blank"
@@ -664,7 +743,7 @@ export default function AboutContent() {
         </div>
       </motion.section>
 
-      <SectionDivider />
+      <SectionDivider variant="warm" />
 
       {/* ── Tech Stack Sphere ────────────────────────────── */}
       <motion.section
@@ -740,7 +819,7 @@ export default function AboutContent() {
         </div>
       </motion.section>
 
-      <SectionDivider />
+      <SectionDivider variant="default" />
 
       {/* ── Career Timeline ──────────────────────────────── */}
       <motion.section
@@ -765,6 +844,14 @@ export default function AboutContent() {
           style={{
             background: 'radial-gradient(circle, #8b5cf6 0%, #eab308 40%, transparent 70%)',
             filter: 'blur(55px)',
+          }}
+        />
+        {/* Subtle bridge gradient connecting to the section above */}
+        <div
+          className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[400px] h-24 opacity-[0.03]"
+          style={{
+            background: 'radial-gradient(ellipse, #8b5cf6 0%, #14b8a6 50%, transparent 75%)',
+            filter: 'blur(40px)',
           }}
         />
 
@@ -799,19 +886,27 @@ export default function AboutContent() {
                 }}
               />
             </div>
-            {/* Start cap — enhanced double glow */}
+            {/* Start cap — enhanced triple glow for premium feel */}
             <div
-              className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full opacity-25"
-              style={{ background: '#2196ff', filter: 'blur(6px)' }}
+              className="absolute -top-4 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full opacity-15"
+              style={{ background: '#2196ff', filter: 'blur(10px)' }}
+            />
+            <div
+              className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full opacity-25"
+              style={{ background: '#2196ff', filter: 'blur(5px)' }}
             />
             <div
               className="absolute -top-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-blue"
               style={{ boxShadow: '0 0 10px rgba(33,150,255,0.6), 0 0 20px rgba(33,150,255,0.3), 0 0 40px rgba(33,150,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25)' }}
             />
-            {/* End cap — enhanced double glow */}
+            {/* End cap — enhanced triple glow for premium feel */}
             <div
-              className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full opacity-25"
-              style={{ background: '#14b8a6', filter: 'blur(6px)' }}
+              className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full opacity-15"
+              style={{ background: '#14b8a6', filter: 'blur(10px)' }}
+            />
+            <div
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full opacity-25"
+              style={{ background: '#14b8a6', filter: 'blur(5px)' }}
             />
             <div
               className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-accent-teal"
@@ -829,6 +924,7 @@ export default function AboutContent() {
               ];
               const color = dotColors[i % dotColors.length];
               const isLast = i === TIMELINE.length - 1;
+              const nextColor = dotColors[(i + 1) % dotColors.length];
 
               return (
                 <motion.div
@@ -879,6 +975,16 @@ export default function AboutContent() {
                     </div>
                   </div>
 
+                  {/* Gradient bridge connector between this card and the next */}
+                  {!isLast && (
+                    <div
+                      className="absolute left-[22px] sm:left-[34px] bottom-0 -translate-x-1/2 translate-y-1/2 w-px h-6 opacity-15 pointer-events-none"
+                      style={{
+                        background: `linear-gradient(180deg, ${color.bg}, ${nextColor.bg})`,
+                      }}
+                    />
+                  )}
+
                   {/* Card with enhanced shadow and border shimmer */}
                   <div
                     className="relative rounded-xl overflow-hidden group transition-all duration-600"
@@ -920,6 +1026,14 @@ export default function AboutContent() {
                         }}
                       />
                     </div>
+
+                    {/* Bottom edge glow — subtle color bleed */}
+                    <div
+                      className="absolute bottom-0 left-1/4 right-1/4 h-px opacity-0 group-hover:opacity-60 transition-opacity duration-500"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${color.bg}25, transparent)`,
+                      }}
+                    />
 
                     <div className="p-5 sm:p-6 group-hover:bg-white/[0.02] transition-colors duration-500">
                       <div className="flex items-start justify-between gap-3 mb-2.5">
@@ -969,8 +1083,17 @@ export default function AboutContent() {
         </div>
       </motion.section>
 
-      {/* ── Footer Spacer ────────────────────────────────── */}
-      <div className="h-16 sm:h-24" />
+      {/* ── Footer Spacer with fade-out gradient ──────────── */}
+      <div className="relative h-16 sm:h-24">
+        {/* Closing gradient orb — subtle fade to background */}
+        <div
+          className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-16 opacity-[0.04]"
+          style={{
+            background: 'radial-gradient(ellipse, #14b8a6 0%, #2196ff 40%, transparent 70%)',
+            filter: 'blur(30px)',
+          }}
+        />
+      </div>
     </>
   );
 }

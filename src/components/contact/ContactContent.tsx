@@ -84,14 +84,14 @@ export default function ContactContent() {
   };
 
   const inputWrapperClass = (field: string) =>
-    `relative rounded-2xl transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+    `relative rounded-2xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
       focused === field
-        ? 'ring-1 ring-[var(--accent)]/25 shadow-[0_0_32px_rgba(45,140,240,0.15),0_0_64px_rgba(139,92,246,0.08),0_0_96px_rgba(20,184,166,0.04),0_8px_32px_rgba(0,0,0,0.3)]'
+        ? 'ring-1 ring-[var(--accent)]/20 shadow-[0_0_40px_rgba(45,140,240,0.14),0_0_80px_rgba(139,92,246,0.07),0_0_120px_rgba(20,184,166,0.03),0_8px_36px_rgba(0,0,0,0.30)]'
         : 'shadow-[0_2px_8px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.10)]'
     }`;
 
   const inputClass =
-    'relative w-full rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] px-4 py-3.5 text-sm text-white/90 placeholder-white/20 outline-none backdrop-blur-xl transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] focus:border-[var(--accent)]/35 focus:bg-[var(--glass-bg-hover)] focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_0_24px_rgba(45,140,240,0.03)]';
+    'relative w-full rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] px-4 py-3.5 text-sm text-white/90 placeholder-white/20 outline-none backdrop-blur-xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus:border-[var(--accent)]/30 focus:bg-[var(--glass-bg-hover)] focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_32px_rgba(45,140,240,0.04),inset_0_0_48px_rgba(139,92,246,0.02)]';
 
   return (
     <>
@@ -134,18 +134,18 @@ export default function ContactContent() {
                 {/* Multi-layer animated glow halo on focus */}
                 {focused === 'name' && (
                   <>
-                    <div className="absolute -inset-[6px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/12 via-[var(--color-accent-teal)]/8 to-[var(--accent-purple)]/12 blur-xl animate-[breathe_4s_ease-in-out_infinite] pointer-events-none" />
-                    <div className="absolute -inset-[3px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 via-transparent to-[var(--accent-purple)]/10 blur-md pointer-events-none" />
-                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/5 via-[var(--color-accent-teal)]/3 to-[var(--accent-purple)]/5 blur-sm pointer-events-none" />
+                    <div className="absolute -inset-[8px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/10 via-[var(--accent-purple)]/6 to-[var(--color-accent-teal)]/8 blur-xl animate-[breathe_5s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute -inset-[4px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/8 via-transparent to-[var(--accent-purple)]/8 blur-lg pointer-events-none" />
+                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/4 via-[var(--color-accent-teal)]/2 to-[var(--accent-purple)]/4 blur-sm pointer-events-none" />
                   </>
                 )}
                 {/* Top-edge glass light reflection */}
                 {focused === 'name' && (
-                  <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent pointer-events-none" />
                 )}
                 {/* Bottom-edge subtle glow on focus */}
                 {focused === 'name' && (
-                  <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/25 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent pointer-events-none" />
                 )}
                 <input
                   id="name"
@@ -174,16 +174,16 @@ export default function ContactContent() {
               <div className={inputWrapperClass('email')}>
                 {focused === 'email' && (
                   <>
-                    <div className="absolute -inset-[6px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/12 via-[var(--color-accent-teal)]/8 to-[var(--accent-purple)]/12 blur-xl animate-[breathe_4s_ease-in-out_infinite] pointer-events-none" />
-                    <div className="absolute -inset-[3px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 via-transparent to-[var(--accent-purple)]/10 blur-md pointer-events-none" />
-                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/5 via-[var(--color-accent-teal)]/3 to-[var(--accent-purple)]/5 blur-sm pointer-events-none" />
+                    <div className="absolute -inset-[8px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/10 via-[var(--accent-purple)]/6 to-[var(--color-accent-teal)]/8 blur-xl animate-[breathe_5s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute -inset-[4px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/8 via-transparent to-[var(--accent-purple)]/8 blur-lg pointer-events-none" />
+                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/4 via-[var(--color-accent-teal)]/2 to-[var(--accent-purple)]/4 blur-sm pointer-events-none" />
                   </>
                 )}
                 {focused === 'email' && (
-                  <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent pointer-events-none" />
                 )}
                 {focused === 'email' && (
-                  <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/25 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent pointer-events-none" />
                 )}
                 <input
                   id="email"
@@ -212,16 +212,16 @@ export default function ContactContent() {
               <div className={inputWrapperClass('message')}>
                 {focused === 'message' && (
                   <>
-                    <div className="absolute -inset-[6px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/12 via-[var(--color-accent-teal)]/8 to-[var(--accent-purple)]/12 blur-xl animate-[breathe_4s_ease-in-out_infinite] pointer-events-none" />
-                    <div className="absolute -inset-[3px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 via-transparent to-[var(--accent-purple)]/10 blur-md pointer-events-none" />
-                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/5 via-[var(--color-accent-teal)]/3 to-[var(--accent-purple)]/5 blur-sm pointer-events-none" />
+                    <div className="absolute -inset-[8px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/10 via-[var(--accent-purple)]/6 to-[var(--color-accent-teal)]/8 blur-xl animate-[breathe_5s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute -inset-[4px] rounded-2xl bg-gradient-to-br from-[var(--accent)]/8 via-transparent to-[var(--accent-purple)]/8 blur-lg pointer-events-none" />
+                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--accent)]/4 via-[var(--color-accent-teal)]/2 to-[var(--accent-purple)]/4 blur-sm pointer-events-none" />
                   </>
                 )}
                 {focused === 'message' && (
-                  <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent pointer-events-none" />
                 )}
                 {focused === 'message' && (
-                  <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/25 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent pointer-events-none" />
                 )}
                 <textarea
                   id="message"
@@ -240,22 +240,22 @@ export default function ContactContent() {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.015 }}
-              whileTap={{ scale: 0.972 }}
-              className="group relative w-full py-3.5 rounded-2xl text-sm font-semibold text-white overflow-hidden transition-shadow duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_0_36px_rgba(45,140,240,0.30),0_0_72px_rgba(139,92,246,0.15),0_0_108px_rgba(20,184,166,0.06),0_12px_40px_rgba(0,0,0,0.35)] active:shadow-[0_0_16px_rgba(45,140,240,0.25)]"
+              whileHover={{ scale: 1.012 }}
+              whileTap={{ scale: 0.975 }}
+              className="group relative w-full py-3.5 rounded-2xl text-sm font-semibold text-white overflow-hidden transition-shadow duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_0_40px_rgba(45,140,240,0.28),0_0_80px_rgba(139,92,246,0.14),0_0_120px_rgba(20,184,166,0.05),0_12px_44px_rgba(0,0,0,0.32)] active:shadow-[0_0_18px_rgba(45,140,240,0.22)]"
             >
-              {/* Rich five-stop gradient background with teal anchor */}
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)] via-[var(--accent)]/90 via-[var(--accent-purple)]/80 via-[var(--accent-purple)]/70 to-[var(--color-accent-teal)] opacity-90 group-hover:opacity-100 transition-opacity duration-600" />
-              {/* Animated shimmer sweep with softer edge */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.12] to-transparent translate-x-[-100%] group-hover:animate-[shimmer_2.5s_ease-in-out_infinite] pointer-events-none" />
+              {/* Rich gradient background — smoother 5-stop with teal anchor */}
+              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/85 via-[var(--accent-purple)]/75 to-[var(--color-accent-teal)] opacity-[0.92] group-hover:opacity-100 transition-opacity duration-700" />
+              {/* Animated shimmer sweep */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.10] to-transparent translate-x-[-100%] group-hover:animate-[shimmer_2.8s_ease-in-out_infinite] pointer-events-none" />
               {/* Top-edge highlight — glass reflection */}
-              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/28 to-transparent" />
               {/* Bottom-edge subtle depth shadow */}
-              <span className="absolute inset-x-2 bottom-0 h-px bg-gradient-to-r from-transparent via-black/15 to-transparent" />
+              <span className="absolute inset-x-2 bottom-0 h-px bg-gradient-to-r from-transparent via-black/12 to-transparent" />
               {/* Inner top gradient for depth illusion */}
-              <span className="absolute inset-x-0 top-0 h-[40%] bg-gradient-to-b from-white/[0.10] to-transparent pointer-events-none rounded-t-2xl" />
+              <span className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none rounded-t-2xl" />
               {/* Ambient glow halo behind button */}
-              <span className="absolute -inset-2 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/10 group-hover:via-[var(--accent-purple)]/6 group-hover:to-[var(--color-accent-teal)]/8 blur-xl transition-all duration-700 -z-10" />
+              <span className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/8 group-hover:via-[var(--accent-purple)]/5 group-hover:to-[var(--color-accent-teal)]/7 blur-xl transition-all duration-800 -z-10" />
               <span className="relative z-10 flex items-center justify-center gap-2">
                 <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
@@ -270,9 +270,9 @@ export default function ContactContent() {
             variants={itemVariants}
             className="flex items-center gap-3 my-10"
           >
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/8 to-[var(--accent)]/15" />
-            <span className="text-[11px] text-white/25 tracking-[0.2em] uppercase font-medium">或通过</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-[var(--accent)]/15 via-white/8 to-transparent" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/6 to-[var(--accent)]/12" />
+            <span className="text-[11px] text-white/22 tracking-[0.2em] uppercase font-medium">或通过</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-[var(--accent)]/12 via-white/6 to-transparent" />
           </motion.div>
 
           {/* Social Links as icon cards */}
@@ -290,27 +290,27 @@ export default function ContactContent() {
                     ? 'noopener noreferrer'
                     : undefined
                 }
-                whileHover={{ scale: 1.04, y: -4 }}
+                whileHover={{ scale: 1.03, y: -3 }}
                 whileTap={{ scale: 0.97 }}
-                className="group relative flex items-center gap-3.5 rounded-2xl px-6 py-3.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[var(--accent)]/25 hover:bg-[var(--glass-bg-hover)] hover:shadow-[0_0_32px_rgba(45,140,240,0.12),0_0_64px_rgba(139,92,246,0.06),0_16px_40px_rgba(0,0,0,0.32)]"
+                className="group relative flex items-center gap-3.5 rounded-2xl px-6 py-3.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[var(--accent)]/22 hover:bg-[var(--glass-bg-hover)] hover:shadow-[0_0_36px_rgba(45,140,240,0.10),0_0_72px_rgba(139,92,246,0.05),0_16px_44px_rgba(0,0,0,0.28)]"
               >
                 {/* Ambient glow halo on hover */}
-                <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/8 group-hover:via-[var(--accent-purple)]/5 group-hover:to-[var(--color-accent-teal)]/6 blur-xl transition-all duration-700 pointer-events-none" />
+                <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/7 group-hover:via-[var(--accent-purple)]/4 group-hover:to-[var(--color-accent-teal)]/5 blur-xl transition-all duration-700 pointer-events-none" />
                 {/* Top-edge light bar on hover */}
-                <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/40 transition-all duration-600" />
+                <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/35 transition-all duration-700" />
                 {/* Bottom gradient underline accent on hover */}
-                <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-teal)]/0 to-transparent group-hover:via-[var(--color-accent-teal)]/45 transition-all duration-600" />
+                <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-teal)]/0 to-transparent group-hover:via-[var(--color-accent-teal)]/40 transition-all duration-700" />
                 {/* Soft inner glow on hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 pointer-events-none" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.025] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                 {/* Icon color with glow */}
-                <span className="text-white/45 group-hover:text-[var(--accent)] transition-colors duration-500 group-hover:drop-shadow-[0_0_8px_rgba(45,140,240,0.35)]">
+                <span className="text-white/40 group-hover:text-[var(--accent)] transition-colors duration-500 group-hover:drop-shadow-[0_0_10px_rgba(45,140,240,0.30)]">
                   {link.icon}
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-white/55 group-hover:text-white/90 transition-colors duration-500">
+                  <span className="text-sm font-medium text-white/50 group-hover:text-white/85 transition-colors duration-500">
                     {link.name}
                   </span>
-                  <span className="text-[10px] text-white/20 group-hover:text-white/40 transition-colors duration-500">
+                  <span className="text-[10px] text-white/18 group-hover:text-white/35 transition-colors duration-500">
                     {link.label}
                   </span>
                 </div>
@@ -320,7 +320,7 @@ export default function ContactContent() {
 
           <motion.p
             variants={itemVariants}
-            className="text-center text-xs text-white/22 mt-10 tracking-wide"
+            className="text-center text-xs text-white/20 mt-10 tracking-wide"
           >
             欢迎通过以上方式联系我
           </motion.p>

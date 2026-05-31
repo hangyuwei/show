@@ -111,15 +111,21 @@ function SectionTitle({
           <span className="absolute inset-[-6px] rounded-2xl bg-indigo-500/[0.08] blur-xl" />
           {/* Far-range atmospheric glow */}
           <span className="absolute inset-[-12px] rounded-3xl bg-violet-500/[0.04] blur-2xl" />
+          {/* Animated pulse ring */}
+          <span className="absolute inset-[-4px] rounded-2xl border border-indigo-400/10 animate-pulse" />
         </span>
       )}
       <div className="min-w-0">
         <h2 className="text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl lg:text-4xl heading-section">
           {children}
         </h2>
-        <div className="mt-4 flex h-[3px] w-32 items-center gap-1">
-          <div className="h-full w-full rounded-full bg-gradient-to-r from-indigo-400 via-violet-400/80 to-purple-400/40" />
-          <div className="h-full w-full -mt-[3px] rounded-full bg-gradient-to-r from-indigo-400/80 via-violet-400/50 to-transparent blur-sm opacity-70" />
+        <div className="mt-4 flex h-[3px] w-36 items-center gap-0.5">
+          {/* Primary gradient bar */}
+          <div className="h-full w-full rounded-full bg-gradient-to-r from-indigo-400 via-violet-400/80 to-purple-400/30" />
+          {/* Soft bloom duplicate for depth */}
+          <div className="absolute h-[3px] w-36 rounded-full bg-gradient-to-r from-indigo-400/60 via-violet-400/30 to-transparent blur-sm" />
+          {/* Trailing glow dot at the end */}
+          <div className="absolute left-32 h-1.5 w-1.5 rounded-full bg-violet-400/40" style={{ boxShadow: '0 0 8px rgba(139,92,246,0.35)' }} />
         </div>
       </div>
       <div className="h-px flex-1 bg-gradient-to-r from-zinc-600/20 via-zinc-700/10 to-transparent" />
@@ -199,31 +205,31 @@ function TechPill({ tech }: { tech: string }) {
     <span
       className="group relative inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-sm font-medium backdrop-blur-md transition-all duration-500 hover:scale-105 hover:-translate-y-0.5"
       style={{
-        background: `linear-gradient(135deg, ${color}18, ${color}08)`,
-        border: `1px solid ${color}22`,
-        color: `${color}dd`,
-        boxShadow: `0 1px 4px rgba(0,0,0,0.18), 0 0 16px ${color}08, inset 0 1px 0 ${color}0a`,
+        background: `linear-gradient(135deg, ${color}20, ${color}0a)`,
+        border: `1px solid ${color}28`,
+        color: `${color}ee`,
+        boxShadow: `0 1px 4px rgba(0,0,0,0.18), 0 0 20px ${color}0c, inset 0 1px 0 ${color}0c`,
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget as HTMLElement;
-        el.style.borderColor = `${color}50`;
-        el.style.boxShadow = `0 6px 20px rgba(0,0,0,0.25), 0 0 24px ${color}18, 0 0 12px ${color}0a, inset 0 1px 0 ${color}15`;
-        el.style.background = `linear-gradient(135deg, ${color}28, ${color}0e)`;
+        el.style.borderColor = `${color}55`;
+        el.style.boxShadow = `0 6px 20px rgba(0,0,0,0.25), 0 0 28px ${color}1c, 0 0 14px ${color}0e, inset 0 1px 0 ${color}18`;
+        el.style.background = `linear-gradient(135deg, ${color}30, ${color}12)`;
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget as HTMLElement;
-        el.style.borderColor = `${color}22`;
-        el.style.boxShadow = `0 1px 4px rgba(0,0,0,0.18), 0 0 16px ${color}08, inset 0 1px 0 ${color}0a`;
-        el.style.background = `linear-gradient(135deg, ${color}18, ${color}08)`;
+        el.style.borderColor = `${color}28`;
+        el.style.boxShadow = `0 1px 4px rgba(0,0,0,0.18), 0 0 20px ${color}0c, inset 0 1px 0 ${color}0c`;
+        el.style.background = `linear-gradient(135deg, ${color}20, ${color}0a)`;
       }}
     >
       <span
-        className="h-1.5 w-1.5 rounded-full transition-all duration-400 group-hover:h-2 group-hover:w-2"
-        style={{ background: color, boxShadow: `0 0 8px ${color}60` }}
+        className="h-1.5 w-1.5 rounded-full transition-all duration-300 group-hover:h-2.5 group-hover:w-2.5"
+        style={{ background: color, boxShadow: `0 0 10px ${color}70` }}
       />
       {tech}
       {/* Ambient far-glow on hover */}
-      <span className="pointer-events-none absolute inset-[-8px] rounded-full opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" style={{ background: `${color}10` }} />
+      <span className="pointer-events-none absolute inset-[-10px] rounded-full opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" style={{ background: `${color}12` }} />
     </span>
   );
 }
@@ -235,7 +241,7 @@ function Breadcrumb({ project }: { project: Project }) {
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
       aria-label="Breadcrumb"
-      className="glass relative inline-flex items-center gap-2.5 rounded-full px-5 py-2.5 text-sm"
+      className="glass relative inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm"
     >
       {/* Top-edge shimmer with wider spread */}
       <div className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/25 to-transparent" />
@@ -245,20 +251,26 @@ function Breadcrumb({ project }: { project: Project }) {
       <div className="pointer-events-none absolute -left-4 -top-4 h-12 w-12 rounded-full bg-indigo-500/[0.04] blur-xl" />
       <Link
         href="/"
-        className="relative text-zinc-500 transition-all duration-300 hover:text-indigo-300 hover:drop-shadow-[0_0_10px_rgba(129,140,248,0.3)]"
+        className="relative flex items-center gap-1 text-zinc-500 transition-all duration-300 hover:text-indigo-300 hover:drop-shadow-[0_0_10px_rgba(129,140,248,0.3)]"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
         </svg>
       </Link>
-      <span className="text-zinc-700/60 select-none">/</span>
+      {/* Chevron separator */}
+      <svg className="h-3 w-3 text-zinc-600/70 select-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
       <Link
         href="/projects"
         className="relative text-zinc-400 transition-all duration-300 hover:text-indigo-300 hover:drop-shadow-[0_0_10px_rgba(129,140,248,0.3)]"
       >
         项目
       </Link>
-      <span className="text-zinc-700/60 select-none">/</span>
+      {/* Chevron separator */}
+      <svg className="h-3 w-3 text-zinc-600/70 select-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
       <span className="relative max-w-[200px] truncate font-medium text-zinc-100 text-shadow-sm">{project.name}</span>
     </motion.nav>
   );
@@ -280,14 +292,19 @@ function TableOfContents({ activeId }: { activeId: string }) {
           <div className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/30 to-transparent" />
           {/* Bottom edge subtle glow */}
           <div className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-violet-400/12 to-transparent" />
-          {/* Ambient corner glow — top right */}
+          {/* Ambient corner glow -- top right */}
           <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-indigo-500/[0.07] blur-2xl" />
-          {/* Ambient corner glow — bottom left */}
+          {/* Ambient corner glow -- bottom left */}
           <div className="pointer-events-none absolute -bottom-6 -left-6 h-20 w-20 rounded-full bg-violet-500/[0.04] blur-2xl" />
 
-          <p className="relative mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400">
-            目录
-          </p>
+          <div className="relative mb-4 flex items-center justify-between">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400">
+              目录
+            </p>
+            <span className="text-[10px] font-medium text-zinc-600">
+              {activeIndex + 1}/{SECTION_IDS.length}
+            </span>
+          </div>
           {/* Progress bar with glow trail */}
           <div className="relative mb-5 h-[3px] w-full overflow-hidden rounded-full bg-zinc-800/70">
             <motion.div
@@ -298,7 +315,7 @@ function TableOfContents({ activeId }: { activeId: string }) {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             />
           </div>
-          <ul className="relative space-y-1">
+          <ul className="relative space-y-0.5">
             {SECTION_IDS.map((section, index) => {
               const isActive = activeId === section.id;
               const isPast = index < activeIndex;
@@ -323,15 +340,21 @@ function TableOfContents({ activeId }: { activeId: string }) {
                         transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                       />
                     )}
-                    <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold transition-all duration-300 ${
-                      isActive
-                        ? 'bg-indigo-500/30 text-indigo-100'
-                        : isPast
-                          ? 'bg-zinc-800/60 text-zinc-500'
+                    {isPast && !isActive ? (
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-400/80 transition-all duration-300">
+                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    ) : (
+                      <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold transition-all duration-300 ${
+                        isActive
+                          ? 'bg-indigo-500/30 text-indigo-100'
                           : 'bg-zinc-800/40 text-zinc-600'
-                    }`} style={isActive ? { boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 0 10px rgba(99,102,241,0.2)' } : undefined}>
-                      {index + 1}
-                    </span>
+                      }`} style={isActive ? { boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 0 10px rgba(99,102,241,0.2)' } : undefined}>
+                        {index + 1}
+                      </span>
+                    )}
                     {section.label}
                   </a>
                 </li>
@@ -353,16 +376,18 @@ function TimelineConnector() {
     <div className="absolute left-[22px] top-0 bottom-0 w-px sm:left-[23px]">
       {/* Core line with gradient fade */}
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/55 via-violet-500/30 via-50% to-indigo-500/[0.04]" />
-      {/* Inner glow layer — tighter bloom */}
+      {/* Inner glow layer -- tighter bloom */}
       <div className="absolute inset-0 w-2 -translate-x-[3px] bg-gradient-to-b from-indigo-400/20 via-violet-400/10 via-50% to-transparent blur-[2px]" />
       {/* Mid-range ambient glow */}
       <div className="absolute inset-0 w-6 -translate-x-[9px] bg-gradient-to-b from-indigo-500/10 via-violet-500/5 via-50% to-transparent blur-[6px]" />
       {/* Outer atmospheric glow */}
       <div className="absolute inset-0 w-12 -translate-x-[18px] bg-gradient-to-b from-indigo-500/5 via-violet-500/[0.03] via-50% to-transparent blur-xl" />
-      {/* Pulsing dot at origin — triple-layer glow */}
+      {/* Pulsing dot at origin -- triple-layer glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-gradient-to-br from-indigo-400 to-violet-400" style={{ boxShadow: '0 0 10px rgba(99,102,241,0.6), 0 0 24px rgba(99,102,241,0.25), 0 0 6px rgba(99,102,241,0.8)' }} />
       {/* Origin halo */}
       <div className="absolute top-[-6px] left-1/2 -translate-x-1/2 h-5 w-5 rounded-full bg-indigo-500/15 blur-md" />
+      {/* Animated traveling pulse along the line */}
+      <div className="absolute left-1/2 -translate-x-1/2 h-12 w-1 rounded-full bg-gradient-to-b from-indigo-400/40 via-violet-400/20 to-transparent blur-sm animate-pulse" style={{ animationDuration: '3s' }} />
     </div>
   );
 }
@@ -394,10 +419,17 @@ function BackToTop() {
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           onClick={scrollToTop}
           aria-label="Back to top"
-          className="glass fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded-full text-zinc-400 transition-all duration-400 hover:text-white hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+          className="glass fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded-full text-zinc-400 transition-all duration-300 hover:text-indigo-300 hover:-translate-y-1"
+          style={{ '--hover-shadow': '0 0 24px rgba(99,102,241,0.25), 0 0 8px rgba(99,102,241,0.15)' } as React.CSSProperties}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLElement;
+            el.style.boxShadow = '0 0 24px rgba(99,102,241,0.25), 0 0 8px rgba(99,102,241,0.15), inset 0 1px 0 rgba(255,255,255,0.1)';
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement;
+            el.style.boxShadow = '';
+          }}
         >
-          {/* Ambient glow ring on hover */}
-          <span className="pointer-events-none absolute inset-[-6px] rounded-full bg-indigo-500/[0.06] opacity-0 blur-lg transition-opacity duration-400 hover-parent:opacity-100" />
           <svg className="h-5 w-5 relative" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
@@ -528,15 +560,17 @@ app.start();`;
               </FadeInSection>
               {/* Premium divider after overview */}
               <div className="mt-20 flex items-center gap-3 sm:mt-24">
-                <div className="h-px flex-1 bg-gradient-to-r from-indigo-500/30 via-violet-500/15 to-transparent" />
-                <div className="flex items-center gap-2.5">
+                <div className="h-px flex-1 bg-gradient-to-r from-indigo-500/25 via-violet-500/12 to-transparent" />
+                <div className="flex items-center gap-2">
+                  <div className="h-[2px] w-[2px] rounded-full bg-indigo-400/40" style={{ boxShadow: '0 0 6px rgba(99,102,241,0.3)' }} />
                   <div className="h-1 w-1 rounded-full bg-indigo-400/50" style={{ boxShadow: '0 0 8px rgba(99,102,241,0.4)' }} />
-                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/35" style={{ boxShadow: '0 0 6px rgba(139,92,246,0.25)' }} />
-                  <div className="h-2 w-2 rounded-full bg-gradient-to-br from-indigo-400/40 to-violet-400/40" style={{ boxShadow: '0 0 10px rgba(99,102,241,0.3), 0 0 20px rgba(99,102,241,0.1)' }} />
-                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/35" style={{ boxShadow: '0 0 6px rgba(139,92,246,0.25)' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/40" style={{ boxShadow: '0 0 8px rgba(139,92,246,0.3)' }} />
+                  <div className="h-2 w-2 rounded-full bg-gradient-to-br from-indigo-400/50 to-violet-400/50" style={{ boxShadow: '0 0 12px rgba(99,102,241,0.35), 0 0 24px rgba(99,102,241,0.12)' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/40" style={{ boxShadow: '0 0 8px rgba(139,92,246,0.3)' }} />
                   <div className="h-1 w-1 rounded-full bg-indigo-400/50" style={{ boxShadow: '0 0 8px rgba(99,102,241,0.4)' }} />
+                  <div className="h-[2px] w-[2px] rounded-full bg-indigo-400/40" style={{ boxShadow: '0 0 6px rgba(99,102,241,0.3)' }} />
                 </div>
-                <div className="h-px flex-1 bg-gradient-to-l from-indigo-500/30 via-violet-500/15 to-transparent" />
+                <div className="h-px flex-1 bg-gradient-to-l from-indigo-500/25 via-violet-500/12 to-transparent" />
               </div>
             </section>
 
@@ -549,10 +583,12 @@ app.start();`;
                 <SectionTitle step="①">需求分析</SectionTitle>
                 <FadeInSection>
                   <div className="relative ml-5 border-l border-indigo-500/12 pl-8 sm:ml-6">
-                    {/* Decorative dot at top of border — triple-layer glow */}
+                    {/* Decorative dot at top of border -- triple-layer glow */}
                     <div className="absolute -left-[5px] top-0 h-2.5 w-2.5 rounded-full border-2 border-indigo-400/60 bg-gradient-to-br from-indigo-400 to-violet-400" style={{ boxShadow: '0 0 14px rgba(99,102,241,0.50), 0 0 6px rgba(99,102,241,0.7), inset 0 0 2px rgba(129,140,248,0.4)' }} />
                     {/* Ambient glow behind dot */}
                     <div className="absolute -left-[10px] top-[-4px] h-5 w-5 rounded-full bg-indigo-500/20 blur-md" />
+                    {/* Subtle pulse ring around dot */}
+                    <div className="absolute -left-[8px] top-[-2px] h-4 w-4 rounded-full border border-indigo-400/15 animate-pulse" style={{ animationDuration: '3s' }} />
                     <div className="mb-10">
                       <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-indigo-400/90">
                         <span className="inline-block h-px w-5 bg-gradient-to-r from-indigo-400/50 to-transparent" />
@@ -610,7 +646,7 @@ app.start();`;
                         return (
                           <div
                             key={tech}
-                            className="group flex items-center justify-center rounded-xl border border-zinc-600/15 bg-zinc-800/30 px-4 py-5 text-center text-sm font-medium text-zinc-300 backdrop-blur-sm transition-all duration-500 hover:border-zinc-500/30 hover:bg-zinc-800/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/8"
+                            className="group relative flex items-center justify-center rounded-xl border border-zinc-600/15 bg-zinc-800/30 px-4 py-5 text-center text-sm font-medium text-zinc-300 backdrop-blur-sm transition-all duration-500 hover:border-zinc-500/30 hover:bg-zinc-800/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/8 overflow-hidden"
                             style={{
                               ['--tech-color' as string]: color,
                             }}
@@ -625,7 +661,9 @@ app.start();`;
                               el.style.boxShadow = '';
                             }}
                           >
-                            <span className="mr-2 h-1.5 w-1.5 rounded-full transition-all duration-300 group-hover:h-2 group-hover:w-2" style={{ background: color, boxShadow: `0 0 6px ${color}40` }} />
+                            {/* Bottom accent line on hover */}
+                            <div className="absolute bottom-0 left-2 right-2 h-[2px] rounded-t-full opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: `linear-gradient(90deg, transparent, ${color}40, transparent)` }} />
+                            <span className="mr-2 h-1.5 w-1.5 rounded-full transition-all duration-300 group-hover:h-2 group-hover:w-2" style={{ background: color, boxShadow: `0 0 8px ${color}50` }} />
                             {tech}
                           </div>
                         );
@@ -696,7 +734,9 @@ app.start();`;
                         <p className="mb-6 leading-[1.8] text-zinc-400">
                           {challenge.description}
                         </p>
-                        <div className="rounded-xl border border-emerald-500/15 bg-gradient-to-br from-emerald-500/[0.08] to-emerald-500/[0.02] p-5 ring-1 ring-emerald-500/[0.06]" style={{ boxShadow: 'inset 0 1px 0 rgba(16,185,129,0.05), 0 0 16px rgba(16,185,129,0.04)' }}>
+                        <div className="relative rounded-xl border border-emerald-500/15 bg-gradient-to-br from-emerald-500/[0.08] to-emerald-500/[0.02] p-5 pl-6 ring-1 ring-emerald-500/[0.06]" style={{ boxShadow: 'inset 0 1px 0 rgba(16,185,129,0.05), 0 0 16px rgba(16,185,129,0.04)' }}>
+                          {/* Left accent bar */}
+                          <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-gradient-to-b from-emerald-400/60 to-emerald-500/20" style={{ boxShadow: '0 0 8px rgba(16,185,129,0.25)' }} />
                           <div className="mb-2.5 flex items-center gap-2">
                             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 ring-1 ring-emerald-500/12" style={{ boxShadow: '0 0 10px rgba(16,185,129,0.2), 0 0 4px rgba(16,185,129,0.3)' }}>
                               <svg
@@ -738,11 +778,14 @@ app.start();`;
                     {[1, 2, 3].map((n) => (
                       <div
                         key={n}
-                        className="group relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-zinc-700/25 bg-zinc-800/25 text-sm text-zinc-600 backdrop-blur-sm transition-all duration-500 hover:border-zinc-600/40 hover:bg-zinc-800/45 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/10 ring-1 ring-white/[0.02] hover:ring-white/[0.04]"
+                        className="group relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-zinc-700/20 bg-zinc-800/20 text-sm text-zinc-600 backdrop-blur-sm transition-all duration-500 hover:border-indigo-500/25 hover:bg-zinc-800/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/[0.06] ring-1 ring-white/[0.02] hover:ring-white/[0.05]"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                        {/* Subtle gradient overlay on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.04] via-transparent to-violet-500/[0.02] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                        {/* Top-edge shimmer */}
+                        <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/0 to-transparent transition-all duration-500 group-hover:via-indigo-400/20" />
                         <span className="relative z-10 flex items-center gap-1.5">
-                          <svg className="h-4 w-4 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <svg className="h-4 w-4 opacity-30 transition-opacity duration-300 group-hover:opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
                           </svg>
                           截图 {n}
@@ -756,17 +799,19 @@ app.start();`;
 
             {/* h) External Links */}
             <section className="relative py-14 sm:py-20">
-              {/* Premium divider — multi-dot with glow cascade */}
+              {/* Premium divider -- multi-dot with glow cascade */}
               <div className="absolute top-0 left-0 right-0 flex items-center gap-4">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-700/30 to-transparent" />
-                <div className="flex items-center gap-2.5">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-700/25 to-transparent" />
+                <div className="flex items-center gap-2">
+                  <div className="h-[2px] w-[2px] rounded-full bg-indigo-400/40" style={{ boxShadow: '0 0 6px rgba(99,102,241,0.3)' }} />
                   <div className="h-1 w-1 rounded-full bg-indigo-400/50" style={{ boxShadow: '0 0 8px rgba(99,102,241,0.4)' }} />
-                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/35" style={{ boxShadow: '0 0 6px rgba(139,92,246,0.25)' }} />
-                  <div className="h-2 w-2 rounded-full bg-gradient-to-br from-indigo-400/40 to-violet-400/40" style={{ boxShadow: '0 0 10px rgba(99,102,241,0.35), 0 0 24px rgba(99,102,241,0.1)' }} />
-                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/35" style={{ boxShadow: '0 0 6px rgba(139,92,246,0.25)' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/40" style={{ boxShadow: '0 0 8px rgba(139,92,246,0.3)' }} />
+                  <div className="h-2 w-2 rounded-full bg-gradient-to-br from-indigo-400/50 to-violet-400/50" style={{ boxShadow: '0 0 12px rgba(99,102,241,0.35), 0 0 24px rgba(99,102,241,0.12)' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-violet-400/40" style={{ boxShadow: '0 0 8px rgba(139,92,246,0.3)' }} />
                   <div className="h-1 w-1 rounded-full bg-indigo-400/50" style={{ boxShadow: '0 0 8px rgba(99,102,241,0.4)' }} />
+                  <div className="h-[2px] w-[2px] rounded-full bg-indigo-400/40" style={{ boxShadow: '0 0 6px rgba(99,102,241,0.3)' }} />
                 </div>
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-700/30 to-transparent" />
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-700/25 to-transparent" />
               </div>
               <FadeInSection>
                 <div className="flex flex-wrap items-center gap-3 pt-6">

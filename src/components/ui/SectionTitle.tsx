@@ -19,7 +19,7 @@ export default function SectionTitle({
 
   return (
     <motion.div
-      className={`flex flex-col gap-4 ${alignment}`}
+      className={`flex flex-col gap-5 ${alignment}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -54,15 +54,15 @@ export default function SectionTitle({
 
       {/* Decorative accent bar — 5-layer premium glow with animated shimmer */}
       <div className="relative h-[3px] w-28 overflow-hidden rounded-full">
-        {/* Layer 1: Rich base gradient — wider color range */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400" />
-        {/* Layer 2: Soft glow bloom — medium spread */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400 blur-md opacity-60" />
-        {/* Layer 3: Outer ambient glow — wide diffuse bloom */}
-        <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-500/25 via-violet-500/20 to-cyan-400/25 blur-xl opacity-40" />
-        {/* Layer 4: Deep scatter — very wide faint halo */}
-        <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-blue-500/10 via-violet-500/8 to-cyan-400/10 blur-2xl opacity-30" />
-        {/* Shimmer sweep — wider, softer travel */}
+        {/* Layer 1: Rich base gradient */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400" />
+        {/* Layer 2: Soft glow bloom */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 blur-md opacity-60" />
+        {/* Layer 3: Outer ambient glow */}
+        <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-indigo-500/25 via-violet-500/20 to-cyan-400/25 blur-xl opacity-40" />
+        {/* Layer 4: Deep scatter halo */}
+        <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-indigo-500/10 via-violet-500/8 to-cyan-400/10 blur-2xl opacity-30" />
+        {/* Shimmer sweep */}
         <motion.div
           className="absolute inset-y-0 w-16 rounded-full bg-gradient-to-r from-transparent via-white/35 to-transparent"
           animate={{ x: ['-5rem', '8rem'] }}
@@ -71,31 +71,50 @@ export default function SectionTitle({
       </div>
 
       {/* Section heading — premium gradient text with cinematic depth */}
-      <h2
-        className="text-[2.25rem] tracking-[-0.022em] leading-[1.08] sm:text-[2.75rem] lg:text-[3.5rem]"
+      <motion.h2
+        className="text-[2.25rem] leading-[1.06] sm:text-[2.75rem] lg:text-[3.5rem]"
         style={{
           fontWeight: 900,
+          letterSpacing: '-0.028em',
+          fontFeatureSettings: "'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'tnum'",
+          fontVariantNumeric: 'tabular-nums',
           background:
-            'linear-gradient(135deg, #ffffff 0%, #f0f4ff 10%, #d4deff 22%, #b8c8fe 35%, #a5b4fc 45%, #93a3f8 52%, #a5b4fc 59%, #c4d0fe 70%, #e0e8ff 82%, #ffffff 100%)',
+            'linear-gradient(135deg, #ffffff 0%, #f4f7ff 8%, #e0e8ff 16%, #cdd6fe 26%, #b4bdf9 36%, #a5b4fc 44%, #9399f0 50%, #a5b4fc 56%, #bcc5fd 64%, #d4dcfe 74%, #e8edff 84%, #f8f9ff 92%, #ffffff 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
           filter:
-            'drop-shadow(0 0 1px rgba(255, 255, 255, 0.12)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 12px 28px rgba(99, 102, 241, 0.10))',
+            'drop-shadow(0 0 1px rgba(255, 255, 255, 0.15)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.65)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45)) drop-shadow(0 12px 32px rgba(99, 102, 241, 0.12))',
+          textWrap: 'balance',
         }}
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
       >
         {title}
-      </h2>
+      </motion.h2>
 
       {subtitle && (
         <motion.p
-          className="max-w-2xl text-[0.9375rem] leading-[1.8] tracking-[0.003em] text-zinc-300/55 sm:text-[1.0625rem]"
-          style={{ fontWeight: 300 }}
+          className="relative max-w-2xl text-[0.9375rem] leading-[1.85] tracking-[0.005em] text-zinc-300/60 sm:text-[1.0625rem]"
+          style={{
+            fontWeight: 300,
+            fontFeatureSettings: "'cv02', 'cv03', 'cv04', 'cv11', 'ss01'",
+          }}
           initial={{ opacity: 0, y: 6 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
+          {align === 'left' && (
+            <span
+              className="absolute left-0 top-[0.25em] bottom-[0.25em] w-[2px] rounded-full -ml-4"
+              style={{
+                background: 'linear-gradient(180deg, rgba(99,102,241,0.4), rgba(139,92,246,0.2), transparent)',
+              }}
+            />
+          )}
           {subtitle}
         </motion.p>
       )}

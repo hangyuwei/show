@@ -53,6 +53,11 @@ export default function RootLayout({
                 if (typeof IntersectionObserver === 'undefined') return;
                 var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+                /* Responsive threshold: less on mobile for earlier reveals */
+                var isMobile = window.innerWidth < 640;
+                var threshold = isMobile ? 0.05 : 0.1;
+                var rootMargin = isMobile ? '0px 0px -10px 0px' : '0px 0px -30px 0px';
+
                 /* If user prefers reduced motion, reveal everything immediately */
                 if (prefersReduced) {
                   document.querySelectorAll('[data-reveal]').forEach(function(el) {
@@ -82,11 +87,18 @@ export default function RootLayout({
                 var obs = new IntersectionObserver(function(entries) {
                   entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
-                      entry.target.setAttribute('data-revealed', '');
+                      var delay = entry.target.getAttribute('data-reveal-delay');
+                      if (delay) {
+                        setTimeout(function() {
+                          entry.target.setAttribute('data-revealed', '');
+                        }, parseInt(delay, 10) || 0);
+                      } else {
+                        entry.target.setAttribute('data-revealed', '');
+                      }
                       obs.unobserve(entry.target);
                     }
                   });
-                }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+                }, { threshold: threshold, rootMargin: rootMargin });
                 document.querySelectorAll('[data-reveal]').forEach(function(el) {
                   obs.observe(el);
                 });

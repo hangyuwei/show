@@ -63,7 +63,7 @@ const reducedVariants: Variants = {
   },
 };
 
-/* ── Scroll-triggered reveal variants ── */
+/* ── Scroll-triggered reveal variants — responsive-aware ── */
 export const revealVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -92,6 +92,77 @@ export const staggerContainer: Variants = {
       staggerChildren: 0.07,
       delayChildren: 0.08,
     },
+  },
+};
+
+/* ── Responsive stagger — wider gaps on larger viewports for readability ── */
+export const staggerContainerResponsive: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.06,
+    },
+  },
+};
+
+/* ── Lightweight reveal child variant for stagger containers ── */
+export const revealChild: Variants = {
+  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.45,
+      ease: EASE_SPRING_OUT,
+      opacity: { duration: 0.35, ease: 'easeOut' },
+      filter: { duration: 0.38, ease: 'easeOut' },
+    } as Transition,
+  },
+};
+
+/* ── Directional reveal variants ── */
+export const revealFromLeft: Variants = {
+  hidden: { opacity: 0, x: -24, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.5,
+      ease: EASE_SPRING_OUT,
+      opacity: { duration: 0.35, ease: 'easeOut' },
+    } as Transition,
+  },
+};
+
+export const revealFromRight: Variants = {
+  hidden: { opacity: 0, x: 24, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.5,
+      ease: EASE_SPRING_OUT,
+      opacity: { duration: 0.35, ease: 'easeOut' },
+    } as Transition,
+  },
+};
+
+export const revealScale: Variants = {
+  hidden: { opacity: 0, scale: 0.92, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.5,
+      ease: EASE_OUT_SMOOTH,
+      opacity: { duration: 0.35, ease: 'easeOut' },
+    } as Transition,
   },
 };
 
@@ -164,6 +235,51 @@ function GlowBurst({ isActive }: { isActive: boolean }) {
       )}
     </AnimatePresence>
   );
+}
+
+/* ── Hook: useScrollReveal — programmatic scroll-triggered reveal with responsive threshold ── */
+export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
+  options: {
+    threshold?: number;
+    rootMargin?: string;
+    triggerOnce?: boolean;
+  } = {},
+) {
+  const ref = useRef<T>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (options.triggerOnce !== false) {
+            observer.unobserve(el);
+          }
+        } else if (options.triggerOnce === false) {
+          setIsVisible(false);
+        }
+      },
+      {
+        threshold: options.threshold ?? 0.1,
+        rootMargin: options.rootMargin ?? '0px 0px -40px 0px',
+      },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [options.threshold, options.rootMargin, options.triggerOnce]);
+
+  return { ref, isVisible };
 }
 
 export default function PageTransition({ children }: PageTransitionProps) {

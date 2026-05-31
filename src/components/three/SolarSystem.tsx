@@ -38,7 +38,7 @@ interface PlanetConfig {
 const PLANETS: PlanetConfig[] = [
   {
     name: '大健康',
-    color: '#38bdf8',
+    color: '#4cc9f0',
     emissiveHex: '#0ea5e9',
     size: 0.6,
     orbitRadius: 5.5,
@@ -54,13 +54,13 @@ const PLANETS: PlanetConfig[] = [
   },
   {
     name: 'AI / 大模型',
-    color: '#c4b5fd',
-    emissiveHex: '#8b5cf6',
+    color: '#d8b4fe',
+    emissiveHex: '#a855f7',
     size: 0.52,
     orbitRadius: 8.0,
     orbitSpeed: 0.10,
     tilt: -0.1,
-    ringColor: '#8b5cf6',
+    ringColor: '#a855f7',
     satellites: Array.from({ length: 7 }, (_, i) => ({
       name: `AI${i + 1}`,
       size: 0.055,
@@ -87,13 +87,13 @@ const PLANETS: PlanetConfig[] = [
   },
   {
     name: '创意',
-    color: '#fde047',
-    emissiveHex: '#eab308',
+    color: '#fde68a',
+    emissiveHex: '#f59e0b',
     size: 0.38,
     orbitRadius: 13.0,
     orbitSpeed: 0.06,
     tilt: -0.25,
-    ringColor: '#eab308',
+    ringColor: '#f59e0b',
     satellites: [
       { name: '创意1', size: 0.045, orbitRadius: 0.75, orbitSpeed: 0.7, orbitOffset: 0 },
     ],
@@ -101,7 +101,7 @@ const PLANETS: PlanetConfig[] = [
   {
     name: '学术研究',
     color: '#5eead4',
-    emissiveHex: '#14b8a6',
+    emissiveHex: '#2dd4bf',
     size: 0.42,
     orbitRadius: 15.5,
     orbitSpeed: 0.045,
@@ -188,27 +188,29 @@ const sunFragmentShader = `
   }
 
   void main() {
-    // Multi-frequency pulsing with wider dynamic range + 3 new harmonics
-    float pulse = 0.82 + 0.11 * sin(uTime * 1.8) + 0.06 * sin(uTime * 0.6 + 1.3)
+    // Multi-frequency pulsing with wider dynamic range + harmonic richness
+    float pulse = 0.80 + 0.11 * sin(uTime * 1.8) + 0.07 * sin(uTime * 0.6 + 1.3)
                 + 0.05 * sin(uTime * 4.7 + 2.7) + 0.03 * sin(uTime * 8.3 + 0.9)
-                + 0.018 * sin(uTime * 13.7 + 3.2) + 0.012 * sin(uTime * 21.1 + 1.1);
+                + 0.02 * sin(uTime * 13.7 + 3.2) + 0.012 * sin(uTime * 21.1 + 1.1);
 
-    // Surface detail with seven octaves for ultra-rich chromosphere texture
-    float n1 = snoise(vPosition * 1.8 + uTime * 0.12);
-    float n2 = snoise(vPosition * 3.5 - uTime * 0.09);
-    float n3 = snoise(vPosition * 7.0 + uTime * 0.18);
-    float n4 = snoise(vPosition * 14.0 - uTime * 0.11);
-    float n5 = snoise(vPosition * 28.0 + uTime * 0.07);
-    float n6 = snoise(vPosition * 56.0 - uTime * 0.05);
-    float n7 = snoise(vPosition * 112.0 + uTime * 0.03);
-    float noise = n1 * 0.34 + n2 * 0.23 + n3 * 0.17 + n4 * 0.11 + n5 * 0.07 + n6 * 0.04 + n7 * 0.04;
+    // Surface detail with eight octaves for ultra-rich chromosphere texture
+    float n1 = snoise(vPosition * 1.6 + uTime * 0.11);
+    float n2 = snoise(vPosition * 3.2 - uTime * 0.08);
+    float n3 = snoise(vPosition * 6.4 + uTime * 0.16);
+    float n4 = snoise(vPosition * 12.8 - uTime * 0.10);
+    float n5 = snoise(vPosition * 25.6 + uTime * 0.06);
+    float n6 = snoise(vPosition * 51.2 - uTime * 0.045);
+    float n7 = snoise(vPosition * 102.4 + uTime * 0.025);
+    float n8 = snoise(vPosition * 200.0 - uTime * 0.015);
+    float noise = n1 * 0.30 + n2 * 0.22 + n3 * 0.17 + n4 * 0.12 + n5 * 0.08
+                + n6 * 0.05 + n7 * 0.03 + n8 * 0.03;
 
-    // Premium solar palette with enhanced chromatic depth
-    vec3 core    = vec3(1.0, 0.98, 0.88);   // white-hot pale champagne (warmer)
-    vec3 inner   = vec3(1.0, 0.90, 0.58);    // warm gold
-    vec3 mid     = vec3(1.0, 0.58, 0.12);    // vivid amber-orange
-    vec3 edge    = vec3(0.94, 0.30, 0.06);   // deep crimson-amber
-    vec3 limb    = vec3(0.68, 0.12, 0.02);   // dark limb for contrast
+    // Premium solar palette with enhanced chromatic depth and warmer core
+    vec3 core    = vec3(1.0, 0.97, 0.85);   // white-hot champagne
+    vec3 inner   = vec3(1.0, 0.88, 0.52);   // warm golden amber
+    vec3 mid     = vec3(1.0, 0.55, 0.10);   // vivid amber-orange
+    vec3 edge    = vec3(0.92, 0.28, 0.05);  // deep crimson-orange
+    vec3 limb    = vec3(0.62, 0.10, 0.02);  // dark limb for contrast
 
     float fresnel = 1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0));
     fresnel = pow(fresnel, 1.5);
@@ -216,26 +218,31 @@ const sunFragmentShader = `
     vec3 baseColor = mix(core, inner, fresnel * 0.3);
     baseColor = mix(baseColor, mid, fresnel * 0.55 + noise * 0.15);
     baseColor = mix(baseColor, edge, fresnel * fresnel * 0.65);
-    baseColor = mix(baseColor, limb, pow(fresnel, 3.2) * 0.45);
+    baseColor = mix(baseColor, limb, pow(fresnel, 3.2) * 0.50);
 
     // Bright granulation spots with hotter color shift
-    float hotSpot = smoothstep(0.18, 0.68, noise);
-    baseColor += vec3(0.38, 0.24, 0.05) * hotSpot;
+    float hotSpot = smoothstep(0.15, 0.65, noise);
+    baseColor += vec3(0.42, 0.28, 0.06) * hotSpot;
 
     // Solar flare streaks with stronger contrast
     float streak = snoise(vPosition * 3.0 + vec3(uTime * 0.07, 0.0, uTime * 0.05));
-    float flareLine = smoothstep(0.48, 0.60, streak);
-    baseColor += vec3(0.32, 0.16, 0.0) * flareLine * (1.0 - fresnel);
+    float flareLine = smoothstep(0.46, 0.58, streak);
+    baseColor += vec3(0.35, 0.18, 0.0) * flareLine * (1.0 - fresnel);
 
     // Secondary perpendicular flare network
     float streak2 = snoise(vPosition * 5.0 + vec3(0.0, uTime * 0.04, uTime * 0.06));
-    float flareLine2 = smoothstep(0.56, 0.66, streak2);
-    baseColor += vec3(0.22, 0.10, 0.0) * flareLine2 * (1.0 - fresnel) * 0.6;
+    float flareLine2 = smoothstep(0.54, 0.64, streak2);
+    baseColor += vec3(0.24, 0.12, 0.0) * flareLine2 * (1.0 - fresnel) * 0.6;
 
     // Tertiary fine-scale granulation for photospheric detail
     float gran = snoise(vPosition * 22.0 + uTime * 0.04);
     float granDetail = smoothstep(0.35, 0.65, gran) * 0.08;
-    baseColor += vec3(0.12, 0.08, 0.01) * granDetail * (1.0 - fresnel);
+    baseColor += vec3(0.14, 0.09, 0.01) * granDetail * (1.0 - fresnel);
+
+    // Limb-brightened prominences -- concentrated at the solar edge
+    float promNoise = snoise(vPosition * 2.2 + vec3(uTime * 0.03, uTime * 0.02, 0.0));
+    float promMask = smoothstep(0.40, 0.75, fresnel) * smoothstep(0.35, 0.65, promNoise);
+    baseColor += vec3(0.30, 0.12, 0.02) * promMask * 0.8;
 
     // Sunspots with penumbra and chromatic darkening
     float spotNoise = snoise(vPosition * 5.5 + uTime * 0.035);
@@ -245,7 +252,7 @@ const sunFragmentShader = `
     // Slight reddish tint in umbra (chromospheric emission)
     baseColor += vec3(0.06, 0.0, 0.0) * umbra;
 
-    float brightness = (0.98 + noise * 0.22) * pulse;
+    float brightness = (1.0 + noise * 0.20) * pulse;
     gl_FragColor = vec4(baseColor * brightness, 1.0);
   }
 `;
@@ -269,39 +276,40 @@ const coronaFragmentShader = `
 
   void main() {
     float fresnel = 0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0));
-    float intensity = pow(max(fresnel, 0.0), 1.8);
+    float intensity = pow(max(fresnel, 0.0), 1.6);
 
     // Multi-layered ray streaks with richer angular structure
     vec3 dir = normalize(vWorldPosition);
     float angle = atan(dir.z, dir.x);
-    float streak1 = 0.60 + 0.40 * sin(angle * 5.0 + uTime * 0.5);
-    float streak2 = 0.70 + 0.30 * sin(angle * 9.0 - uTime * 0.85);
-    float streak3 = 0.80 + 0.20 * sin(angle * 17.0 + uTime * 1.3);
-    float streak4 = 0.90 + 0.10 * sin(angle * 29.0 - uTime * 2.0);
-    float streak = streak1 * streak2 * streak3 * streak4;
+    float streak1 = 0.58 + 0.42 * sin(angle * 5.0 + uTime * 0.5);
+    float streak2 = 0.68 + 0.32 * sin(angle * 9.0 - uTime * 0.85);
+    float streak3 = 0.78 + 0.22 * sin(angle * 17.0 + uTime * 1.3);
+    float streak4 = 0.88 + 0.12 * sin(angle * 29.0 - uTime * 2.0);
+    float streak5 = 0.93 + 0.07 * sin(angle * 41.0 + uTime * 0.7);
+    float streak = streak1 * streak2 * streak3 * streak4 * streak5;
 
     // Streamer modulation with wider and narrower features
     float streamer1 = 0.7 + 0.3 * smoothstep(0.35, 0.65, sin(angle * 2.5 + uTime * 0.12));
     float streamer2 = 0.85 + 0.15 * smoothstep(0.4, 0.6, sin(angle * 7.0 - uTime * 0.2));
     float streamer = streamer1 * streamer2;
 
-    // Rich multi-frequency pulsing with broader harmonic content + extra harmonics
-    float pulse = 0.58 + 0.20 * sin(uTime * 1.6) + 0.10 * sin(uTime * 4.2 + 0.8)
+    // Rich multi-frequency pulsing with broader harmonic content
+    float pulse = 0.56 + 0.20 * sin(uTime * 1.6) + 0.10 * sin(uTime * 4.2 + 0.8)
                 + 0.06 * sin(uTime * 7.5 + 2.0) + 0.04 * sin(uTime * 11.0 + 1.5)
-                + 0.02 * sin(uTime * 16.0 + 3.0) + 0.015 * sin(uTime * 23.0 + 0.4);
+                + 0.025 * sin(uTime * 16.0 + 3.0) + 0.015 * sin(uTime * 23.0 + 0.4);
 
     // Premium color gradient: champagne inner -> warm gold mid -> deep amber outer
-    vec3 innerColor = vec3(1.0, 0.94, 0.70);
-    vec3 midColor = vec3(1.0, 0.72, 0.30);
+    vec3 innerColor = vec3(1.0, 0.94, 0.72);
+    vec3 midColor = vec3(1.0, 0.70, 0.28);
     vec3 outerColor = uColor;
-    vec3 deepColor = vec3(0.88, 0.38, 0.10);
-    float depth = pow(max(fresnel, 0.0), 0.65);
+    vec3 deepColor = vec3(0.85, 0.35, 0.08);
+    float depth = pow(max(fresnel, 0.0), 0.60);
     vec3 glowColor = mix(innerColor, midColor, depth * 0.45);
     glowColor = mix(glowColor, outerColor, depth * 0.8);
-    glowColor = mix(glowColor, deepColor, pow(depth, 2.0) * 0.3);
+    glowColor = mix(glowColor, deepColor, pow(depth, 2.0) * 0.35);
 
-    vec3 glow = glowColor * intensity * streak * streamer * pulse * 3.8;
-    float alpha = intensity * 0.75 * pulse * streak * streamer;
+    vec3 glow = glowColor * intensity * streak * streamer * pulse * 4.2;
+    float alpha = intensity * 0.78 * pulse * streak * streamer;
     gl_FragColor = vec4(glow, alpha);
   }
 `;
@@ -314,35 +322,36 @@ const outerCoronaFragmentShader = `
 
   void main() {
     float fresnel = 0.55 - dot(vNormal, vec3(0.0, 0.0, 1.0));
-    float intensity = pow(max(fresnel, 0.0), 2.5);
+    float intensity = pow(max(fresnel, 0.0), 2.2);
 
     vec3 dir = normalize(vWorldPosition);
     float angle = atan(dir.z, dir.x);
 
-    // Dense radial rays with richer frequency content + two more layers
-    float rays1 = 0.48 + 0.52 * sin(angle * 8.0 + uTime * 0.35);
-    float rays2 = 0.63 + 0.37 * cos(angle * 15.0 - uTime * 0.6);
-    float rays3 = 0.76 + 0.24 * sin(angle * 4.0 + uTime * 0.2);
-    float rays4 = 0.86 + 0.14 * cos(angle * 23.0 + uTime * 1.1);
-    float rays5 = 0.92 + 0.08 * sin(angle * 37.0 - uTime * 1.6);
-    float rays = rays1 * rays2 * rays3 * rays4 * rays5;
+    // Dense radial rays with richer frequency content
+    float rays1 = 0.46 + 0.54 * sin(angle * 8.0 + uTime * 0.35);
+    float rays2 = 0.60 + 0.40 * cos(angle * 15.0 - uTime * 0.6);
+    float rays3 = 0.74 + 0.26 * sin(angle * 4.0 + uTime * 0.2);
+    float rays4 = 0.84 + 0.16 * cos(angle * 23.0 + uTime * 1.1);
+    float rays5 = 0.91 + 0.09 * sin(angle * 37.0 - uTime * 1.6);
+    float rays6 = 0.95 + 0.05 * cos(angle * 53.0 - uTime * 0.9);
+    float rays = rays1 * rays2 * rays3 * rays4 * rays5 * rays6;
 
     // Asymmetric brightness with slow drift (like real corona)
-    float asymmetry = 0.80 + 0.20 * sin(angle * 0.7 + uTime * 0.08);
+    float asymmetry = 0.78 + 0.22 * sin(angle * 0.7 + uTime * 0.08);
 
-    float pulse = 0.72 + 0.14 * sin(uTime * 1.1) + 0.08 * sin(uTime * 2.8 + 0.5)
+    float pulse = 0.70 + 0.15 * sin(uTime * 1.1) + 0.08 * sin(uTime * 2.8 + 0.5)
                 + 0.04 * sin(uTime * 6.5 + 1.2) + 0.02 * sin(uTime * 10.0 + 2.8)
                 + 0.015 * sin(uTime * 15.0 + 4.1);
 
-    vec3 colorInner = vec3(1.0, 0.75, 0.32);
-    vec3 colorMid = vec3(0.94, 0.45, 0.12);
-    vec3 colorOuter = vec3(0.82, 0.28, 0.06);
+    vec3 colorInner = vec3(1.0, 0.75, 0.34);
+    vec3 colorMid = vec3(0.94, 0.44, 0.10);
+    vec3 colorOuter = vec3(0.80, 0.26, 0.05);
     float depthGrad = pow(max(fresnel, 0.0), 1.3);
     vec3 color = mix(colorInner, colorMid, depthGrad * 0.6);
     color = mix(color, colorOuter, depthGrad);
 
-    vec3 glow = color * intensity * rays * asymmetry * pulse * 2.8;
-    float alpha = intensity * rays * asymmetry * pulse * 0.55;
+    vec3 glow = color * intensity * rays * asymmetry * pulse * 3.2;
+    float alpha = intensity * rays * asymmetry * pulse * 0.58;
     gl_FragColor = vec4(glow, alpha);
   }
 `;
@@ -379,11 +388,11 @@ function Sun() {
   );
 
   const sunGeo = useMemo(() => new THREE.SphereGeometry(0.9, 64, 64), []);
-  const innerGlowGeo = useMemo(() => new THREE.SphereGeometry(1.05, 48, 48), []);
-  const coronaGeo = useMemo(() => new THREE.SphereGeometry(1.4, 48, 48), []);
-  const outerCoronaGeo = useMemo(() => new THREE.SphereGeometry(2.0, 48, 48), []);
-  const midHazeGeo = useMemo(() => new THREE.SphereGeometry(2.6, 32, 32), []);
-  const outerGeo = useMemo(() => new THREE.SphereGeometry(3.8, 32, 32), []);
+  const innerGlowGeo = useMemo(() => new THREE.SphereGeometry(1.08, 48, 48), []);
+  const coronaGeo = useMemo(() => new THREE.SphereGeometry(1.45, 48, 48), []);
+  const outerCoronaGeo = useMemo(() => new THREE.SphereGeometry(2.2, 48, 48), []);
+  const midHazeGeo = useMemo(() => new THREE.SphereGeometry(3.0, 32, 32), []);
+  const outerGeo = useMemo(() => new THREE.SphereGeometry(4.2, 32, 32), []);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -394,23 +403,23 @@ function Sun() {
       meshRef.current.rotation.y = t * 0.04;
     }
     if (coronaRef.current) {
-      const s = 1.0 + 0.09 * Math.sin(t * 1.8) + 0.04 * Math.sin(t * 4.7) + 0.02 * Math.sin(t * 8.1);
+      const s = 1.0 + 0.10 * Math.sin(t * 1.8) + 0.045 * Math.sin(t * 4.7) + 0.022 * Math.sin(t * 8.1);
       coronaRef.current.scale.setScalar(s);
     }
     if (innerGlowRef.current) {
-      const s = 1.0 + 0.06 * Math.sin(t * 2.2 + 0.3) + 0.03 * Math.sin(t * 5.1 + 1.1);
+      const s = 1.0 + 0.07 * Math.sin(t * 2.2 + 0.3) + 0.035 * Math.sin(t * 5.1 + 1.1);
       innerGlowRef.current.scale.setScalar(s);
     }
     if (outerCoronaRef.current) {
-      const s = 1.0 + 0.07 * Math.sin(t * 1.2 + 0.7) + 0.035 * Math.sin(t * 3.5) + 0.015 * Math.sin(t * 6.2);
+      const s = 1.0 + 0.08 * Math.sin(t * 1.2 + 0.7) + 0.04 * Math.sin(t * 3.5) + 0.018 * Math.sin(t * 6.2);
       outerCoronaRef.current.scale.setScalar(s);
     }
     if (midHazeRef.current) {
-      const s = 1.0 + 0.045 * Math.sin(t * 0.95 + 1.2) + 0.025 * Math.sin(t * 2.6) + 0.012 * Math.sin(t * 4.8);
+      const s = 1.0 + 0.05 * Math.sin(t * 0.95 + 1.2) + 0.028 * Math.sin(t * 2.6) + 0.014 * Math.sin(t * 4.8);
       midHazeRef.current.scale.setScalar(s);
     }
     if (outerRef.current) {
-      const s = 1.0 + 0.038 * Math.sin(t * 0.8 + 0.5) + 0.02 * Math.sin(t * 1.9) + 0.01 * Math.sin(t * 3.7);
+      const s = 1.0 + 0.042 * Math.sin(t * 0.8 + 0.5) + 0.022 * Math.sin(t * 1.9) + 0.012 * Math.sin(t * 3.7);
       outerRef.current.scale.setScalar(s);
     }
   });
@@ -429,13 +438,13 @@ function Sun() {
   return (
     <group>
       {/* Primary warm point light */}
-      <pointLight intensity={11} distance={70} decay={2} color="#ffaa44" />
+      <pointLight intensity={12} distance={75} decay={2} color="#ffaa44" />
       {/* Secondary fill light for softer ambient bounce */}
-      <pointLight intensity={2.8} distance={38} decay={2} color="#ff8844" />
+      <pointLight intensity={3.0} distance={40} decay={2} color="#ff8844" />
       {/* Tertiary subtle warm-cool rim for color depth */}
-      <pointLight intensity={0.9} distance={20} decay={2} color="#ffcc88" />
+      <pointLight intensity={1.0} distance={22} decay={2} color="#ffcc88" />
       {/* Quaternary ultra-soft wide fill for deep shadow lift */}
-      <pointLight intensity={0.35} distance={55} decay={2} color="#ffddaa" />
+      <pointLight intensity={0.4} distance={58} decay={2} color="#ffddaa" />
 
       {/* Sun core */}
       <mesh ref={meshRef} geometry={sunGeo}>
@@ -449,9 +458,9 @@ function Sun() {
       {/* Inner photosphere glow - soft transition between core and corona */}
       <mesh ref={innerGlowRef} geometry={innerGlowGeo}>
         <meshBasicMaterial
-          color="#ffcc66"
+          color="#ffd066"
           transparent
-          opacity={0.12}
+          opacity={0.14}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -487,9 +496,9 @@ function Sun() {
       {/* Mid haze layer for smoother corona falloff */}
       <mesh ref={midHazeRef} geometry={midHazeGeo}>
         <meshBasicMaterial
-          color="#ff8833"
+          color="#ff8830"
           transparent
-          opacity={0.04}
+          opacity={0.045}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -499,9 +508,9 @@ function Sun() {
       {/* Diffuse outer haze */}
       <mesh ref={outerRef} geometry={outerGeo}>
         <meshBasicMaterial
-          color="#ff6620"
+          color="#ff6618"
           transparent
-          opacity={0.035}
+          opacity={0.038}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -541,19 +550,19 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
         color: colorObj,
         emissive: emissiveObj,
         emissiveIntensity: 0.35,
-        roughness: 0.38,
-        metalness: 0.45,
+        roughness: 0.32,
+        metalness: 0.52,
       }),
     [colorObj, emissiveObj],
   );
 
-  const atmosGeo = useMemo(() => new THREE.SphereGeometry(1.18, 32, 32), []);
+  const atmosGeo = useMemo(() => new THREE.SphereGeometry(1.20, 32, 32), []);
   const atmosMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         color: colorObj,
         transparent: true,
-        opacity: 0.16,
+        opacity: 0.18,
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -562,13 +571,13 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
   );
 
   // Second atmosphere layer for softer outer glow
-  const outerAtmosGeo = useMemo(() => new THREE.SphereGeometry(1.38, 24, 24), []);
+  const outerAtmosGeo = useMemo(() => new THREE.SphereGeometry(1.42, 24, 24), []);
   const outerAtmosMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         color: colorObj,
         transparent: true,
-        opacity: 0.07,
+        opacity: 0.08,
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -577,13 +586,13 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
   );
 
   // Third ultra-soft atmospheric haze for premium depth
-  const ultraAtmosGeo = useMemo(() => new THREE.SphereGeometry(1.6, 20, 20), []);
+  const ultraAtmosGeo = useMemo(() => new THREE.SphereGeometry(1.65, 20, 20), []);
   const ultraAtmosMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         color: colorObj,
         transparent: true,
-        opacity: 0.03,
+        opacity: 0.035,
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -592,7 +601,7 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
   );
 
   const ringGeo = useMemo(
-    () => new THREE.RingGeometry(1.35, 1.9, 64),
+    () => new THREE.RingGeometry(1.35, 2.05, 64),
     [],
   );
   const ringMat = useMemo(
@@ -600,7 +609,7 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
       new THREE.MeshBasicMaterial({
         color: new THREE.Color(ringColor ?? color),
         transparent: true,
-        opacity: 0.28,
+        opacity: 0.32,
         side: THREE.DoubleSide,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -611,15 +620,15 @@ function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetM
   useFrame((_, delta) => {
     if (!meshRef.current) return;
     meshRef.current.rotation.y += delta * 0.25;
-    const target = hovered ? 1.20 : 1;
+    const target = hovered ? 1.22 : 1;
     scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, target, delta * 4.5);
     meshRef.current.scale.setScalar(scaleRef.current);
-    if (atmosRef.current) atmosRef.current.scale.setScalar(scaleRef.current * 1.18);
+    if (atmosRef.current) atmosRef.current.scale.setScalar(scaleRef.current * 1.20);
     if (ringRef.current) ringRef.current.scale.setScalar(scaleRef.current);
-    mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, hovered ? 0.80 : 0.35, delta * 3.5);
-    atmosMat.opacity = THREE.MathUtils.lerp(atmosMat.opacity, hovered ? 0.36 : 0.16, delta * 3.5);
-    outerAtmosMat.opacity = THREE.MathUtils.lerp(outerAtmosMat.opacity, hovered ? 0.14 : 0.07, delta * 3.5);
-    ultraAtmosMat.opacity = THREE.MathUtils.lerp(ultraAtmosMat.opacity, hovered ? 0.06 : 0.03, delta * 3.5);
+    mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, hovered ? 0.90 : 0.35, delta * 3.5);
+    atmosMat.opacity = THREE.MathUtils.lerp(atmosMat.opacity, hovered ? 0.40 : 0.18, delta * 3.5);
+    outerAtmosMat.opacity = THREE.MathUtils.lerp(outerAtmosMat.opacity, hovered ? 0.16 : 0.08, delta * 3.5);
+    ultraAtmosMat.opacity = THREE.MathUtils.lerp(ultraAtmosMat.opacity, hovered ? 0.07 : 0.035, delta * 3.5);
   });
 
   useEffect(() => {
@@ -665,9 +674,9 @@ function Satellite({ config, parentColor }: { config: SatelliteConfig; parentCol
       new THREE.MeshStandardMaterial({
         color: new THREE.Color(parentColor).lerp(new THREE.Color('#ffffff'), 0.40),
         emissive: new THREE.Color(parentColor),
-        emissiveIntensity: 0.25,
-        roughness: 0.35,
-        metalness: 0.40,
+        emissiveIntensity: 0.30,
+        roughness: 0.30,
+        metalness: 0.45,
       }),
     [parentColor],
   );
@@ -710,7 +719,7 @@ function OrbitRing({ radius, color }: { radius: number; color: string }) {
       new THREE.LineBasicMaterial({
         color: new THREE.Color(color),
         transparent: true,
-        opacity: 0.14,
+        opacity: 0.16,
       }),
     [color],
   );
@@ -760,9 +769,9 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
     () =>
       new THREE.PointsMaterial({
         color: new THREE.Color(color),
-        size: 0.055,
+        size: 0.06,
         transparent: true,
-        opacity: 0.28,
+        opacity: 0.30,
         sizeAttenuation: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -828,16 +837,19 @@ const dustFragmentShader = `
     float dist = length(center);
     if (dist > 0.5) discard;
 
-    // Gaussian core
-    float gaussian = exp(-dist * dist * 14.0);
+    // Gaussian core with softer falloff
+    float gaussian = exp(-dist * dist * 12.0);
 
     // Cross-spike diffraction for brighter stars (vSize > threshold)
-    float spikeSharpness = 80.0;
-    float spikeX = exp(-abs(center.y) * spikeSharpness) * exp(-abs(center.x) * 6.0);
-    float spikeY = exp(-abs(center.x) * spikeSharpness) * exp(-abs(center.y) * 6.0);
-    float spikes = (spikeX + spikeY) * step(0.13, vSize) * 0.35;
+    float spikeSharpness = 70.0;
+    float spikeX = exp(-abs(center.y) * spikeSharpness) * exp(-abs(center.x) * 5.5);
+    float spikeY = exp(-abs(center.x) * spikeSharpness) * exp(-abs(center.y) * 5.5);
+    float spikes = (spikeX + spikeY) * step(0.12, vSize) * 0.40;
 
-    float brightness = gaussian + spikes;
+    // Subtle halo ring for medium-brightness stars
+    float halo = exp(-pow(dist - 0.22, 2.0) * 80.0) * 0.12 * step(0.06, vSize);
+
+    float brightness = gaussian + spikes + halo;
     float alpha = brightness * vAlpha;
     gl_FragColor = vec4(vColor * (0.85 + 0.15 * brightness), alpha);
   }
@@ -845,7 +857,7 @@ const dustFragmentShader = `
 
 function CosmicDust() {
   const ref = useRef<THREE.Points>(null);
-  const count = 6000;
+  const count = 7500;
 
   const { positions, colors, sizes, phases, twinkleSpeeds } = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -864,32 +876,37 @@ function CosmicDust() {
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.55; // flattened galactic plane
       pos[i * 3 + 2] = r * Math.cos(phi);
 
-      // Varied star colors: warm white, cool blue, purple, faint gold, rose
+      // Varied star colors: warm white, cool blue, purple, faint gold, rose, teal
       const type = Math.random();
-      if (type < 0.35) {
+      if (type < 0.30) {
         // Warm white / yellow-white
-        const b = 0.7 + Math.random() * 0.3;
-        col[i * 3] = b; col[i * 3 + 1] = b * 0.95; col[i * 3 + 2] = b * 0.82;
-      } else if (type < 0.55) {
-        // Cool blue
-        col[i * 3] = 0.3 + Math.random() * 0.2;
-        col[i * 3 + 1] = 0.5 + Math.random() * 0.3;
+        const b = 0.72 + Math.random() * 0.28;
+        col[i * 3] = b; col[i * 3 + 1] = b * 0.94; col[i * 3 + 2] = b * 0.80;
+      } else if (type < 0.48) {
+        // Cool blue / ice-blue
+        col[i * 3] = 0.28 + Math.random() * 0.18;
+        col[i * 3 + 1] = 0.48 + Math.random() * 0.30;
         col[i * 3 + 2] = 0.85 + Math.random() * 0.15;
-      } else if (type < 0.70) {
+      } else if (type < 0.60) {
         // Purple / violet
-        col[i * 3] = 0.5 + Math.random() * 0.25;
-        col[i * 3 + 1] = 0.2 + Math.random() * 0.2;
-        col[i * 3 + 2] = 0.7 + Math.random() * 0.3;
-      } else if (type < 0.82) {
+        col[i * 3] = 0.48 + Math.random() * 0.25;
+        col[i * 3 + 1] = 0.18 + Math.random() * 0.22;
+        col[i * 3 + 2] = 0.68 + Math.random() * 0.30;
+      } else if (type < 0.72) {
         // Faint gold / amber
-        col[i * 3] = 0.8 + Math.random() * 0.2;
-        col[i * 3 + 1] = 0.6 + Math.random() * 0.2;
-        col[i * 3 + 2] = 0.2 + Math.random() * 0.15;
-      } else if (type < 0.92) {
+        col[i * 3] = 0.78 + Math.random() * 0.22;
+        col[i * 3 + 1] = 0.58 + Math.random() * 0.22;
+        col[i * 3 + 2] = 0.18 + Math.random() * 0.15;
+      } else if (type < 0.82) {
         // Rose / pink accent
-        col[i * 3] = 0.8 + Math.random() * 0.2;
-        col[i * 3 + 1] = 0.3 + Math.random() * 0.2;
-        col[i * 3 + 2] = 0.4 + Math.random() * 0.2;
+        col[i * 3] = 0.78 + Math.random() * 0.22;
+        col[i * 3 + 1] = 0.28 + Math.random() * 0.22;
+        col[i * 3 + 2] = 0.38 + Math.random() * 0.22;
+      } else if (type < 0.92) {
+        // Teal / cyan for dark theme harmony
+        col[i * 3] = 0.18 + Math.random() * 0.15;
+        col[i * 3 + 1] = 0.55 + Math.random() * 0.25;
+        col[i * 3 + 2] = 0.60 + Math.random() * 0.25;
       } else {
         // Bright accent stars (near-white)
         col[i * 3] = 0.92 + Math.random() * 0.08;
@@ -955,7 +972,7 @@ function CosmicDust() {
 
 function NebulaClouds() {
   const groupRef = useRef<THREE.Group>(null);
-  const count = 38;
+  const count = 45;
 
   const meshes = useMemo(() => {
     const items: { position: [number, number, number]; scale: number; color: string; opacity: number; pulseSpeed: number; pulsePhase: number }[] = [];
@@ -967,6 +984,7 @@ function NebulaClouds() {
       '#1a0a3a', '#081a42', '#120e55', '#0a3048', '#0e0845', '#082540',
       '#063848', '#0a4858', '#082a4e', '#0c3860', '#051a50', '#0a3058',
       '#082858', '#0e1848', '#062860', '#0c1a55',
+      '#0d2838', '#083848', '#0a1828', '#102838', '#062038',
     ];
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2;
@@ -980,7 +998,7 @@ function NebulaClouds() {
         ],
         scale: 15 + Math.random() * 45,
         color: colors[i % colors.length],
-        opacity: 0.06 + Math.random() * 0.14,
+        opacity: 0.05 + Math.random() * 0.16,
         pulseSpeed: 0.15 + Math.random() * 0.45,
         pulsePhase: Math.random() * Math.PI * 2,
       });
@@ -1023,7 +1041,7 @@ function NebulaClouds() {
     meshes.forEach((m, i) => {
       if (cloudMaterials[i]) {
         const base = m.opacity;
-        cloudMaterials[i].opacity = base + base * 0.2 * Math.sin(t * m.pulseSpeed + m.pulsePhase);
+        cloudMaterials[i].opacity = base + base * 0.25 * Math.sin(t * m.pulseSpeed + m.pulsePhase);
       }
     });
   });
@@ -1052,20 +1070,21 @@ function CameraAutoDolly() {
       initialized.current = true;
     }
     const t = state.clock.elapsedTime;
-    // Breathing zoom with five frequencies for richer organic rhythm
-    const dollyFactor = 1.0 + 0.040 * Math.sin(t * 0.08) + 0.020 * Math.sin(t * 0.05 + 1.0)
-                      + 0.010 * Math.sin(t * 0.19 + 2.5) + 0.006 * Math.sin(t * 0.31 + 0.7)
-                      + 0.003 * Math.sin(t * 0.47 + 3.1);
+    // Breathing zoom with richer organic rhythm
+    const dollyFactor = 1.0 + 0.035 * Math.sin(t * 0.07) + 0.018 * Math.sin(t * 0.04 + 1.0)
+                      + 0.008 * Math.sin(t * 0.17 + 2.5) + 0.005 * Math.sin(t * 0.29 + 0.7)
+                      + 0.002 * Math.sin(t * 0.43 + 3.1);
     const dir = camera.position.clone().normalize();
     const targetDist = baseDistance.current * dollyFactor;
     const currentDist = camera.position.length();
-    const newDist = THREE.MathUtils.lerp(currentDist, targetDist, 0.012);
+    const newDist = THREE.MathUtils.lerp(currentDist, targetDist, 0.010);
     camera.position.copy(dir.multiplyScalar(newDist));
 
-    // Gentle vertical sway with layered oscillation
-    const sway = 0.25 * Math.sin(t * 0.05) + 0.12 * Math.sin(t * 0.09 + 0.5) + 0.06 * Math.sin(t * 0.17 + 1.8);
+    // Gentle vertical sway with layered oscillation for cinematic drift
+    const sway = 0.22 * Math.sin(t * 0.04) + 0.10 * Math.sin(t * 0.08 + 0.5)
+               + 0.05 * Math.sin(t * 0.15 + 1.8) + 0.02 * Math.sin(t * 0.27 + 2.2);
     const normalizedY = camera.position.y / currentDist;
-    camera.position.y = newDist * (normalizedY + sway * 0.005);
+    camera.position.y = newDist * (normalizedY + sway * 0.004);
   });
 
   return null;
@@ -1119,7 +1138,7 @@ function PlanetSystem({ config }: { config: PlanetConfig }) {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.07} color="#1a2848" />
+      <ambientLight intensity={0.06} color="#141e38" />
       <Sun />
       <CosmicDust />
       <NebulaClouds />
@@ -1132,7 +1151,7 @@ function Scene() {
         minDistance={6}
         maxDistance={35}
         autoRotate
-        autoRotateSpeed={0.14}
+        autoRotateSpeed={0.16}
         enablePan={false}
         maxPolarAngle={Math.PI * 0.72}
         minPolarAngle={Math.PI * 0.28}
@@ -1164,8 +1183,8 @@ export default function SolarSystem() {
     <Canvas
       dpr={[1, 1.5]}
       camera={{ position: [0, 10, 18], fov: 50, near: 0.1, far: 250 }}
-      style={{ background: 'radial-gradient(ellipse at center, #0a0a1a 0%, #000005 100%)' }}
-      gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
+      style={{ background: 'radial-gradient(ellipse at center, #080818 0%, #000004 100%)' }}
+      gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.25 }}
     >
       <Suspense fallback={<LoadingFallback />}>
         <Scene />
@@ -1173,12 +1192,12 @@ export default function SolarSystem() {
       {/* Post-processing: tuned bloom for dramatic sun glow with clean planet rendering */}
       <EffectComposer>
         <Bloom
-          intensity={1.9}
-          luminanceThreshold={0.20}
-          luminanceSmoothing={0.96}
+          intensity={1.85}
+          luminanceThreshold={0.18}
+          luminanceSmoothing={0.95}
           mipmapBlur
         />
-        <Vignette eskil={false} offset={0.30} darkness={0.52} />
+        <Vignette eskil={false} offset={0.28} darkness={0.55} />
       </EffectComposer>
     </Canvas>
   );

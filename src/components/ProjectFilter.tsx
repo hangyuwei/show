@@ -61,15 +61,16 @@ export default function ProjectFilter({
               style={
                 isActive
                   ? {
-                      background: `linear-gradient(135deg, ${lineColor}25, ${lineColor}10 55%, ${lineColor}06)`,
+                      background: `linear-gradient(135deg, ${lineColor}28, ${lineColor}12 50%, ${lineColor}08)`,
                       borderColor: 'transparent',
                       boxShadow: `
-                        0 0 40px ${lineColor}35,
-                        0 0 16px ${lineColor}20,
-                        0 0 6px ${lineColor}50,
-                        0 2px 12px rgba(0,0,0,0.25),
-                        inset 0 1px 0 ${lineColor}30,
-                        inset 0 0 24px ${lineColor}0e`,
+                        0 0 36px ${lineColor}30,
+                        0 0 14px ${lineColor}18,
+                        0 0 5px ${lineColor}45,
+                        0 2px 10px rgba(0,0,0,0.22),
+                        inset 0 1px 0 ${lineColor}28,
+                        inset 0 0 20px ${lineColor}0c`,
+                      textShadow: `0 0 18px ${lineColor}40, 0 0 40px ${lineColor}15`,
                     }
                   : undefined
               }
@@ -79,12 +80,12 @@ export default function ProjectFilter({
                 borderColor: 'rgba(255,255,255,0.10)',
               } : {}}
               layout
-              initial={{ opacity: 0, y: 18, scale: 0.92 }}
+              initial={{ opacity: 0, y: 20, scale: 0.90 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
-                duration: 0.45,
-                delay: filterIdx * 0.06,
-                ease: [0.22, 1, 0.36, 1],
+                duration: 0.5,
+                delay: filterIdx * 0.055,
+                ease: [0.16, 1, 0.3, 1],
               }}
             >
               <span className="text-base leading-none">{filter.emoji}</span>
@@ -96,18 +97,17 @@ export default function ProjectFilter({
                   className="absolute inset-0 rounded-full"
                   layoutId="activeFilterGlow"
                   style={{
-                    border: `1.5px solid ${lineColor}70`,
+                    border: `1.5px solid ${lineColor}60`,
                     boxShadow: `
-                      0 0 36px ${lineColor}40,
-                      0 0 72px ${lineColor}18,
-                      0 0 120px ${lineColor}08,
-                      0 0 200px ${lineColor}03,
-                      inset 0 0 18px ${lineColor}0e`,
+                      0 0 30px ${lineColor}35,
+                      0 0 60px ${lineColor}15,
+                      0 0 100px ${lineColor}08,
+                      inset 0 0 16px ${lineColor}0c`,
                   }}
                   transition={{
                     type: 'spring',
-                    stiffness: 380,
-                    damping: 26,
+                    stiffness: 400,
+                    damping: 28,
                   }}
                 />
               )}
@@ -119,27 +119,27 @@ export default function ProjectFilter({
                   className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full"
                   style={{
                     background: `radial-gradient(circle, ${lineColor}, ${lineColor}cc)`,
-                    boxShadow: `0 0 14px ${lineColor}c0, 0 0 6px ${lineColor}, 0 0 24px ${lineColor}40`,
+                    boxShadow: `0 0 12px ${lineColor}b0, 0 0 5px ${lineColor}, 0 0 20px ${lineColor}35`,
                   }}
                   animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [1, 0.75, 1],
+                    scale: [1, 1.3, 1],
+                    opacity: [1, 0.8, 1],
                   }}
                   transition={{
                     scale: {
-                      duration: 2.0,
+                      duration: 2.4,
                       repeat: Infinity,
                       ease: 'easeInOut',
                     },
                     opacity: {
-                      duration: 2.0,
+                      duration: 2.4,
                       repeat: Infinity,
                       ease: 'easeInOut',
                     },
                     layout: {
                       type: 'spring',
-                      stiffness: 480,
-                      damping: 30,
+                      stiffness: 500,
+                      damping: 32,
                     },
                   }}
                 />

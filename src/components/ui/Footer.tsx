@@ -9,38 +9,40 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto relative">
-      {/* Multi-color gradient top border — four-stop with animated shimmer feel */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/40 via-[var(--accent-purple)]/30 via-[var(--color-accent-teal)]/25 to-transparent" />
+      {/* Multi-color gradient top border — five-stop aurora shimmer */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/35 via-[var(--accent-purple)]/28 via-[var(--color-accent-teal)]/22 to-transparent" />
       {/* Soft glow bleed below the border */}
-      <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-r from-transparent via-[var(--accent)]/[0.04] to-transparent blur-lg pointer-events-none" />
-      {/* Ambient glow at center — wider spread */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/5 h-10 bg-gradient-to-b from-[var(--accent-purple)]/[0.05] to-transparent blur-xl pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-10 bg-gradient-to-r from-transparent via-[var(--accent)]/[0.035] to-transparent blur-lg pointer-events-none" />
+      {/* Ambient glow at center — wider spread with aurora warmth */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/5 h-12 bg-gradient-to-b from-[var(--accent-purple)]/[0.04] to-transparent blur-xl pointer-events-none" />
       {/* Secondary teal ambient glow offset left */}
-      <div className="absolute top-0 left-1/4 w-1/4 h-6 bg-gradient-to-b from-[var(--color-accent-teal)]/[0.03] to-transparent blur-lg pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-1/4 h-8 bg-gradient-to-b from-[var(--color-accent-teal)]/[0.025] to-transparent blur-lg pointer-events-none" />
+      {/* Warm anchor glow offset right — for color harmony */}
+      <div className="absolute top-0 right-1/4 w-1/5 h-6 bg-gradient-to-b from-[var(--accent)]/[0.02] to-transparent blur-md pointer-events-none" />
 
-      {/* Subtle background pattern */}
+      {/* Subtle background pattern — refined dot grid */}
       <div
-        className="absolute inset-0 opacity-[0.012]"
+        className="absolute inset-0 opacity-[0.010]"
         style={{
           backgroundImage:
             'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 0)',
-          backgroundSize: '28px 28px',
+          backgroundSize: '32px 32px',
         }}
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-6 pt-5">
-        <div className="relative rounded-2xl backdrop-blur-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2),0_1px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.25),0_2px_8px_rgba(0,0,0,0.12)] transition-shadow duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
-          {/* Inner top gradient accent line — richer three-stop */}
-          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/25 via-[var(--accent-purple)]/15 to-[var(--accent)]/0" />
+        <div className="relative rounded-2xl backdrop-blur-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] overflow-hidden shadow-[0_4px_28px_rgba(0,0,0,0.18),0_1px_4px_rgba(0,0,0,0.08)] hover:shadow-[0_6px_36px_rgba(0,0,0,0.24),0_2px_8px_rgba(0,0,0,0.10)] transition-shadow duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
+          {/* Inner top gradient accent line — aurora three-stop */}
+          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/22 via-[var(--accent-purple)]/14 to-[var(--accent)]/0" />
           {/* Soft inner glow reflection at top */}
-          <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-white/[0.018] to-transparent pointer-events-none" />
-          {/* Subtle traveling border shimmer */}
-          <div className="absolute top-0 left-0 w-1/3 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/30 to-transparent animate-[shimmer_8s_ease-in-out_infinite] pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-white/[0.015] to-transparent pointer-events-none" />
+          {/* Traveling border shimmer — aurora spectrum */}
+          <div className="absolute top-0 left-0 w-1/3 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/25 to-transparent animate-[shimmer_7s_ease-in-out_infinite] pointer-events-none" />
 
           <div className="flex items-center justify-between px-7 py-5">
             {/* Left: Copyright with animated accent dot */}
-            <span className="text-xs text-white/30 flex items-center gap-2.5">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--color-accent-teal)] opacity-50 animate-[breathe_4s_ease-in-out_infinite] shadow-[0_0_8px_rgba(45,140,240,0.35),0_0_16px_rgba(20,184,166,0.15)]" />
+            <span className="text-xs text-white/28 flex items-center gap-2.5">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--color-accent-teal)] opacity-45 animate-[breathe_5s_ease-in-out_infinite] shadow-[0_0_10px_rgba(45,140,240,0.30),0_0_20px_rgba(20,184,166,0.12)]" />
               <span className="tracking-wide">&copy; 2024&ndash;2026 Hang</span>
             </span>
 
@@ -50,10 +52,10 @@ export default function Footer() {
                 href="https://github.com/hangyuwei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
+                className="group text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
               >
                 <svg
-                  className="w-3.5 h-3.5 transition-transform duration-500 group-hover:scale-115 group-hover:drop-shadow-[0_0_6px_rgba(45,140,240,0.3)]"
+                  className="w-3.5 h-3.5 transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_6px_rgba(45,140,240,0.28)]"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
@@ -66,19 +68,19 @@ export default function Footer() {
                 </svg>
                 <span className="relative">
                   GitHub
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/60 to-[var(--color-accent-teal)] transition-all duration-600 group-hover:w-full" />
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/55 to-[var(--color-accent-teal)] transition-all duration-600 group-hover:w-full" />
                 </span>
               </a>
 
               {/* Separator with gradient */}
-              <span className="w-px h-3.5 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+              <span className="w-px h-3.5 bg-gradient-to-b from-transparent via-white/8 to-transparent" />
 
               <a
                 href="mailto:13811282241@163.com"
-                className="group text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
+                className="group text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
               >
                 <svg
-                  className="w-3.5 h-3.5 transition-transform duration-500 group-hover:scale-115 group-hover:drop-shadow-[0_0_6px_rgba(45,140,240,0.3)]"
+                  className="w-3.5 h-3.5 transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_6px_rgba(45,140,240,0.28)]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -92,7 +94,7 @@ export default function Footer() {
                 </svg>
                 <span className="relative">
                   Email
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/60 to-[var(--color-accent-teal)] transition-all duration-600 group-hover:w-full" />
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/55 to-[var(--color-accent-teal)] transition-all duration-600 group-hover:w-full" />
                 </span>
               </a>
             </nav>
@@ -103,7 +105,7 @@ export default function Footer() {
                 href="https://github.com/hangyuwei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
+                className="text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
               >
                 <svg
                   className="w-3.5 h-3.5"
@@ -119,10 +121,10 @@ export default function Footer() {
                 </svg>
                 GitHub
               </a>
-              <span className="w-px h-3 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+              <span className="w-px h-3 bg-gradient-to-b from-transparent via-white/8 to-transparent" />
               <a
                 href="mailto:13811282241@163.com"
-                className="text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
+                className="text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
               >
                 <svg
                   className="w-3.5 h-3.5"
@@ -147,10 +149,10 @@ export default function Footer() {
               onClick={scrollToTop}
               whileHover={{ y: -3 }}
               whileTap={{ y: 0 }}
-              className="group/btn text-xs text-white/30 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5 relative"
+              className="group/btn text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5 relative"
             >
               <svg
-                className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:-translate-y-1 group-hover/btn:drop-shadow-[0_0_6px_rgba(45,140,240,0.35)]"
+                className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:-translate-y-1 group-hover/btn:drop-shadow-[0_0_8px_rgba(45,140,240,0.30)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -164,13 +166,13 @@ export default function Footer() {
               </svg>
               <span className="relative">
                 顶部
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/50 to-[var(--color-accent-teal)] transition-all duration-600 group-hover/btn:w-full" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/45 to-[var(--color-accent-teal)] transition-all duration-600 group-hover/btn:w-full" />
               </span>
             </motion.button>
           </div>
 
           {/* Bottom inner gradient line — teal anchor for visual balance */}
-          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--color-accent-teal)]/15 via-[var(--accent-purple)]/8 to-[var(--accent)]/0" />
+          <div className="h-px bg-gradient-to-r from-[var(--accent)]/0 via-[var(--color-accent-teal)]/12 via-[var(--accent-purple)]/6 to-[var(--accent)]/0" />
         </div>
       </div>
     </footer>

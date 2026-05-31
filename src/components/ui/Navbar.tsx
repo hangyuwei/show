@@ -44,10 +44,10 @@ export default function Navbar() {
       tickingRef.current = true;
       requestAnimationFrame(() => {
         const scrollY = window.scrollY;
-        // Smooth ease-out interpolation from 0 to 1 over first 100px of scroll
-        const raw = Math.min(scrollY / 100, 1);
+        // Smooth ease-out interpolation from 0 to 1 over first 120px of scroll
+        const raw = Math.min(scrollY / 120, 1);
         // Quintic ease-out for ultra-smooth perceived transition
-        const progress = 1 - Math.pow(1 - raw, 4);
+        const progress = 1 - Math.pow(1 - raw, 5);
         setScrollProgress(progress);
         tickingRef.current = false;
       });
@@ -66,31 +66,35 @@ export default function Navbar() {
   };
 
   // ── Premium glass effect interpolation ──
-  // Enhanced: deeper color range, smoother opacity ramp
-  const glassBgOpacity = 0.02 + scrollProgress * 0.28;
-  const glassBorderOpacity = 0.04 + scrollProgress * 0.22;
-  const glassBlur = 16 + scrollProgress * 26;
-  const glassSaturation = 1.3 + scrollProgress * 0.6;
+  // Deeper color range with richer indigo undertone, smoother opacity ramp
+  const glassBgOpacity = 0.01 + scrollProgress * 0.32;
+  const glassBorderOpacity = 0.03 + scrollProgress * 0.24;
+  const glassBlur = 14 + scrollProgress * 28;
+  const glassSaturation = 1.2 + scrollProgress * 0.7;
 
-  // Refined color tint: deep navy shifting toward richer indigo
-  const bgR = Math.round(5 + scrollProgress * 10);
-  const bgG = Math.round(6 + scrollProgress * 5);
-  const bgB = Math.round(24 + scrollProgress * 28);
+  // Refined color tint: deep navy shifting toward richer indigo with slight warmth
+  const bgR = Math.round(4 + scrollProgress * 12);
+  const bgG = Math.round(5 + scrollProgress * 6);
+  const bgB = Math.round(22 + scrollProgress * 32);
 
-  // ── Enhanced shadow system: 5-tier depth with color-shifted ambient glow ──
-  const shadowLayer1 = `0 1px 2px rgba(0,0,0,${0.06 + scrollProgress * 0.10})`;
-  const shadowLayer2 = `0 3px 8px rgba(0,0,0,${scrollProgress * 0.12})`;
-  const shadowLayer3 = `0 8px 24px rgba(0,0,0,${scrollProgress * 0.18})`;
-  const shadowLayer4 = `0 20px 56px -4px rgba(0,0,0,${scrollProgress * 0.22})`;
-  const shadowLayer5 = `0 40px 80px -8px rgba(0,0,0,${scrollProgress * 0.12})`;
-  const shadowInsetTop = `inset 0 1px 0 rgba(255,255,255,${0.04 + scrollProgress * 0.08})`;
-  const shadowInsetBot = `inset 0 -1px 0 rgba(0,0,0,${0.04 + scrollProgress * 0.06})`;
+  // ── Enhanced shadow system: 6-tier depth with color-shifted ambient glow ──
+  const shadowLayer1 = `0 1px 2px rgba(0,0,0,${0.05 + scrollProgress * 0.10})`;
+  const shadowLayer2 = `0 2px 6px rgba(0,0,0,${scrollProgress * 0.10})`;
+  const shadowLayer3 = `0 6px 20px rgba(0,0,0,${scrollProgress * 0.16})`;
+  const shadowLayer4 = `0 16px 48px -4px rgba(0,0,0,${scrollProgress * 0.20})`;
+  const shadowLayer5 = `0 32px 72px -8px rgba(0,0,0,${scrollProgress * 0.14})`;
+  const shadowLayer6 = `0 48px 100px -16px rgba(0,0,0,${scrollProgress * 0.08})`;
+  const shadowInsetTop = `inset 0 1px 0 rgba(255,255,255,${0.03 + scrollProgress * 0.10})`;
+  const shadowInsetBot = `inset 0 -1px 0 rgba(0,0,0,${0.03 + scrollProgress * 0.06})`;
   // Multi-hue ambient glow that intensifies on scroll
-  const shadowGlowPurple = scrollProgress > 0.15
-    ? `0 0 60px -12px rgba(139,92,246,${scrollProgress * 0.07})`
+  const shadowGlowPurple = scrollProgress > 0.1
+    ? `0 0 60px -12px rgba(139,92,246,${scrollProgress * 0.08})`
     : 'none';
-  const shadowGlowBlue = scrollProgress > 0.25
-    ? `0 0 80px -16px rgba(45,140,240,${scrollProgress * 0.04})`
+  const shadowGlowBlue = scrollProgress > 0.2
+    ? `0 0 80px -16px rgba(45,140,240,${scrollProgress * 0.05})`
+    : 'none';
+  const shadowGlowTeal = scrollProgress > 0.4
+    ? `0 0 100px -24px rgba(20,184,166,${scrollProgress * 0.025})`
     : 'none';
 
   return (
@@ -114,9 +118,9 @@ export default function Navbar() {
             borderStyle: 'solid',
             borderTopWidth: '0px',
             borderBottomWidth: '1px',
-            borderLeftColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.4})`,
-            borderRightColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.4})`,
-            borderBottomColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.8})`,
+            borderLeftColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.35})`,
+            borderRightColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.35})`,
+            borderBottomColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.7})`,
             borderBottomLeftRadius: '1rem',
             borderBottomRightRadius: '1rem',
             backdropFilter: `blur(${glassBlur}px) saturate(${glassSaturation})`,
@@ -127,77 +131,109 @@ export default function Navbar() {
               shadowLayer3,
               shadowLayer4,
               shadowLayer5,
+              shadowLayer6,
               shadowInsetTop,
               shadowInsetBot,
               shadowGlowPurple,
               shadowGlowBlue,
+              shadowGlowTeal,
             ].join(', '),
           }}
         >
+          {/* ── Conic rotating gradient border ── */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-b-2xl overflow-hidden"
+            style={{ opacity: 0.25 + scrollProgress * 0.75 }}
+          >
+            <div
+              className="absolute -inset-[100%]"
+              style={{
+                background: `conic-gradient(from 0deg, rgba(59,130,246,0.18), rgba(99,102,241,0.22), rgba(139,92,246,0.28), rgba(168,85,247,0.22), rgba(20,184,166,0.18), rgba(6,182,212,0.15), rgba(59,130,246,0.18))`,
+                animation: 'navbar-conic-spin 8s linear infinite',
+              }}
+            />
+            <div
+              className="absolute inset-0 rounded-b-2xl"
+              style={{
+                background: `rgb(${bgR}, ${bgG}, ${bgB})`,
+                margin: '1px',
+              }}
+            />
+          </div>
+
           {/* ── Noise texture overlay for realistic frost grain ── */}
           <div
             className="pointer-events-none absolute inset-0 rounded-b-2xl"
             style={{
-              opacity: 0.015 + scrollProgress * 0.035,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              opacity: 0.012 + scrollProgress * 0.04,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
               mixBlendMode: 'overlay',
             }}
           />
 
           {/* ── Primary refraction highlight — top edge light caustic ── */}
           <div
-            className="pointer-events-none absolute top-0 left-[6%] right-[6%] h-[1px]"
+            className="pointer-events-none absolute top-0 left-[5%] right-[5%] h-[1px]"
             style={{
-              background: `linear-gradient(90deg, transparent, rgba(255,255,255,${0.03 + scrollProgress * 0.09}) 20%, rgba(200,220,255,${0.05 + scrollProgress * 0.13}) 40%, rgba(255,255,255,${0.06 + scrollProgress * 0.16}) 50%, rgba(200,220,255,${0.05 + scrollProgress * 0.13}) 60%, rgba(255,255,255,${0.03 + scrollProgress * 0.09}) 80%, transparent)`,
+              background: `linear-gradient(90deg, transparent, rgba(255,255,255,${0.02 + scrollProgress * 0.10}) 15%, rgba(200,220,255,${0.04 + scrollProgress * 0.14}) 35%, rgba(255,255,255,${0.06 + scrollProgress * 0.18}) 50%, rgba(200,220,255,${0.04 + scrollProgress * 0.14}) 65%, rgba(255,255,255,${0.02 + scrollProgress * 0.10}) 85%, transparent)`,
             }}
           />
 
           {/* ── Secondary refraction band — prismatic light scatter ── */}
           <div
-            className="pointer-events-none absolute top-[1px] left-[12%] right-[12%] h-[1px]"
+            className="pointer-events-none absolute top-[1px] left-[10%] right-[10%] h-[1px]"
             style={{
-              background: `linear-gradient(90deg, transparent, rgba(139,92,246,${scrollProgress * 0.035}) 25%, rgba(45,140,240,${scrollProgress * 0.05}) 45%, rgba(20,184,166,${scrollProgress * 0.04}) 55%, rgba(139,92,246,${scrollProgress * 0.035}) 75%, transparent)`,
+              background: `linear-gradient(90deg, transparent, rgba(99,102,241,${scrollProgress * 0.04}) 20%, rgba(139,92,246,${scrollProgress * 0.05}) 35%, rgba(45,140,240,${scrollProgress * 0.06}) 50%, rgba(20,184,166,${scrollProgress * 0.05}) 65%, rgba(99,102,241,${scrollProgress * 0.04}) 80%, transparent)`,
               opacity: scrollProgress,
             }}
           />
 
           {/* ── Tertiary refraction — ultra-subtle warm band for color depth ── */}
           <div
-            className="pointer-events-none absolute top-[2px] left-[20%] right-[20%] h-[1px]"
+            className="pointer-events-none absolute top-[2px] left-[18%] right-[18%] h-[1px]"
             style={{
-              background: `linear-gradient(90deg, transparent, rgba(245,158,11,${scrollProgress * 0.02}) 40%, rgba(245,158,11,${scrollProgress * 0.02}) 60%, transparent)`,
-              opacity: scrollProgress * 0.6,
+              background: `linear-gradient(90deg, transparent, rgba(245,158,11,${scrollProgress * 0.02}) 35%, rgba(245,158,11,${scrollProgress * 0.02}) 65%, transparent)`,
+              opacity: scrollProgress * 0.5,
             }}
           />
 
-          {/* ── Animated gradient border bottom — tri-layer with prismatic flow ── */}
+          {/* ── Animated gradient border bottom — quad-layer with prismatic flow ── */}
           <div
             className="pointer-events-none absolute bottom-0 left-0 right-0 rounded-b-2xl overflow-hidden"
             style={{ height: '2px' }}
           >
-            {/* Primary rotating gradient — expanded color palette */}
+            {/* Primary rotating gradient — expanded color palette with indigo bridge */}
             <div
               className="absolute inset-0"
               style={{
-                background: `linear-gradient(90deg, #3b82f6 0%, #6366f1 15%, #8b5cf6 30%, #a855f7 42%, #14b8a6 58%, #06b6d4 72%, #3b82f6 100%)`,
-                backgroundSize: '250% 100%',
-                animation: 'navbar-border-flow 5s linear infinite',
+                background: `linear-gradient(90deg, #3b82f6 0%, #6366f1 12%, #8b5cf6 25%, #a855f7 37%, #14b8a6 50%, #06b6d4 62%, #3b82f6 75%, #6366f1 87%, #8b5cf6 100%)`,
+                backgroundSize: '300% 100%',
+                animation: 'navbar-border-flow 6s linear infinite',
               }}
             />
             {/* Fade mask — refined center fade for edge emphasis */}
             <div
               className="absolute inset-0"
               style={{
-                background: `linear-gradient(90deg, transparent 0%, rgba(4,6,15,0.25) 10%, rgba(4,6,15,0.55) 35%, rgba(4,6,15,0.65) 50%, rgba(4,6,15,0.55) 65%, rgba(4,6,15,0.25) 90%, transparent 100%)`,
+                background: `linear-gradient(90deg, transparent 0%, rgba(4,6,15,0.20) 8%, rgba(4,6,15,0.50) 30%, rgba(4,6,15,0.60) 50%, rgba(4,6,15,0.50) 70%, rgba(4,6,15,0.20) 92%, transparent 100%)`,
               }}
             />
-            {/* Traveling shimmer highlight — brighter core with wider spread */}
+            {/* Traveling shimmer highlight — wider spread with softer core */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(90deg, transparent 0%, transparent 25%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.6) 55%, transparent 75%, transparent 100%)',
-                animation: 'navbar-shimmer 7s ease-in-out infinite',
+                  'linear-gradient(90deg, transparent 0%, transparent 20%, rgba(255,255,255,0.50) 40%, rgba(255,255,255,0.65) 50%, rgba(255,255,255,0.50) 60%, transparent 80%, transparent 100%)',
+                animation: 'navbar-shimmer 8s ease-in-out infinite',
+              }}
+            />
+            {/* Fourth layer: slow color-pulsing ambient band for depth shimmer */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(90deg, transparent, rgba(99,102,241,0.12) 25%, rgba(139,92,246,0.18) 50%, rgba(99,102,241,0.12) 75%, transparent)`,
+                animation: 'navbar-border-flow 12s linear infinite reverse',
+                opacity: 0.4 + scrollProgress * 0.6,
               }}
             />
           </div>
@@ -209,9 +245,9 @@ export default function Navbar() {
           >
             {/* Logo ambient glow — wider, softer radial with multi-hue bleed */}
             <span
-              className="absolute -inset-5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"
+              className="absolute -inset-6 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"
               style={{
-                background: 'radial-gradient(ellipse at 30% 50%, rgba(139,92,246,0.12) 0%, rgba(45,140,240,0.06) 35%, rgba(20,184,166,0.03) 60%, transparent 75%)',
+                background: 'radial-gradient(ellipse at 30% 50%, rgba(99,102,241,0.14) 0%, rgba(139,92,246,0.07) 30%, rgba(45,140,240,0.05) 50%, rgba(20,184,166,0.03) 70%, transparent 80%)',
               }}
             />
 
@@ -219,23 +255,39 @@ export default function Navbar() {
             <span
               className="absolute -inset-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:scale-[1.03]"
               style={{
-                border: '1px solid rgba(139,92,246,0.12)',
-                background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.04) 0%, transparent 70%)',
-                boxShadow: 'inset 0 0 12px rgba(139,92,246,0.03)',
+                border: '1px solid rgba(99,102,241,0.14)',
+                background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.05) 0%, rgba(139,92,246,0.03) 40%, transparent 70%)',
+                boxShadow: 'inset 0 0 16px rgba(99,102,241,0.04), inset 0 0 32px rgba(139,92,246,0.02)',
               }}
             />
+
+            {/* Logo hover light sweep effect */}
+            <span
+              className="absolute inset-0 rounded-lg overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{
+                animation: 'navbar-logo-sweep 3s ease-in-out infinite',
+              }}
+            >
+              <span
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.06) 55%, transparent 70%)',
+                  animation: 'navbar-logo-sweep-move 3s ease-in-out infinite',
+                }}
+              />
+            </span>
 
             {/* "Hang" text — expanded gradient with richer color stops */}
             <span
               className="relative text-lg font-bold tracking-wide transition-all duration-500 ease-out group-hover:scale-[1.04] group-hover:tracking-wider"
               style={{
-                background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 15%, #a78bfa 30%, #c084fc 45%, #e879f9 55%, #a78bfa 70%, #818cf8 85%, #60a5fa 100%)',
+                background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 12%, #a78bfa 24%, #c084fc 36%, #e879f9 48%, #c084fc 60%, #a78bfa 72%, #818cf8 84%, #60a5fa 100%)',
                 backgroundSize: '400% 400%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
                 animation: 'navbar-logo-gradient 10s ease infinite',
-                filter: `drop-shadow(0 0 ${8 + scrollProgress * 8}px rgba(139, 92, 246, ${0.18 + scrollProgress * 0.18})) drop-shadow(0 0 ${16 + scrollProgress * 12}px rgba(45, 140, 240, ${scrollProgress * 0.08}))`,
+                filter: `drop-shadow(0 0 ${6 + scrollProgress * 10}px rgba(99, 102, 241, ${0.15 + scrollProgress * 0.20})) drop-shadow(0 0 ${14 + scrollProgress * 14}px rgba(139, 92, 246, ${scrollProgress * 0.10}))`,
               }}
             >
               Hang
@@ -245,8 +297,8 @@ export default function Navbar() {
             <span
               className="relative w-[3.5px] h-[3.5px] rounded-full opacity-40 group-hover:opacity-90 transition-all duration-500 group-hover:scale-125"
               style={{
-                background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-                boxShadow: '0 0 4px rgba(139,92,246,0.35), 0 0 8px rgba(45,140,240,0.15)',
+                background: 'linear-gradient(135deg, #818cf8, #3b82f6)',
+                boxShadow: '0 0 5px rgba(99,102,241,0.40), 0 0 10px rgba(45,140,240,0.18)',
               }}
             />
 
@@ -254,13 +306,13 @@ export default function Navbar() {
             <span
               className="relative text-base font-light tracking-wide"
               style={{
-                background: 'linear-gradient(135deg, #94a3b8 0%, #c8d3e3 25%, #e2e8f0 40%, #d1d9e6 55%, #94a3b8 80%, #7c8aa6 100%)',
-                backgroundSize: '300% 300%',
+                background: 'linear-gradient(135deg, #94a3b8 0%, #c8d3e3 20%, #e2e8f0 38%, #d1d9e6 52%, #b0bfd4 68%, #94a3b8 84%, #7c8aa6 100%)',
+                backgroundSize: '350% 350%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                animation: 'navbar-logo-subtle 12s ease infinite',
-                filter: 'drop-shadow(0 0 4px rgba(148, 163, 184, 0.15)) drop-shadow(0 0 12px rgba(200, 211, 227, 0.06))',
+                animation: 'navbar-logo-subtle 14s ease infinite',
+                filter: 'drop-shadow(0 0 5px rgba(148, 163, 184, 0.18)) drop-shadow(0 0 14px rgba(200, 211, 227, 0.08))',
               }}
             >
               Portfolio
@@ -271,8 +323,8 @@ export default function Navbar() {
               className="absolute -bottom-1.5 left-0 h-[1.5px] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out"
               style={{
                 width: '100%',
-                background: 'linear-gradient(90deg, rgba(20,184,166,0.15), rgba(139,92,246,0.35), rgba(59,130,246,0.45), rgba(139,92,246,0.35), rgba(20,184,166,0.15))',
-                boxShadow: '0 0 8px rgba(139,92,246,0.15)',
+                background: 'linear-gradient(90deg, rgba(20,184,166,0.12), rgba(99,102,241,0.30), rgba(139,92,246,0.40), rgba(59,130,246,0.45), rgba(139,92,246,0.40), rgba(99,102,241,0.30), rgba(20,184,166,0.12))',
+                boxShadow: '0 0 10px rgba(99,102,241,0.18)',
               }}
             />
           </Link>
@@ -297,17 +349,17 @@ export default function Navbar() {
                         layoutId="navbar-active-indicator"
                         className="absolute inset-0 rounded-lg"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(139,92,246,0.14) 0%, rgba(45,140,240,0.08) 40%, rgba(20,184,166,0.10) 70%, rgba(139,92,246,0.06) 100%)',
+                          background: 'linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(139,92,246,0.10) 30%, rgba(45,140,240,0.08) 60%, rgba(20,184,166,0.10) 100%)',
                           boxShadow: [
-                            'inset 0 1px 0 rgba(255,255,255,0.14)',
+                            'inset 0 1px 0 rgba(255,255,255,0.16)',
                             'inset 0 -1px 0 rgba(0,0,0,0.06)',
-                            'inset 0 0 0 1px rgba(255,255,255,0.08)',
-                            '0 0 20px rgba(139,92,246,0.06)',
-                            '0 0 8px rgba(139,92,246,0.10)',
-                            '0 0 40px rgba(45,140,240,0.03)',
+                            'inset 0 0 0 1px rgba(255,255,255,0.10)',
+                            '0 0 24px rgba(99,102,241,0.08)',
+                            '0 0 10px rgba(139,92,246,0.12)',
+                            '0 0 48px rgba(45,140,240,0.04)',
                           ].join(', '),
                         }}
-                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                       />
                     )}
 
@@ -316,7 +368,7 @@ export default function Navbar() {
                       <span
                         className="absolute inset-0 rounded-lg opacity-0 group-hover/nav:opacity-100 transition-opacity duration-300 ease-out"
                         style={{
-                          background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.04) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.01) 100%)',
+                          background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.05) 0%, rgba(139,92,246,0.03) 40%, rgba(255,255,255,0.02) 70%, rgba(255,255,255,0.01) 100%)',
                         }}
                       />
                     )}
@@ -331,29 +383,30 @@ export default function Navbar() {
                       style={
                         active
                           ? {
-                              background: 'linear-gradient(90deg, #3b82f6, #8b5cf6 40%, #a855f7 60%, #14b8a6)',
-                              boxShadow: '0 0 6px rgba(139,92,246,0.50), 0 0 16px rgba(59,130,246,0.20), 0 0 32px rgba(139,92,246,0.08)',
+                              background: 'linear-gradient(90deg, #3b82f6, #6366f1 25%, #8b5cf6 50%, #a855f7 75%, #14b8a6)',
+                              boxShadow: '0 0 6px rgba(99,102,241,0.50), 0 0 18px rgba(139,92,246,0.25), 0 0 36px rgba(99,102,241,0.10)',
                             }
-                          : { background: 'linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.50), rgba(255,255,255,0.12))' }
+                          : { background: 'linear-gradient(90deg, rgba(255,255,255,0.10), rgba(255,255,255,0.48), rgba(255,255,255,0.10))' }
                       }
                     />
                   </Link>
 
-                  {/* Active route glowing dot — refined multi-layer pulse */}
+                  {/* Active route glowing dot — refined multi-layer pulse with aurora colors */}
                   {active && (
                     <motion.span
                       layoutId="navbar-glowing-dot"
                       className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
                       style={{
-                        background: 'radial-gradient(circle, #ede9fe 0%, #c4b5fd 20%, #8b5cf6 45%, rgba(139,92,246,0.30) 70%, transparent 100%)',
+                        background: 'radial-gradient(circle, #e0e7ff 0%, #c7d2fe 18%, #a5b4fc 32%, #818cf8 48%, rgba(99,102,241,0.35) 68%, transparent 100%)',
                         boxShadow: [
-                          '0 0 2px 1px rgba(139, 92, 246, 0.55)',
-                          '0 0 8px 2px rgba(139, 92, 246, 0.25)',
-                          '0 0 20px 4px rgba(139, 92, 246, 0.08)',
+                          '0 0 2px 1px rgba(99, 102, 241, 0.60)',
+                          '0 0 8px 2px rgba(99, 102, 241, 0.30)',
+                          '0 0 20px 4px rgba(139, 92, 246, 0.12)',
+                          '0 0 40px 6px rgba(99, 102, 241, 0.05)',
                         ].join(', '),
                         animation: 'navbar-dot-pulse 3.5s ease-in-out infinite',
                       }}
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                     />
                   )}
                 </li>
@@ -369,7 +422,7 @@ export default function Navbar() {
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLElement;
               el.style.background = 'rgba(255,255,255,0.05)';
-              el.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,0.06)';
+              el.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,0.08)';
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLElement;
@@ -386,7 +439,7 @@ export default function Navbar() {
                   rotate: mobileMenuOpen ? 45 : 0,
                   y: mobileMenuOpen ? 0 : -5,
                 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               />
               <motion.span
                 className="absolute block w-5 h-[1.5px] bg-current rounded-full origin-center"
@@ -394,7 +447,7 @@ export default function Navbar() {
                   opacity: mobileMenuOpen ? 0 : 1,
                   scaleX: mobileMenuOpen ? 0.3 : 1,
                 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               />
               <motion.span
                 className="absolute block w-5 h-[1.5px] bg-current rounded-full origin-center"
@@ -402,7 +455,7 @@ export default function Navbar() {
                   rotate: mobileMenuOpen ? -45 : 0,
                   y: mobileMenuOpen ? 0 : 5,
                 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               />
             </div>
 
@@ -417,7 +470,7 @@ export default function Navbar() {
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="absolute inset-0 rounded-xl pointer-events-none"
                     style={{
-                      border: '1px solid rgba(139,92,246,0.25)',
+                      border: '1px solid rgba(99,102,241,0.30)',
                     }}
                   />
                   <motion.span
@@ -427,7 +480,7 @@ export default function Navbar() {
                     transition={{ duration: 0.6, ease: 'easeOut', delay: 0.05 }}
                     className="absolute inset-0 rounded-xl pointer-events-none"
                     style={{
-                      border: '1px solid rgba(45,140,240,0.12)',
+                      border: '1px solid rgba(139,92,246,0.15)',
                     }}
                   />
                 </>
@@ -440,33 +493,36 @@ export default function Navbar() {
         <AnimatePresence mode="wait">
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+              initial={{ opacity: 0, height: 0, scaleY: 0.95 }}
+              animate={{ opacity: 1, height: 'auto', scaleY: 1 }}
+              exit={{ opacity: 0, height: 0, scaleY: 0.95 }}
               transition={{
-                duration: 0.5,
+                duration: 0.55,
                 ease: [0.22, 1, 0.36, 1],
-                opacity: { duration: 0.25, delay: 0.05 },
+                opacity: { duration: 0.2, delay: 0.08 },
+                height: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                scaleY: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
               }}
-              className="md:hidden overflow-hidden relative"
+              className="md:hidden overflow-hidden relative origin-top"
               style={{
-                backgroundColor: `rgba(${bgR}, ${bgG}, ${bgB}, 0.92)`,
-                backdropFilter: 'blur(40px) saturate(1.8)',
-                WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
+                backgroundColor: `rgba(${bgR}, ${bgG}, ${bgB}, 0.93)`,
+                backdropFilter: 'blur(44px) saturate(1.9)',
+                WebkitBackdropFilter: 'blur(44px) saturate(1.9)',
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderTopWidth: '0px',
                 borderBottomLeftRadius: '1rem',
                 borderBottomRightRadius: '1rem',
-                borderLeftColor: `rgba(255,255,255,${glassBorderOpacity * 0.45})`,
-                borderRightColor: `rgba(255,255,255,${glassBorderOpacity * 0.45})`,
-                borderBottomColor: `rgba(255,255,255,${glassBorderOpacity * 0.8})`,
+                borderLeftColor: `rgba(255,255,255,${glassBorderOpacity * 0.40})`,
+                borderRightColor: `rgba(255,255,255,${glassBorderOpacity * 0.40})`,
+                borderBottomColor: `rgba(255,255,255,${glassBorderOpacity * 0.75})`,
                 boxShadow: [
-                  `0 16px 48px rgba(0,0,0,0.40)`,
-                  `0 6px 16px rgba(0,0,0,0.25)`,
-                  `inset 0 1px 0 rgba(255,255,255,0.07)`,
-                  `0 0 60px -12px rgba(139,92,246,0.06)`,
-                  `0 0 40px -8px rgba(45,140,240,0.04)`,
+                  `0 20px 56px rgba(0,0,0,0.42)`,
+                  `0 8px 20px rgba(0,0,0,0.28)`,
+                  `inset 0 1px 0 rgba(255,255,255,0.08)`,
+                  `0 0 70px -12px rgba(99,102,241,0.08)`,
+                  `0 0 48px -8px rgba(139,92,246,0.05)`,
+                  `0 0 90px -16px rgba(20,184,166,0.03)`,
                 ].join(', '),
               }}
             >
@@ -474,8 +530,8 @@ export default function Navbar() {
               <div
                 className="pointer-events-none absolute inset-0 rounded-b-2xl"
                 style={{
-                  opacity: 0.02,
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                  opacity: 0.018,
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
                   mixBlendMode: 'overlay',
                 }}
               />
@@ -488,23 +544,23 @@ export default function Navbar() {
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(90deg, #3b82f6 0%, #6366f1 15%, #8b5cf6 30%, #a855f7 42%, #14b8a6 58%, #06b6d4 72%, #3b82f6 100%)`,
-                    backgroundSize: '250% 100%',
-                    animation: 'navbar-border-flow 5s linear infinite',
+                    background: `linear-gradient(90deg, #3b82f6 0%, #6366f1 12%, #8b5cf6 25%, #a855f7 37%, #14b8a6 50%, #06b6d4 62%, #3b82f6 75%, #6366f1 87%, #8b5cf6 100%)`,
+                    backgroundSize: '300% 100%',
+                    animation: 'navbar-border-flow 6s linear infinite',
                   }}
                 />
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(90deg, transparent 0%, rgba(4,6,15,0.3) 12%, rgba(4,6,15,0.55) 35%, rgba(4,6,15,0.60) 50%, rgba(4,6,15,0.55) 65%, rgba(4,6,15,0.3) 88%, transparent 100%)`,
+                    background: `linear-gradient(90deg, transparent 0%, rgba(4,6,15,0.25) 10%, rgba(4,6,15,0.55) 35%, rgba(4,6,15,0.60) 50%, rgba(4,6,15,0.55) 65%, rgba(4,6,15,0.25) 90%, transparent 100%)`,
                   }}
                 />
                 <div
                   className="absolute inset-0"
                   style={{
                     background:
-                      'linear-gradient(90deg, transparent 0%, transparent 25%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0.65) 50%, rgba(255,255,255,0.5) 55%, transparent 75%, transparent 100%)',
-                    animation: 'navbar-shimmer 7s ease-in-out infinite',
+                      'linear-gradient(90deg, transparent 0%, transparent 20%, rgba(255,255,255,0.45) 40%, rgba(255,255,255,0.60) 50%, rgba(255,255,255,0.45) 60%, transparent 80%, transparent 100%)',
+                    animation: 'navbar-shimmer 8s ease-in-out infinite',
                   }}
                 />
               </div>
@@ -513,7 +569,7 @@ export default function Navbar() {
               <div
                 className="mx-6 h-[1px]"
                 style={{
-                  background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.04) 15%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.06) 70%, rgba(45,140,240,0.04) 85%, transparent)',
+                  background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.05) 12%, rgba(139,92,246,0.06) 28%, rgba(255,255,255,0.08) 50%, rgba(139,92,246,0.06) 72%, rgba(45,140,240,0.05) 88%, transparent)',
                 }}
               />
 
@@ -523,12 +579,12 @@ export default function Navbar() {
                   return (
                     <motion.li
                       key={link.href}
-                      initial={{ opacity: 0, x: -20, filter: 'blur(6px)' }}
+                      initial={{ opacity: 0, x: -16, filter: 'blur(8px)' }}
                       animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, x: -20, filter: 'blur(6px)' }}
+                      exit={{ opacity: 0, x: -16, filter: 'blur(8px)' }}
                       transition={{
-                        duration: 0.45,
-                        delay: 0.06 + index * 0.07,
+                        duration: 0.5,
+                        delay: 0.08 + index * 0.06,
                         ease: [0.22, 1, 0.36, 1],
                       }}
                     >
@@ -542,12 +598,12 @@ export default function Navbar() {
                         style={
                           active
                             ? {
-                                background: 'linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(45,140,240,0.07) 40%, rgba(20,184,166,0.09) 70%, rgba(139,92,246,0.05) 100%)',
+                                background: 'linear-gradient(135deg, rgba(99,102,241,0.14) 0%, rgba(139,92,246,0.09) 35%, rgba(45,140,240,0.07) 65%, rgba(20,184,166,0.09) 100%)',
                                 boxShadow: [
-                                  'inset 0 1px 0 rgba(255,255,255,0.12)',
-                                  'inset 0 0 0 1px rgba(255,255,255,0.07)',
-                                  '0 0 24px rgba(139,92,246,0.05)',
-                                  '0 0 48px rgba(45,140,240,0.02)',
+                                  'inset 0 1px 0 rgba(255,255,255,0.14)',
+                                  'inset 0 0 0 1px rgba(255,255,255,0.09)',
+                                  '0 0 28px rgba(99,102,241,0.06)',
+                                  '0 0 56px rgba(139,92,246,0.03)',
                                 ].join(', '),
                               }
                             : {}
@@ -561,14 +617,14 @@ export default function Navbar() {
                               layoutId="navbar-mobile-active-bar"
                               className="w-[3px] h-4 rounded-full"
                               style={{
-                                background: 'linear-gradient(180deg, #60a5fa 0%, #818cf8 25%, #8b5cf6 50%, #a855f7 75%, #14b8a6 100%)',
+                                background: 'linear-gradient(180deg, #60a5fa 0%, #818cf8 20%, #8b5cf6 40%, #a855f7 60%, #14b8a6 80%, #06b6d4 100%)',
                                 boxShadow: [
-                                  '0 0 6px rgba(139,92,246,0.50)',
-                                  '0 0 2px rgba(96,165,250,0.35)',
-                                  '0 0 12px rgba(139,92,246,0.15)',
+                                  '0 0 6px rgba(99,102,241,0.55)',
+                                  '0 0 3px rgba(96,165,250,0.40)',
+                                  '0 0 14px rgba(139,92,246,0.18)',
                                 ].join(', '),
                               }}
-                              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                             />
                           )}
                           {link.label}
@@ -576,10 +632,10 @@ export default function Navbar() {
                             <span
                               className="ml-auto w-1.5 h-1.5 rounded-full"
                               style={{
-                                background: 'radial-gradient(circle, #ede9fe 0%, #c4b5fd 20%, #8b5cf6 45%, rgba(139,92,246,0.35) 65%, transparent 100%)',
+                                background: 'radial-gradient(circle, #e0e7ff 0%, #c7d2fe 18%, #a5b4fc 35%, #818cf8 50%, rgba(99,102,241,0.40) 70%, transparent 100%)',
                                 boxShadow: [
-                                  '0 0 3px 1px rgba(139, 92, 246, 0.40)',
-                                  '0 0 8px 2px rgba(139, 92, 246, 0.15)',
+                                  '0 0 3px 1px rgba(99, 102, 241, 0.45)',
+                                  '0 0 10px 2px rgba(99, 102, 241, 0.18)',
                                 ].join(', '),
                                 animation: 'navbar-dot-pulse 3.5s ease-in-out infinite',
                               }}
@@ -598,8 +654,8 @@ export default function Navbar() {
         {/* ── Scoped keyframes — refined timing and motion curves ── */}
         <style dangerouslySetInnerHTML={{ __html: `
           @keyframes navbar-shimmer {
-            0% { transform: translateX(-250%); }
-            100% { transform: translateX(250%); }
+            0% { transform: translateX(-300%); }
+            100% { transform: translateX(300%); }
           }
           @keyframes navbar-logo-gradient {
             0% { background-position: 0% 50%; }
@@ -615,17 +671,26 @@ export default function Navbar() {
           }
           @keyframes navbar-border-flow {
             0% { background-position: 0% 50%; }
-            100% { background-position: 250% 50%; }
+            100% { background-position: 300% 50%; }
           }
           @keyframes navbar-dot-pulse {
             0%, 100% {
-              opacity: 0.55;
+              opacity: 0.50;
               transform: translateX(-50%) scale(1);
             }
             50% {
               opacity: 1;
-              transform: translateX(-50%) scale(1.4);
+              transform: translateX(-50%) scale(1.5);
             }
+          }
+          @keyframes navbar-conic-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          @keyframes navbar-logo-sweep-move {
+            0% { transform: translateX(-120%); }
+            40% { transform: translateX(120%); }
+            100% { transform: translateX(120%); }
           }
         `}} />
       </nav>

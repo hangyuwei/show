@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   GLOBAL CSS — Portfolio Design System v2
+   GLOBAL CSS — Portfolio Design System v3 (Final Polish)
    Foundation layer: tokens, gradients, glass, glow, utilities
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -16,10 +16,10 @@
     ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
     'Liberation Mono', monospace;
 
-  /* ── Core palette — deeper, richer navy with indigo undertones ── */
+  /* ── Core palette — deeper, richer navy with indigo undertones + subtle warmth ── */
   --background: #03050d;
-  --background-mid: #070a1c;
-  --background-end: #0a0f28;
+  --background-mid: #070a1e;
+  --background-end: #0a1029;
   --background-deep: #020208;
   --foreground: #e4e9f7;
   --foreground-bright: #f6f8ff;
@@ -58,6 +58,13 @@
   --accent-teal-dim: #0d9488;
   --accent-teal-glow: rgba(20, 184, 166, 0.35);
   --accent-teal-soft: rgba(20, 184, 166, 0.12);
+
+  /* ── Indigo accent — bridges blue-purple gap, used throughout components ── */
+  --accent-indigo: #6366f1;
+  --accent-indigo-dim: #4f46e5;
+  --accent-indigo-glow: rgba(99, 102, 241, 0.35);
+  --accent-indigo-soft: rgba(99, 102, 241, 0.12);
+  --accent-indigo-luminous: #818cf8;
 
   /* ── Warm accent (gold / amber) for highlights ── */
   --accent-warm: #f59e0b;
@@ -212,6 +219,8 @@
   --glass-bg-teal-hover: rgba(10, 24, 50, 0.70);
   --glass-bg-warm: rgba(20, 14, 8, 0.55);
   --glass-bg-warm-hover: rgba(26, 18, 10, 0.70);
+  --glass-bg-indigo: rgba(12, 10, 48, 0.55);
+  --glass-bg-indigo-hover: rgba(16, 14, 60, 0.70);
 
   /* ════════════════════════════════════════════════════════════════
      GLOW SYSTEM — Layered radial/box glow presets (v4 — 4 tiers)
@@ -251,6 +260,15 @@
   --glow-warm-strong: 0 0 16px rgba(245, 158, 11, 0.40),
     0 0 48px rgba(245, 158, 11, 0.15),
     0 0 80px rgba(245, 158, 11, 0.06);
+  --glow-indigo: 0 0 12px rgba(99, 102, 241, 0.25),
+    0 0 36px rgba(99, 102, 241, 0.10);
+  --glow-indigo-strong: 0 0 16px rgba(99, 102, 241, 0.40),
+    0 0 48px rgba(99, 102, 241, 0.15),
+    0 0 80px rgba(99, 102, 241, 0.06);
+  --glow-indigo-ultra: 0 0 24px rgba(99, 102, 241, 0.60),
+    0 0 64px rgba(99, 102, 241, 0.35),
+    0 0 120px rgba(99, 102, 241, 0.18),
+    0 0 200px rgba(99, 102, 241, 0.06);
   --glow-rose: 0 0 12px rgba(244, 63, 94, 0.25),
     0 0 36px rgba(244, 63, 94, 0.10);
   --glow-rose-strong: 0 0 16px rgba(244, 63, 94, 0.40),
@@ -282,6 +300,10 @@
     0 0 12px rgba(20, 184, 166, 0.50),
     0 0 32px rgba(20, 184, 166, 0.25),
     0 0 64px rgba(20, 184, 166, 0.10);
+  --glow-neon-indigo: 0 0 4px rgba(99, 102, 241, 0.80),
+    0 0 12px rgba(99, 102, 241, 0.50),
+    0 0 32px rgba(99, 102, 241, 0.25),
+    0 0 64px rgba(99, 102, 241, 0.10);
 
   /* ── Text glow presets ── */
   --text-glow-blue: 0 0 20px rgba(45, 140, 240, 0.5),
@@ -290,6 +312,9 @@
   --text-glow-purple: 0 0 20px rgba(139, 92, 246, 0.5),
     0 0 60px rgba(139, 92, 246, 0.25),
     0 0 120px rgba(139, 92, 246, 0.10);
+  --text-glow-indigo: 0 0 20px rgba(99, 102, 241, 0.5),
+    0 0 60px rgba(99, 102, 241, 0.25),
+    0 0 120px rgba(99, 102, 241, 0.10);
   --text-glow-aurora: 0 0 16px rgba(96, 165, 250, 0.45),
     0 0 40px rgba(139, 92, 246, 0.25),
     0 0 80px rgba(45, 212, 191, 0.12),
@@ -299,15 +324,15 @@
      GRADIENT SYSTEM — Rich, multi-stop gradient presets
      ════════════════════════════════════════════════════════════════ */
 
-  /* Primary background gradient — five-stop depth with richer midpoint */
+  /* Primary background gradient — six-stop depth with richer midpoint and warmer fade */
   --gradient-bg: linear-gradient(
     170deg,
     var(--background) 0%,
-    var(--background-mid) 30%,
-    #08102a 50%,
-    var(--background-end) 70%,
-    #0b0d22 88%,
-    #0c0e24 100%
+    var(--background-mid) 28%,
+    #08102c 48%,
+    var(--background-end) 68%,
+    #0b0d24 86%,
+    #0c0f26 100%
   );
 
   /* Soft vertical gradient for page sections */
@@ -352,9 +377,15 @@
   --gradient-hero-title: linear-gradient(
     135deg,
     #ffffff 0%,
-    #c7d2fe 30%,
-    #a5b4fc 50%,
-    #c7d2fe 70%,
+    #e0e7ff 12%,
+    #c7d2fe 25%,
+    #a5b4fc 38%,
+    #818cf8 48%,
+    #93c5fd 56%,
+    #a78bfa 64%,
+    #c4b5fd 75%,
+    #bae6fd 86%,
+    #e0e7ff 94%,
     #ffffff 100%
   );
   --gradient-rainbow: linear-gradient(
@@ -380,6 +411,11 @@
   --gradient-radial-teal: radial-gradient(
     ellipse 60% 50% at 50% 50%,
     rgba(20, 184, 166, 0.10) 0%,
+    transparent 70%
+  );
+  --gradient-radial-indigo: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    rgba(99, 102, 241, 0.10) 0%,
     transparent 70%
   );
 
@@ -471,6 +507,8 @@
   --ease-jelly: cubic-bezier(0.5, 1.5, 0.5, 0.9);
   --ease-dramatic: cubic-bezier(0.12, 0.9, 0.2, 1);
   --ease-luxury: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-circ: cubic-bezier(0, 0, 0.2, 1);
+  --duration-micro: 50ms;
   --duration-instant: 75ms;
   --duration-fast: 150ms;
   --duration-normal: 300ms;
@@ -538,6 +576,7 @@
   --color-accent-orange: #f97316;
   --color-accent-gold: #eab308;
   --color-accent-teal: var(--accent-teal);
+  --color-accent-indigo: var(--accent-indigo);
   --color-accent-warm: var(--accent-warm);
   --color-accent-rose: var(--accent-rose);
 
@@ -729,7 +768,7 @@ h2 {
   font-size: var(--text-4xl);
   line-height: var(--leading-4xl);
   font-weight: var(--weight-extrabold);
-  letter-spacing: -0.018em;
+  letter-spacing: -0.022em;
 }
 h3 {
   font-size: var(--text-3xl);
@@ -929,7 +968,7 @@ section {
 /* ── Section heading — lighter depth for in-page section titles ── */
 .heading-section {
   font-weight: var(--weight-extrabold);
-  letter-spacing: -0.018em;
+  letter-spacing: -0.022em;
   line-height: 1.1;
   text-shadow:
     0 0 1px rgba(255, 255, 255, 0.05),
@@ -1164,6 +1203,25 @@ section {
   box-shadow: var(--glass-shadow-premium-hover), var(--glass-aurora-inner-glow);
 }
 
+/* Tinted glass — indigo undertone for indigo-accent panels */
+.glass-indigo {
+  background: var(--glass-bg-indigo);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow);
+  transition:
+    background var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-indigo:hover {
+  background: var(--glass-bg-indigo-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-inner-shadow), var(--glass-shadow-hover);
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════
    GLOW Utilities
@@ -1187,11 +1245,15 @@ section {
 .glow-multicolor  { box-shadow: var(--glow-multicolor); }
 .glow-multicolor-strong { box-shadow: var(--glow-multicolor-strong); }
 .glow-multicolor-ultra { box-shadow: var(--glow-multicolor-ultra); }
+.glow-indigo      { box-shadow: var(--glow-indigo); }
+.glow-indigo-strong { box-shadow: var(--glow-indigo-strong); }
+.glow-indigo-ultra { box-shadow: var(--glow-indigo-ultra); }
 
 /* ── Neon glow — saturated edge glow for emphasis states ── */
 .glow-neon-blue   { box-shadow: var(--glow-neon-blue); }
 .glow-neon-purple { box-shadow: var(--glow-neon-purple); }
 .glow-neon-teal   { box-shadow: var(--glow-neon-teal); }
+.glow-neon-indigo { box-shadow: var(--glow-neon-indigo); }
 
 /* ── Animated glow — pulsing box-shadow ── */
 .glow-pulse-blue {
@@ -1289,6 +1351,13 @@ section {
 }
 .glow-hover-multicolor:hover {
   box-shadow: var(--glow-multicolor-strong);
+}
+
+.glow-hover-indigo {
+  transition: box-shadow var(--duration-slow) var(--ease-out-expo);
+}
+.glow-hover-indigo:hover {
+  box-shadow: var(--glow-indigo-strong);
 }
 
 
@@ -1498,13 +1567,13 @@ section {
    ═══════════════════════════════════════════════════════════════════ */
 
 ::selection {
-  background: rgba(45, 140, 240, 0.30);
+  background: rgba(99, 102, 241, 0.35);
   color: #ffffff;
   text-shadow: none;
 }
 
 ::-moz-selection {
-  background: rgba(45, 140, 240, 0.30);
+  background: rgba(99, 102, 241, 0.35);
   color: #ffffff;
   text-shadow: none;
 }
@@ -1524,19 +1593,19 @@ section {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--accent-dim) 0%, rgba(20, 184, 166, 0.35) 100%);
+  background: linear-gradient(180deg, var(--accent-dim) 0%, rgba(99, 102, 241, 0.28) 50%, rgba(20, 184, 166, 0.30) 100%);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-teal) 100%);
-  box-shadow: 0 0 8px rgba(45, 140, 240, 0.25);
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-indigo) 50%, var(--accent-teal) 100%);
+  box-shadow: 0 0 8px rgba(45, 140, 240, 0.28);
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(45, 140, 240, 0.25) var(--background);
+  scrollbar-color: rgba(99, 102, 241, 0.22) var(--background);
 }
 
 
@@ -1599,6 +1668,7 @@ canvas {
     opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
     filter 0.5s ease-out;
+  transition-delay: calc(var(--reveal-delay, 0) * 1ms);
 }
 
 [data-reveal][data-revealed] {
@@ -1629,6 +1699,27 @@ canvas {
   transform: scale(1) translateY(0);
 }
 
+/* Fade-only variant — lightest reveal for text-heavy content */
+[data-reveal="fade"] {
+  transform: translateY(0);
+}
+[data-reveal="fade"][data-revealed] {
+  transform: translateY(0);
+}
+
+/* Mobile: shorter travel distance for snappier feel */
+@media (max-width: 639px) {
+  [data-reveal] {
+    transform: translateY(16px);
+  }
+  [data-reveal="left"] {
+    transform: translateX(-16px) translateY(0);
+  }
+  [data-reveal="right"] {
+    transform: translateX(16px) translateY(0);
+  }
+}
+
 /* Reduced motion: show everything immediately */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
@@ -1636,6 +1727,7 @@ canvas {
     transform: none;
     filter: none;
     transition: none;
+    transition-delay: 0s !important;
   }
 }
 
@@ -1993,4 +2085,193 @@ canvas {
     rgba(99, 102, 241, 0.30) 78%,
     transparent 100%
   );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 5 — TYPOGRAPHY FINAL PASS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Text-shadow emboss — subtle raised/etched effect on dark ── */
+.text-shadow-emboss {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06),
+    0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Aurora text glow intense — stronger version for hero emphasis ── */
+.text-shadow-glow-aurora-intense {
+  text-shadow:
+    0 0 6px rgba(96, 165, 250, 0.55),
+    0 0 18px rgba(139, 92, 246, 0.35),
+    0 0 40px rgba(99, 102, 241, 0.20),
+    0 0 72px rgba(45, 212, 191, 0.10),
+    0 0 120px rgba(96, 165, 250, 0.05);
+}
+
+/* ── Indigo text glow ── */
+.text-shadow-glow-indigo {
+  text-shadow: 0 0 20px rgba(99, 102, 241, 0.35), 0 0 60px rgba(99, 102, 241, 0.12);
+}
+.text-shadow-glow-indigo-intense {
+  text-shadow:
+    0 0 8px rgba(99, 102, 241, 0.50),
+    0 0 24px rgba(99, 102, 241, 0.30),
+    0 0 60px rgba(99, 102, 241, 0.15),
+    0 0 120px rgba(99, 102, 241, 0.06);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 5 — FINAL POLISH: Noise texture, masks, indigo orb, extras
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Noise texture — SVG fractalNoise overlay used across components ── */
+.noise-texture {
+  pointer-events: none;
+  opacity: 0.015;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ── Noise texture — heavier variant for glass panels ── */
+.noise-texture-heavy {
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ── Radial mask — fade content from center to edges ── */
+.mask-radial-center {
+  -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, black 15%, transparent 65%);
+  mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, black 15%, transparent 65%);
+}
+
+.mask-radial-top {
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 15%, black 3%, transparent 100%);
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 15%, black 3%, transparent 100%);
+}
+
+/* ── Ambient orb — indigo variant for richer depth ── */
+.ambient-orb-indigo {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+/* ── Dot grid — indigo tinted variant matching project page BG ── */
+.dot-grid-indigo {
+  background-image: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
+}
+
+/* ── Mesh gradient background — indigo variant ── */
+.bg-mesh-indigo {
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 70% 60%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+}
+
+/* ── Gradient text — indigo spectrum ── */
+.text-gradient-indigo {
+  background: linear-gradient(
+    135deg,
+    #818cf8 0%,
+    #6366f1 30%,
+    #8b5cf6 60%,
+    #818cf8 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.15));
+}
+
+/* ── Transition micro — for tooltip/popover/quick UI states ── */
+.transition-micro {
+  transition: all var(--duration-micro) var(--ease-out-circ);
+}
+
+/* ── Transition circ — circular ease-out for smooth deceleration ── */
+.transition-circ {
+  transition: all var(--duration-normal) var(--ease-out-circ);
+}
+
+/* ── Glow pulse indigo — pulsing box-shadow for indigo accents ── */
+.glow-pulse-indigo {
+  animation: glow-pulse-indigo 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse-indigo {
+  0%, 100% { box-shadow: 0 0 8px rgba(99, 102, 241, 0.15), 0 0 24px rgba(99, 102, 241, 0.06); }
+  50%       { box-shadow: 0 0 16px rgba(99, 102, 241, 0.35), 0 0 48px rgba(99, 102, 241, 0.12), 0 0 72px rgba(99, 102, 241, 0.04); }
+}
+
+/* ── Section background — refined with warmer mid-tone ── */
+.section-bg-premium {
+  background: linear-gradient(
+    180deg,
+    rgba(4, 6, 15, 0.88) 0%,
+    rgba(8, 12, 32, 0.93) 50%,
+    rgba(10, 16, 42, 0.96) 100%
+  );
+}
+
+/* ── Scrollbar — enhanced with richer gradient and indigo hint ── */
+.premium-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.premium-scrollbar::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.premium-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-dim) 0%, rgba(99, 102, 241, 0.30) 50%, rgba(20, 184, 166, 0.25) 100%);
+  border-radius: 3px;
+}
+
+.premium-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-indigo) 50%, var(--accent-teal) 100%);
+  box-shadow: 0 0 10px rgba(45, 140, 240, 0.30);
+}
+
+/* ── Heading section premium — the most refined in-page section heading ── */
+.heading-section-premium {
+  font-weight: var(--weight-black);
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 30px rgba(4, 6, 15, 0.55),
+    0 1px 3px rgba(0, 0, 0, 0.55),
+    0 4px 14px rgba(0, 0, 0, 0.25),
+    0 12px 36px rgba(99, 102, 241, 0.06);
+}
+
+/* ── Text balance utility — ensures headings wrap optimally ── */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ── Pretty utility — prevents orphans in paragraphs ── */
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* ── Tabular figures — for numeric columns and data tables ── */
+.text-tabular {
+  font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ── Proportional oldstyle figures — for elegant body text ── */
+.text-oldstyle {
+  font-feature-settings: 'onum' on, 'pnum' on, 'ss01' on;
+  font-variant-numeric: oldstyle-nums proportional-nums;
 }

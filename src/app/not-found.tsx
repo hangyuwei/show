@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, type Variants, type Transition } from 'framer-motion';
 
 const EASE_OUT_SMOOTH: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -326,9 +327,26 @@ export default function NotFound() {
   }, []);
 
   const reduced = prefersReducedMotion;
+  const router = useRouter();
+
+  /* Keyboard navigation: Backspace or H to go home */
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Backspace' || e.key === 'h' || e.key === 'H') {
+      if (e.key === 'h' || e.key === 'H') {
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      }
+      e.preventDefault();
+      router.push('/');
+    }
+  }, [router]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[80vh] md:min-h-[85vh] bg-bg-primary overflow-hidden px-4 sm:px-6">
+    <div className="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[80vh] md:min-h-[85vh] bg-bg-primary overflow-hidden px-5 sm:px-6 md:px-8">
       {/* Dot-grid background pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
@@ -370,9 +388,9 @@ export default function NotFound() {
         initial="hidden"
         animate="visible"
       >
-        {/* 404 Number — enhanced glow with multi-layer drop-shadow */}
+        {/* 404 Number — enhanced glow with multi-layer drop-shadow, responsive sizing */}
         <motion.div
-          className="text-[5.5rem] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] font-bold leading-none tracking-tighter select-none"
+          className="text-[6rem] leading-none tracking-tighter select-none sm:text-[9rem] md:text-[11rem] lg:text-[13rem]"
           style={{
             background: 'linear-gradient(135deg, #60a5fa 0%, #8b5cf6 30%, #c084fc 50%, #14b8a6 75%, #60a5fa 100%)',
             backgroundSize: '200% 200%',
@@ -391,7 +409,7 @@ export default function NotFound() {
 
         {/* Decorative line — wider with richer gradient */}
         <motion.div
-          className="mx-auto mt-4 mb-5 sm:mb-6 h-px w-28 sm:w-36"
+          className="mx-auto mt-3 mb-4 h-px w-24 sm:mt-4 sm:mb-5 sm:w-36"
           style={{
             background:
               'linear-gradient(90deg, transparent 0%, rgba(45,140,240,0.4) 15%, rgba(139,92,246,0.5) 35%, rgba(20,184,166,0.5) 65%, rgba(45,140,240,0.4) 85%, transparent 100%)',
@@ -402,7 +420,7 @@ export default function NotFound() {
 
         {/* Title */}
         <motion.h1
-          className="text-xl sm:text-2xl md:text-3xl font-bold text-text-primary mb-3"
+          className="text-xl sm:text-2xl md:text-3xl font-bold text-text-primary mb-2 sm:mb-3"
           variants={itemVariants}
         >
           Lost in Space
@@ -410,7 +428,7 @@ export default function NotFound() {
 
         {/* Description */}
         <motion.p
-          className="text-text-secondary text-sm sm:text-base md:text-lg mb-8 sm:mb-10 leading-relaxed max-w-sm mx-auto"
+          className="text-text-secondary text-sm sm:text-base md:text-lg mb-6 sm:mb-8 md:mb-10 leading-relaxed max-w-sm mx-auto"
           variants={itemVariants}
         >
           The page you are looking for has drifted beyond the stars.
@@ -419,14 +437,15 @@ export default function NotFound() {
           Let&apos;s navigate you back to known space.
         </motion.p>
 
-        {/* Actions — enhanced CTA buttons with glow */}
+        {/* Actions — enhanced CTA buttons with glow, larger touch targets on mobile */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-3"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
           variants={itemVariants}
         >
           <Link
             href="/"
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
+            className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto
+              px-7 py-3.5 sm:px-6 sm:py-3 rounded-xl text-sm font-medium
               bg-glow/20 text-white border border-glow/30
               hover:bg-glow/30 hover:border-glow/50 hover:scale-[1.03] active:scale-[0.98]
               transition-all duration-300
@@ -460,7 +479,8 @@ export default function NotFound() {
 
           <Link
             href="/projects"
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium
+            className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto
+              px-7 py-3.5 sm:px-6 sm:py-3 rounded-xl text-sm font-medium
               text-text-secondary border border-white/10
               hover:text-white hover:border-white/20 hover:bg-white/5 hover:scale-[1.03] active:scale-[0.98]
               transition-all duration-300
@@ -486,13 +506,18 @@ export default function NotFound() {
         {/* Animated coordinate readout */}
         <CoordinateReadout />
 
-        {/* Error code hint */}
-        <motion.p
-          className="mt-3 text-[10px] sm:text-xs text-white/[0.12] font-mono"
+        {/* Error code hint with keyboard shortcut */}
+        <motion.div
+          className="mt-3 flex flex-col items-center gap-1.5"
           variants={itemVariants}
         >
-          ERROR_CODE: 404 &middot; PAGE_NOT_FOUND
-        </motion.p>
+          <p className="text-[10px] sm:text-xs text-white/[0.12] font-mono">
+            ERROR_CODE: 404 &middot; PAGE_NOT_FOUND
+          </p>
+          <p className="text-[10px] sm:text-xs text-white/[0.08] font-mono hidden sm:block">
+            Press <kbd className="px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.03] text-white/[0.15] text-[9px]">Backspace</kbd> or <kbd className="px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.03] text-white/[0.15] text-[9px]">H</kbd> to go home
+          </p>
+        </motion.div>
       </motion.div>
 
       {/* Top and bottom gradient fades — taller for smoother blend */}

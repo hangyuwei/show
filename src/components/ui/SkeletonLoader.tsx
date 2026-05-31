@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { motion, type Transition } from 'framer-motion';
 
 interface SkeletonLoaderProps {
-  variant?: 'card' | 'text' | '3d' | 'image' | 'avatar' | 'wave';
+  variant?: 'card' | 'text' | '3d' | 'image' | 'avatar' | 'wave' | 'page';
   count?: number;
   className?: string;
+  /** Gap between repeated skeleton items (Tailwind class, e.g. "gap-4") */
+  gap?: string;
 }
 
 /* ── Shared easing ── */
@@ -270,7 +272,54 @@ function WaveSkeleton({ reduced }: { reduced: boolean }) {
   );
 }
 
-type SkeletonVariant = 'card' | 'text' | '3d' | 'image' | 'avatar' | 'wave';
+/* ── Page skeleton — full-page loading placeholder with hero, text, and card areas ── */
+function PageSkeleton({ reduced }: { reduced: boolean }) {
+  return (
+    <motion.div
+      className="space-y-8 sm:space-y-10 max-w-5xl mx-auto px-4 sm:px-6"
+      initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.55, ease: EASE_OUT_SMOOTH } as Transition}
+    >
+      {/* Hero area */}
+      <div className="flex flex-col items-center gap-4 pt-8 sm:pt-12">
+        <SkeletonPulse className="h-8 sm:h-10 w-3/5 sm:w-2/5" reduced={reduced} />
+        <SkeletonPulse className="h-4 sm:h-5 w-4/5 sm:w-3/5" reduced={reduced} />
+        <SkeletonPulse className="h-3 sm:h-4 w-2/5 sm:w-1/4" reduced={reduced} />
+      </div>
+
+      {/* Divider shimmer */}
+      <div className="flex justify-center">
+        <SkeletonPulse className="h-px w-48 sm:w-64 rounded-full" reduced={reduced} />
+      </div>
+
+      {/* Card grid area */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        {Array.from({ length: 6 }, (_, i) => (
+          <motion.div
+            key={i}
+            initial={reduced ? { opacity: 0 } : { opacity: 0, y: 14, filter: 'blur(3px)' }}
+            animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={
+              reduced
+                ? { duration: 0.1, delay: i * 0.03 }
+                : ({ duration: 0.4, delay: 0.1 + i * 0.06, ease: EASE_OUT_SMOOTH } as Transition)
+            }
+          >
+            <div className="rounded-xl border border-white/[0.06] bg-bg-secondary/60 p-4 space-y-3">
+              <SkeletonPulse className="h-28 sm:h-32 w-full rounded-lg" reduced={reduced} />
+              <SkeletonPulse className="h-4 w-3/4" reduced={reduced} />
+              <SkeletonPulse className="h-3 w-full" reduced={reduced} />
+              <SkeletonPulse className="h-3 w-4/6" reduced={reduced} />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+type SkeletonVariant = 'card' | 'text' | '3d' | 'image' | 'avatar' | 'wave' | 'page';
 
 const VARIANT_COMPONENTS: Record<SkeletonVariant, React.ComponentType<{ reduced: boolean }>> = {
   card: CardSkeleton,
@@ -279,18 +328,20 @@ const VARIANT_COMPONENTS: Record<SkeletonVariant, React.ComponentType<{ reduced:
   image: ImageSkeleton,
   avatar: AvatarSkeleton,
   wave: WaveSkeleton,
+  page: PageSkeleton,
 };
 
 export default function SkeletonLoader({
   variant = 'card',
   count = 1,
   className,
+  gap = 'space-y-4',
 }: SkeletonLoaderProps) {
   const reduced = useReducedMotion();
   const Component = VARIANT_COMPONENTS[variant as SkeletonVariant];
 
   return (
-    <div className={className}>
+    <div className={`${gap} ${className ?? ''}`}>
       {Array.from({ length: count }, (_, i) => (
         <motion.div
           key={i}
