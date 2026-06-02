@@ -95,7 +95,7 @@ export default function ScrollScrubHero({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[250vh] bg-[#02030a]"
+      className="relative min-h-[150vh] bg-[#02030a]"
       aria-label="Cosmic astrolabe portfolio hero"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
