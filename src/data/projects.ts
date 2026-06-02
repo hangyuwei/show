@@ -120,7 +120,7 @@ const healthProjects: Project[] = [
     screenshots: ['/projects/campus-health/screenshot1.png', '/projects/campus-health/screenshot2.png', '/projects/campus-health/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/campus-health',
     featured: true,
-    year: '2022',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -161,7 +161,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/kefu-stats/screenshot1.png', '/projects/kefu-stats/screenshot2.png', '/projects/kefu-stats/screenshot3.png'],
     featured: true,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -197,7 +197,7 @@ const healthProjects: Project[] = [
     screenshots: ['/projects/feasibility-report/screenshot1.png', '/projects/feasibility-report/screenshot2.png', '/projects/feasibility-report/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/feasibility-report',
     featured: true,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -232,7 +232,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/product-poster/screenshot1.png', '/projects/product-poster/screenshot2.png', '/projects/product-poster/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -274,7 +274,7 @@ const healthProjects: Project[] = [
     screenshots: ['/projects/medical-ocr/screenshot1.png', '/projects/medical-ocr/screenshot2.png', '/projects/medical-ocr/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/medical-ocr',
     featured: true,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -309,7 +309,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/competitor-intel/screenshot1.png', '/projects/competitor-intel/screenshot2.png', '/projects/competitor-intel/screenshot3.png'],
     featured: true,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -344,7 +344,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/cognitive-guide/screenshot1.png', '/projects/cognitive-guide/screenshot2.png', '/projects/cognitive-guide/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -379,7 +379,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/tcm-assessment/screenshot1.png', '/projects/tcm-assessment/screenshot2.png', '/projects/tcm-assessment/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -414,7 +414,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/industry-standards/screenshot1.png', '/projects/industry-standards/screenshot2.png', '/projects/industry-standards/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -449,7 +449,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/order-planning/screenshot1.png', '/projects/order-planning/screenshot2.png', '/projects/order-planning/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -484,7 +484,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/handover-archive/screenshot1.png', '/projects/handover-archive/screenshot2.png', '/projects/handover-archive/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -519,7 +519,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/medical-case/screenshot1.png', '/projects/medical-case/screenshot2.png', '/projects/medical-case/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -554,7 +554,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/health-handbook/screenshot1.png', '/projects/health-handbook/screenshot2.png', '/projects/health-handbook/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -589,7 +589,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/science-animation/screenshot1.png', '/projects/science-animation/screenshot2.png', '/projects/science-animation/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -624,7 +624,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/diabetes-illustration/screenshot1.png', '/projects/diabetes-illustration/screenshot2.png', '/projects/diabetes-illustration/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -659,7 +659,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/health-assessment/screenshot1.png', '/projects/health-assessment/screenshot2.png', '/projects/health-assessment/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -694,7 +694,7 @@ const healthProjects: Project[] = [
     },
     screenshots: ['/projects/dongfanghong/screenshot1.png', '/projects/dongfanghong/screenshot2.png', '/projects/dongfanghong/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
 ];
@@ -743,7 +743,7 @@ const aiProjects: Project[] = [
     screenshots: ['/projects/my-agent/screenshot1.png', '/projects/my-agent/screenshot2.png', '/projects/my-agent/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/my-agent',
     featured: true,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -779,7 +779,7 @@ const aiProjects: Project[] = [
     screenshots: ['/projects/hermes-agent/screenshot1.png', '/projects/hermes-agent/screenshot2.png', '/projects/hermes-agent/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/hermes-agent',
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -821,7 +821,7 @@ const aiProjects: Project[] = [
     screenshots: ['/projects/vimax/screenshot1.png', '/projects/vimax/screenshot2.png', '/projects/vimax/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/vimax',
     featured: true,
-    year: '2024',
+    year: '2026',
     status: 'active',
   },
   {
@@ -856,7 +856,7 @@ const aiProjects: Project[] = [
     },
     screenshots: ['/projects/stable-diffusion/screenshot1.png', '/projects/stable-diffusion/screenshot2.png', '/projects/stable-diffusion/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -891,7 +891,7 @@ const aiProjects: Project[] = [
     },
     screenshots: ['/projects/comfyui/screenshot1.png', '/projects/comfyui/screenshot2.png', '/projects/comfyui/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'active',
   },
   {
@@ -926,7 +926,7 @@ const aiProjects: Project[] = [
     },
     screenshots: ['/projects/deeptutor/screenshot1.png', '/projects/deeptutor/screenshot2.png', '/projects/deeptutor/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -961,7 +961,7 @@ const aiProjects: Project[] = [
     },
     screenshots: ['/projects/qwen-deploy/screenshot1.png', '/projects/qwen-deploy/screenshot2.png', '/projects/qwen-deploy/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
 ];
@@ -1003,7 +1003,7 @@ const webProjects: Project[] = [
     },
     screenshots: ['/projects/wehot/screenshot1.png', '/projects/wehot/screenshot2.png', '/projects/wehot/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -1038,7 +1038,7 @@ const webProjects: Project[] = [
     },
     screenshots: ['/projects/miniprogram/screenshot1.png', '/projects/miniprogram/screenshot2.png', '/projects/miniprogram/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2025',
     status: 'completed',
   },
   {
@@ -1073,7 +1073,7 @@ const webProjects: Project[] = [
     },
     screenshots: ['/projects/luntan/screenshot1.png', '/projects/luntan/screenshot2.png', '/projects/luntan/screenshot3.png'],
     featured: false,
-    year: '2023',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -1108,7 +1108,7 @@ const webProjects: Project[] = [
     },
     screenshots: ['/projects/llm-wiki/screenshot1.png', '/projects/llm-wiki/screenshot2.png', '/projects/llm-wiki/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -1201,7 +1201,7 @@ const creativeProjects: Project[] = [
     screenshots: ['/projects/starry-music-box/screenshot1.png', '/projects/starry-music-box/screenshot2.png', '/projects/starry-music-box/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/starry-music-box',
     featured: true,
-    year: '2025',
+    year: '2026',
     status: 'completed',
   },
 ];
@@ -1243,7 +1243,7 @@ const researchProjects: Project[] = [
     },
     screenshots: ['/projects/academic-skills/screenshot1.png', '/projects/academic-skills/screenshot2.png', '/projects/academic-skills/screenshot3.png'],
     featured: false,
-    year: '2025',
+    year: '2026',
     status: 'active',
   },
   {
@@ -1285,7 +1285,7 @@ const researchProjects: Project[] = [
     screenshots: ['/projects/paper-downloader/screenshot1.png', '/projects/paper-downloader/screenshot2.png', '/projects/paper-downloader/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/paper-downloader',
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
   {
@@ -1320,7 +1320,7 @@ const researchProjects: Project[] = [
     },
     screenshots: ['/projects/resume-screener/screenshot1.png', '/projects/resume-screener/screenshot2.png', '/projects/resume-screener/screenshot3.png'],
     featured: false,
-    year: '2024',
+    year: '2026',
     status: 'completed',
   },
 ];
