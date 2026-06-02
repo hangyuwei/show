@@ -730,7 +730,7 @@ function handleSectionLinkClick(
 
 function CompactSectionNav({ activeId }: { activeId: string }) {
   return (
-    <nav className="xl:hidden" aria-label="Section navigation">
+    <nav className="xl:hidden sticky top-[72px] z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 pt-2 pb-3 bg-[#040b14]/80 backdrop-blur-xl border-b border-cyan-100/[0.06]" aria-label="Section navigation">
       <div className="flex gap-2 overflow-x-auto rounded-lg border border-cyan-100/10 bg-[#040b14]/70 p-2 backdrop-blur-xl">
         {SECTION_IDS.map((section, index) => {
           const isActive = activeId === section.id;
