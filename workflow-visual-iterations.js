@@ -17,7 +17,6 @@ export const meta = {
 }
 
 var DIR = '/Users/hang/Documents/projects2/portfolio'
-var SITE = 'https://show-hangs-projects-0e426d87.vercel.app'
 var RS = {
   type: 'object',
   properties: {

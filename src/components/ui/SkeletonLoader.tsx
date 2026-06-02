@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import type { ComponentType, CSSProperties } from 'react';
 import { motion, type Transition } from 'framer-motion';
+import usePrefersReducedMotion from '@/components/usePrefersReducedMotion';
 
 interface SkeletonLoaderProps {
   variant?: 'card' | 'text' | '3d' | 'image' | 'avatar' | 'wave' | 'page';
@@ -24,21 +25,8 @@ const TOP_EDGE_GLOW =
 const BOTTOM_EDGE_GLOW =
   'linear-gradient(90deg, transparent 0%, rgba(20,184,166,0.03) 30%, rgba(139,92,246,0.04) 50%, rgba(20,184,166,0.03) 70%, transparent 100%)';
 
-/* ── Reduced-motion-safe duration multiplier ── */
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-  return reduced;
-}
-
 /* ── Base skeleton pulse block ── */
-function SkeletonPulse({ className, style, reduced }: { className?: string; style?: React.CSSProperties; reduced: boolean }) {
+function SkeletonPulse({ className, style, reduced }: { className?: string; style?: CSSProperties; reduced: boolean }) {
   return (
     <motion.div
       className={`relative overflow-hidden rounded-lg bg-bg-card ${className ?? ''}`}
@@ -321,7 +309,7 @@ function PageSkeleton({ reduced }: { reduced: boolean }) {
 
 type SkeletonVariant = 'card' | 'text' | '3d' | 'image' | 'avatar' | 'wave' | 'page';
 
-const VARIANT_COMPONENTS: Record<SkeletonVariant, React.ComponentType<{ reduced: boolean }>> = {
+const VARIANT_COMPONENTS: Record<SkeletonVariant, ComponentType<{ reduced: boolean }>> = {
   card: CardSkeleton,
   text: TextSkeleton,
   '3d': Scene3DSkeleton,
@@ -337,7 +325,7 @@ export default function SkeletonLoader({
   className,
   gap = 'space-y-4',
 }: SkeletonLoaderProps) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const Component = VARIANT_COMPONENTS[variant as SkeletonVariant];
 
   return (

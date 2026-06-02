@@ -201,16 +201,16 @@ function SectionDivider({ variant = 'default' }: { variant?: 'default' | 'warm' 
 
 function SectionTitle({ children, subtitle }: { children: React.ReactNode; subtitle?: string }) {
   return (
-    <div className="text-center mb-10 sm:mb-14">
+    <div className="text-center mb-7 sm:mb-9">
       {/* Title with enhanced gradient text including drop-shadow glow */}
       <h2 className="text-2xl sm:text-3xl font-bold mb-2 tracking-heading heading-section">
         <span
           style={{
-            background: 'linear-gradient(135deg, #2196ff 0%, #00e5ff 40%, #8b5cf6 70%, #14b8a6 100%)',
+            background: 'linear-gradient(135deg, #e8f2ff 0%, #65d8ff 48%, #14b8a6 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            filter: 'drop-shadow(0 0 18px rgba(33,150,255,0.2)) drop-shadow(0 0 6px rgba(139,92,246,0.15))',
+            filter: 'drop-shadow(0 0 10px rgba(101,216,255,0.12))',
           }}
         >
           {children}
@@ -223,7 +223,7 @@ function SectionTitle({ children, subtitle }: { children: React.ReactNode; subti
       <div className="relative flex justify-center mt-4 gap-0.5 overflow-hidden">
         <div className="h-px w-8 bg-gradient-to-r from-transparent to-accent-blue/25" />
         <div className="relative h-px w-14 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-accent-blue/35 via-accent-purple/30 to-accent-teal/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-accent-blue/30 via-white/15 to-accent-teal/28" />
           <div
             className="absolute inset-0"
             style={{
@@ -262,78 +262,35 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
-        className="relative w-full py-16 sm:py-24 mb-8"
+        className="relative w-full mb-4 sm:mb-6"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Mesh gradient background — multi-layer depth */}
         <div
-          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/4 w-[800px] h-[450px] rounded-full opacity-[0.10] animate-breathe"
+          className="pointer-events-none absolute top-4 left-1/2 -translate-x-1/2 w-[680px] h-[300px] rounded-full opacity-[0.055]"
           style={{
-            background: 'radial-gradient(ellipse, #2196ff 0%, #8b5cf6 25%, #14b8a6 50%, #eab308 70%, transparent 85%)',
-            filter: 'blur(90px)',
+            background: 'radial-gradient(ellipse, #65d8ff 0%, #14b8a6 44%, transparent 76%)',
+            filter: 'blur(86px)',
           }}
         />
-        {/* Secondary softer bloom layer */}
         <div
-          className="pointer-events-none absolute top-8 left-1/2 -translate-x-1/2 w-[550px] h-[280px] rounded-full opacity-[0.06]"
+          className="pointer-events-none absolute top-12 left-1/2 -translate-x-1/2 w-[480px] h-[180px] rounded-full opacity-[0.035]"
           style={{
-            background: 'radial-gradient(ellipse, #2196ff 0%, #14b8a6 40%, transparent 70%)',
-            filter: 'blur(100px)',
-          }}
-        />
-        {/* Third subtle warm bloom for color harmony */}
-        <div
-          className="pointer-events-none absolute top-16 left-[60%] w-[300px] h-[200px] rounded-full opacity-[0.04]"
-          style={{
-            background: 'radial-gradient(ellipse, #8b5cf6 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(ellipse, #e8f2ff 0%, #65d8ff 42%, transparent 76%)',
+            filter: 'blur(70px)',
           }}
         />
 
-        {/* Floating accent orbs with enhanced glow */}
-        <div
-          className="pointer-events-none absolute top-8 right-[10%] w-3 h-3 rounded-full bg-accent-teal/45 shadow-[0_0_14px_rgba(20,184,166,0.35)]"
-          style={{ animation: 'float 7s ease-in-out infinite' }}
-        />
-        <div
-          className="pointer-events-none absolute top-1/2 left-[8%] w-2.5 h-2.5 rounded-full bg-accent-blue/30 shadow-[0_0_12px_rgba(33,150,255,0.25)]"
-          style={{ animation: 'float 8s ease-in-out infinite 1s' }}
-        />
-        <div
-          className="pointer-events-none absolute bottom-12 left-[15%] w-2 h-2 rounded-full bg-accent-purple/35 shadow-[0_0_10px_rgba(139,92,246,0.3)]"
-          style={{ animation: 'float 9s ease-in-out infinite 2s' }}
-        />
-        {/* Additional floating orb for premium depth */}
-        <div
-          className="pointer-events-none absolute top-1/3 right-[25%] w-1.5 h-1.5 rounded-full bg-accent-warm/30 shadow-[0_0_8px_rgba(245,158,11,0.25)]"
-          style={{ animation: 'float 10s ease-in-out infinite 3s' }}
-        />
-
-        <div className="relative text-center pt-16 sm:pt-24 pb-12 sm:pb-16">
+        <div className="relative text-center pt-12 sm:pt-14 pb-8 sm:pb-10">
           {/* Premium label pill with animated border */}
           <motion.span
             variants={heroSubtitleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="relative inline-flex items-center gap-1.5 text-xs font-mono tracking-display uppercase text-accent-teal/65 mb-5 px-4 py-1.5 rounded-full border border-accent-teal/15"
-            style={{ background: 'rgba(20, 184, 166, 0.06)' }}
+            className="relative inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.035] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-[#65d8ff]/70 mb-4"
           >
-            {/* Subtle traveling light on pill border */}
-            <span
-              className="absolute inset-0 rounded-full overflow-hidden pointer-events-none"
-              style={{ border: '1px solid transparent' }}
-            >
-              <span
-                className="absolute top-0 left-[-60%] w-[30%] h-full"
-                style={{
-                  background: 'linear-gradient(90deg, transparent, rgba(20,184,166,0.2), transparent)',
-                  animation: 'shimmer 3.5s ease-in-out infinite',
-                }}
-              />
-            </span>
-            <span className="w-1 h-1 rounded-full bg-accent-teal/55 shadow-[0_0_4px_rgba(20,184,166,0.4)]" />
-            About
+            <span className="h-1.5 w-1.5 rounded-full bg-[#65d8ff]/70" />
+            ABOUT
           </motion.span>
 
           {/* Main title with enhanced gradient and glow */}
@@ -342,15 +299,15 @@ export default function AboutContent() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-4xl sm:text-6xl font-bold tracking-tight mb-5 heading-premium"
+            className="text-4xl sm:text-5xl font-semibold tracking-tight mb-4 heading-premium"
           >
             <span
               style={{
-                background: 'linear-gradient(135deg, #2196ff 0%, #00e5ff 35%, #8b5cf6 65%, #14b8a6 100%)',
+                background: 'linear-gradient(135deg, #e8f2ff 0%, #65d8ff 52%, #14b8a6 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                filter: 'drop-shadow(0 0 24px rgba(33,150,255,0.25)) drop-shadow(0 0 8px rgba(139,92,246,0.15))',
+                filter: 'drop-shadow(0 0 14px rgba(101,216,255,0.14))',
               }}
             >
               关于我
@@ -363,7 +320,7 @@ export default function AboutContent() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-base sm:text-lg text-white/30 max-w-md mx-auto leading-relaxed tracking-wide"
+            className="text-sm sm:text-base text-white/42 max-w-xl mx-auto leading-relaxed"
           >
             全栈开发 / 大健康技术 / AI 应用 / 创意可视化
           </motion.p>
@@ -374,25 +331,11 @@ export default function AboutContent() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="relative flex justify-center items-center gap-2 mt-7 origin-center"
+            className="relative flex justify-center items-center gap-2 mt-5 origin-center"
           >
-            <span className="w-16 h-px bg-gradient-to-r from-transparent to-accent-blue/40" />
-            <span className="w-1 h-1 rounded-full bg-accent-blue/55 shadow-[0_0_5px_rgba(33,150,255,0.35)]" />
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/65 shadow-[0_0_7px_rgba(33,150,255,0.45)]" />
-            {/* Center diamond with glow */}
-            <span className="relative w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(20,184,166,0.5),0_0_20px_rgba(20,184,166,0.2)]" style={{ background: 'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), #14b8a6 70%)' }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-purple/65 shadow-[0_0_7px_rgba(139,92,246,0.45)]" />
-            <span className="w-1 h-1 rounded-full bg-accent-purple/55 shadow-[0_0_5px_rgba(139,92,246,0.35)]" />
-            <span className="w-16 h-px bg-gradient-to-l from-transparent to-accent-purple/40" />
-            {/* Shimmer pass across entire separator */}
-            <span
-              className="absolute top-0 left-0 w-full h-full pointer-events-none"
-              style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)',
-                animation: 'shimmer 4s ease-in-out infinite',
-                filter: 'blur(2px)',
-              }}
-            />
+            <span className="w-20 h-px bg-gradient-to-r from-transparent via-[#65d8ff]/35 to-transparent" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#65d8ff]/55" />
+            <span className="w-20 h-px bg-gradient-to-r from-transparent via-[#f2c166]/24 to-transparent" />
           </motion.div>
         </div>
       </motion.section>
@@ -403,30 +346,20 @@ export default function AboutContent() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
-        className="relative w-full mb-20 sm:mb-28"
+        className="relative w-full mb-14 sm:mb-20"
         style={{ padding: 0, background: 'none' }}
       >
-        {/* Mesh gradient background with breathing animation */}
         <div
-          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full opacity-[0.06] animate-breathe"
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[460px] rounded-full opacity-[0.035]"
           style={{
-            background: 'radial-gradient(circle, #2196ff 0%, #14b8a6 35%, #8b5cf6 55%, transparent 75%)',
-            filter: 'blur(90px)',
+            background: 'radial-gradient(circle, #65d8ff 0%, #14b8a6 42%, transparent 76%)',
+            filter: 'blur(84px)',
           }}
         />
-        {/* Secondary warm accent bloom */}
         <div
-          className="pointer-events-none absolute top-1/3 left-[30%] w-[300px] h-[300px] rounded-full opacity-[0.03]"
+          className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 w-[460px] h-20 opacity-[0.025]"
           style={{
-            background: 'radial-gradient(circle, #eab308 0%, transparent 70%)',
-            filter: 'blur(70px)',
-          }}
-        />
-        {/* Bridge gradient flowing down from hero — creates visual continuity */}
-        <div
-          className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[500px] h-32 opacity-[0.04]"
-          style={{
-            background: 'radial-gradient(ellipse, #2196ff 0%, #8b5cf6 50%, transparent 75%)',
+            background: 'radial-gradient(ellipse, #65d8ff 0%, transparent 75%)',
             filter: 'blur(40px)',
           }}
         />
@@ -434,45 +367,26 @@ export default function AboutContent() {
         <SectionTitle subtitle="跨领域复合能力全景 — 涵盖工程、设计、数据与 AI">能力雷达</SectionTitle>
 
         <div
-          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-700 hover:border-white/[0.12]"
+          className="relative w-full max-w-xl mx-auto h-[340px] sm:h-[420px] rounded-xl overflow-hidden border border-white/[0.055] group/panel transition-all duration-500 hover:border-white/[0.10]"
           style={{
-            background: 'var(--glass-bg)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(33,150,255,0.04), 0 0 80px rgba(139,92,246,0.02)',
+            background: 'rgba(7, 17, 31, 0.68)',
+            boxShadow: '0 12px 34px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}
         >
-          {/* Inner ambient gradient at top with stronger glow */}
           <div
-            className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-28 rounded-full opacity-[0.09] group-hover/panel:opacity-[0.14] transition-opacity duration-700"
+            className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-20 rounded-full opacity-[0.055] group-hover/panel:opacity-[0.08] transition-opacity duration-500"
             style={{
-              background: 'radial-gradient(ellipse, #2196ff, #14b8a6 60%, transparent 80%)',
+              background: 'radial-gradient(ellipse, #65d8ff, #14b8a6 60%, transparent 80%)',
               filter: 'blur(24px)',
             }}
           />
-          {/* Inner bottom ambient glow */}
+
           <div
-            className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-20 rounded-full opacity-[0.05] group-hover/panel:opacity-[0.08] transition-opacity duration-700"
+            className="pointer-events-none absolute inset-0 rounded-xl"
             style={{
-              background: 'radial-gradient(ellipse, #8b5cf6, transparent 70%)',
-              filter: 'blur(18px)',
+              boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.025), inset 0 24px 70px rgba(101,216,255,0.014)',
             }}
           />
-
-          {/* Corner accents with enhanced hover glow */}
-          <div className="absolute top-0 left-0 w-14 h-14 border-t border-l border-accent-blue/20 rounded-tl-2xl group-hover/panel:border-accent-blue/40 group-hover/panel:shadow-[-2px_-2px_12px_rgba(33,150,255,0.08)] transition-all duration-500" />
-          <div className="absolute top-0 right-0 w-14 h-14 border-t border-r border-accent-teal/20 rounded-tr-2xl group-hover/panel:border-accent-teal/40 group-hover/panel:shadow-[2px_-2px_12px_rgba(20,184,166,0.08)] transition-all duration-500" />
-          <div className="absolute bottom-0 left-0 w-14 h-14 border-b border-l border-accent-teal/20 rounded-bl-2xl group-hover/panel:border-accent-teal/40 group-hover/panel:shadow-[-2px_2px_12px_rgba(20,184,166,0.08)] transition-all duration-500" />
-          <div className="absolute bottom-0 right-0 w-14 h-14 border-b border-r border-accent-blue/20 rounded-br-2xl group-hover/panel:border-accent-blue/40 group-hover/panel:shadow-[2px_2px_12px_rgba(33,150,255,0.08)] transition-all duration-500" />
-
-          {/* Top border shimmer — traveling light */}
-          <div className="absolute top-0 left-0 right-0 h-px overflow-hidden pointer-events-none">
-            <div
-              className="absolute top-0 h-full w-[40%]"
-              style={{
-                background: 'linear-gradient(90deg, transparent, rgba(33,150,255,0.4) 30%, rgba(20,184,166,0.5) 50%, rgba(33,150,255,0.4) 70%, transparent)',
-                animation: 'shimmer 3s ease-in-out infinite',
-              }}
-            />
-          </div>
 
           <SkillRadar3D />
         </div>

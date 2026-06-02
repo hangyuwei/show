@@ -533,7 +533,7 @@ interface PlanetMeshProps {
   ringColor?: string;
 }
 
-function PlanetBody({ name, color, emissiveHex, size, tilt, ringColor }: PlanetMeshProps) {
+function PlanetBody({ color, emissiveHex, size, tilt, ringColor }: PlanetMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const atmosRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
@@ -741,7 +741,7 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
   const ref = useRef<THREE.Points>(null);
   const angleOffsets = useRef<Float32Array>(new Float32Array(0));
 
-  const { positions, alphas } = useMemo(() => {
+  const { positions } = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const alp = new Float32Array(count);
     const offsets = new Float32Array(count);
@@ -756,7 +756,7 @@ function OrbitTrail({ radius, color, count = 60 }: { radius: number; color: stri
       offsets[i] = a;
     }
     angleOffsets.current = offsets;
-    return { positions: pos, alphas: alp };
+    return { positions: pos };
   }, [radius, count]);
 
   const geo = useMemo(() => {

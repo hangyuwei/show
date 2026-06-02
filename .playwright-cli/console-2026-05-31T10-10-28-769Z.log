@@ -1,0 +1,102 @@
+[     258ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=383d98b3:20102
+[     390ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[     390ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[     391ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[     391ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[     393ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[     393ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[  478582ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/?token=LcVDQSxXvFbI' failed:  @ http://127.0.0.1:5173/@vite/client:801
+[  478583ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:5173/@vite/client:963
+[  478640ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  479642ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  480644ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  481648ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  482652ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  483658ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  484667ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  485684ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  486717ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  487746ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:5173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:5173/@vite/client:1034
+[  489377ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=d5fcd12d:20102
+[  489460ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489460ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489461ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489467ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489469ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[  489469ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489469ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489476ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489478ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489478ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489478ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[  489484ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[ 3045725ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:5173/@vite/client:963
+[ 3046167ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=d5fcd12d:20102
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046269ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[ 3046275ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[ 3046276ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[50308959ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:5173/@vite/client:963
+[50309156ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=d5fcd12d:20102
+[50309211ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309211ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309211ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309211ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309212ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309212ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309213ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309213ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309213ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309213ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[50309215ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[50309215ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[53246808ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:5173/@vite/client:963
+[53246982ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=d5fcd12d:20102
+[53247029ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247030ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247030ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247030ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247030ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247031ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247031ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247031ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247031ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247031ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[53247033ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[53247033ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[84609394ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:5173/@vite/client:963
+[84609768ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=d5fcd12d:20102
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609862ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[84609863ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[84609867ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[90232212ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:5173/@vite/client:963
+[90232762ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=d5fcd12d:20102
+[90232815ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232815ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232815ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232815ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232815ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232815ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/meta.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232816ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/config.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232816ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/knowledge-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232816ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/diff-overlay.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232816ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://127.0.0.1:5173/domain-graph.json?token=2fdcd3f64ed011231f3c94800f0ffb66:0
+[90232818ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156
+[90232821ms] [ERROR] Knowledge graph validation failed: Missing or invalid project metadata @ http://127.0.0.1:5173/src/App.tsx:156

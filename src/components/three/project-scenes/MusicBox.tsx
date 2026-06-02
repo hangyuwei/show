@@ -40,7 +40,7 @@ function Planet({ orbitRadius, speed, size, color, emissiveColor }: {
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const orbitRef = useRef<THREE.Group>(null);
-  const geometry = useMemo(() => new THREE.SphereGeometry(size, 16, 16), []);
+  const geometry = useMemo(() => new THREE.SphereGeometry(size, 16, 16), [size]);
   const material = useMemo(
     () =>
       new THREE.MeshStandardMaterial({

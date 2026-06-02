@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Hero from '@/components/Hero';
+import FeaturedProjectsSection from '@/components/projects/FeaturedProjectsSection';
+import { getFeaturedProjects } from '@/data/projects';
 
 export const metadata: Metadata = {
   title: "Hang's Portfolio - 全栈开发 · AI应用 · 大健康",
@@ -8,22 +10,12 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const featuredProjects = getFeaturedProjects();
+
   return (
     <main className="flex flex-col">
       <Hero />
-
-      {/* Featured Projects placeholder */}
-      <section
-        id="featured-projects"
-        className="flex min-h-screen flex-col items-center justify-center px-6 py-24"
-      >
-        <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
-          精选项目
-        </h2>
-        <p className="max-w-md text-center text-muted">
-          项目展示区域即将上线，敬请期待。
-        </p>
-      </section>
+      <FeaturedProjectsSection projects={featuredProjects} />
     </main>
   );
 }

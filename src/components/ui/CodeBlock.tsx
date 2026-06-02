@@ -1,10 +1,3 @@
-import { Geist_Mono } from 'next/font/google';
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
 interface CodeBlockProps {
   code: string;
   language?: string;
@@ -23,7 +16,7 @@ export default function CodeBlock({ code, language = 'text' }: CodeBlockProps) {
       </div>
       <div className="relative bg-[#1e1e2e] p-4">
         <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-emerald-400 to-teal-500" />
-        <pre className={`${geistMono.className} overflow-x-auto pl-4 text-sm leading-relaxed text-zinc-300`}>
+        <pre className="overflow-x-auto pl-4 font-mono text-sm leading-relaxed text-zinc-300">
           <code>{code}</code>
         </pre>
       </div>

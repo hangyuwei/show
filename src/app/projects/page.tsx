@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { allProjects, businessLineLabels, type BusinessLine } from '@/data/projects';
+import { allProjects, type BusinessLine } from '@/data/projects';
 import SectionTitle from '@/components/ui/SectionTitle';
 import ProjectFilter from '@/components/ProjectFilter';
 import FloatingCard3D from '@/components/three/FloatingCard3D';
@@ -18,69 +18,56 @@ export default function ProjectsPage() {
   }, [activeFilter]);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-black">
-      {/* Dot grid pattern background — premium density with color tint */}
+    <div className="relative min-h-screen flex flex-col overflow-hidden bg-[#02030a]">
+      {/* Dot grid pattern background — calibrated to the astrolabe palette */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage:
-            'radial-gradient(circle, rgba(139,92,246,0.055) 0.6px, transparent 0.6px)',
-          backgroundSize: '16px 16px',
+            'radial-gradient(circle, rgba(101,216,255,0.045) 0.6px, transparent 0.6px)',
+          backgroundSize: '18px 18px',
           maskImage:
             'radial-gradient(ellipse 85% 75% at 50% 12%, black 4%, transparent 100%)',
           WebkitMaskImage:
             'radial-gradient(ellipse 85% 75% at 50% 12%, black 4%, transparent 100%)',
         }}
       />
-      {/* Grid lines overlay — wider, subtler with violet tint */}
+      {/* Grid lines overlay — engineered HUD trace */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(139,92,246,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.022) 1px, transparent 1px)',
-          backgroundSize: '100px 100px',
+            'linear-gradient(rgba(101,216,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(101,216,255,0.014) 1px, transparent 1px)',
+          backgroundSize: '96px 96px',
           maskImage:
             'radial-gradient(ellipse 75% 65% at 50% 22%, black 6%, transparent 100%)',
           WebkitMaskImage:
             'radial-gradient(ellipse 75% 65% at 50% 22%, black 6%, transparent 100%)',
         }}
       />
-      {/* Cross-hatch diagonal lines for texture depth — premium color tint */}
+      {/* Cross-hatch diagonal lines for texture depth */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-[0.016]"
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.014]"
         style={{
           backgroundImage:
-            'repeating-linear-gradient(45deg, transparent, transparent 52px, rgba(139,92,246,0.30) 52px, rgba(139,92,246,0.30) 53px), repeating-linear-gradient(-45deg, transparent, transparent 52px, rgba(20,184,166,0.22) 52px, rgba(20,184,166,0.22) 53px)',
+            'repeating-linear-gradient(45deg, transparent, transparent 54px, rgba(101,216,255,0.24) 54px, rgba(101,216,255,0.24) 55px), repeating-linear-gradient(-45deg, transparent, transparent 54px, rgba(242,193,102,0.16) 54px, rgba(242,193,102,0.16) 55px)',
           maskImage:
             'radial-gradient(ellipse 60% 50% at 50% 30%, black 10%, transparent 80%)',
           WebkitMaskImage:
             'radial-gradient(ellipse 60% 50% at 50% 30%, black 10%, transparent 80%)',
         }}
       />
-      {/* Ambient glow orbs for atmosphere — premium layered light */}
+      {/* Restrained spectral wash for depth */}
       <div
-        className="pointer-events-none absolute top-[8%] left-[4%] w-[650px] h-[650px] rounded-full z-0"
+        className="pointer-events-none absolute top-[5%] left-[4%] w-[520px] h-[360px] rounded-full z-0"
         style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.07) 0%, rgba(139,92,246,0.025) 40%, rgba(139,92,246,0.008) 60%, transparent 75%)',
+          background: 'radial-gradient(ellipse, rgba(101,216,255,0.032) 0%, rgba(101,216,255,0.010) 42%, transparent 72%)',
         }}
       />
       <div
-        className="pointer-events-none absolute bottom-[12%] right-[0%] w-[750px] h-[750px] rounded-full z-0"
+        className="pointer-events-none absolute bottom-[12%] right-[2%] w-[560px] h-[380px] rounded-full z-0"
         style={{
-          background: 'radial-gradient(circle, rgba(6,182,212,0.06) 0%, rgba(6,182,212,0.022) 40%, rgba(6,182,212,0.006) 60%, transparent 75%)',
-        }}
-      />
-      <div
-        className="pointer-events-none absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] rounded-full z-0"
-        style={{
-          background: 'radial-gradient(ellipse, rgba(249,115,22,0.03) 0%, rgba(249,115,22,0.012) 40%, rgba(249,115,22,0.004) 60%, transparent 75%)',
-        }}
-      />
-      {/* Fourth orb — subtle blue accent for depth layering */}
-      <div
-        className="pointer-events-none absolute top-[30%] right-[15%] w-[450px] h-[450px] rounded-full z-0"
-        style={{
-          background: 'radial-gradient(circle, rgba(45,140,240,0.035) 0%, rgba(45,140,240,0.012) 40%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(232,242,255,0.018) 0%, rgba(101,216,255,0.008) 45%, transparent 74%)',
         }}
       />
       {/* Subtle noise texture overlay for depth */}
@@ -95,7 +82,7 @@ export default function ProjectsPage() {
       />
 
       {/* Main content */}
-      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 sm:pt-18 sm:pb-20">
         {/* Section title */}
         <motion.div
           initial={{ opacity: 0, y: 34 }}
@@ -103,14 +90,14 @@ export default function ProjectsPage() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <SectionTitle
-            title="项目宇宙"
-            subtitle="探索我在不同领域的作品与实验，从医疗 AI 到创意编程。"
+            title="项目索引"
+            subtitle="按真实系统、技术路径和交付结果整理的作品集入口。"
           />
         </motion.div>
 
         {/* Filter */}
         <motion.div
-          className="mt-12 mb-10"
+          className="mt-8 mb-8"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
@@ -123,7 +110,7 @@ export default function ProjectsPage() {
 
         {/* Card grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-9"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6"
           layout
         >
           <AnimatePresence mode="popLayout">
@@ -145,8 +132,9 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <span className="text-4xl mb-4">🔭</span>
-            <p className="text-lg">该分类下暂无项目</p>
+            <p className="font-mono text-xs uppercase tracking-[0.22em] text-white/35">
+              NO PROJECTS MATCH FILTER
+            </p>
           </motion.div>
         )}
       </main>

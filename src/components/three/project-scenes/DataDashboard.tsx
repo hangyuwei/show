@@ -19,7 +19,7 @@ function Bar({ position, targetHeight, color }: { position: [number, number, num
         roughness: 0.3,
         metalness: 0.5,
       }),
-    []
+    [color]
   );
 
   useFrame((state) => {

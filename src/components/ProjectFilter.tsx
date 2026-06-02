@@ -8,14 +8,12 @@ export type FilterOption = '全部' | BusinessLine;
 
 interface FilterItem {
   label: FilterOption;
-  emoji: string;
 }
 
 const FILTERS: FilterItem[] = [
-  { label: '全部', emoji: '🌌' },
-  ...Object.entries(businessLineLabels).map(([key, val]) => ({
+  { label: '全部' },
+  ...Object.entries(businessLineLabels).map(([key]) => ({
     label: key as BusinessLine,
-    emoji: val.emoji,
   })),
 ];
 
@@ -29,8 +27,8 @@ export default function ProjectFilter({
   onFilterChange,
 }: ProjectFilterProps) {
   return (
-    <div className="w-full overflow-x-auto scrollbar-hide py-2">
-      <div className="flex gap-2 min-w-max px-1">
+    <div className="w-full py-2">
+      <div className="flex flex-wrap gap-2 px-1">
         {FILTERS.map((filter, filterIdx) => {
           const isActive = activeFilter === filter.label;
           const displayLabel =
@@ -38,39 +36,39 @@ export default function ProjectFilter({
               ? '全部'
               : businessLineLabels[filter.label as BusinessLine]?.name ?? filter.label;
 
-          // Get business line color for active glow
           const lineColor =
             filter.label === '全部'
-              ? '#8b5cf6'
-              : businessLineLabels[filter.label as BusinessLine]?.color ?? '#8b5cf6';
+              ? '#65d8ff'
+              : businessLineLabels[filter.label as BusinessLine]?.color ?? '#65d8ff';
+          const code =
+            filter.label === '全部'
+              ? 'ALL'
+              : businessLineLabels[filter.label as BusinessLine]?.nameEn
+                  .split(/\s|&/)
+                  .filter(Boolean)
+                  .map((part) => part[0])
+                  .join('')
+                  .slice(0, 3)
+                  .toUpperCase();
 
           return (
             <motion.button
               key={filter.label}
               onClick={() => onFilterChange(filter.label)}
               className={`
-                relative flex items-center gap-2 whitespace-nowrap rounded-full
-                px-5 py-2.5 text-sm font-medium tracking-wide
-                border transition-all duration-500
+                relative flex items-center gap-2 whitespace-nowrap rounded-lg
+                px-3.5 py-2 text-sm font-medium
+                border transition-all duration-300
                 ${
                   isActive
-                    ? 'text-white border-transparent'
-                    : 'bg-white/[0.015] text-zinc-500 border-white/[0.05] hover:bg-white/[0.06] hover:text-zinc-300 hover:border-white/[0.12]'
+                    ? 'border-white/[0.16] bg-white/[0.08] text-white'
+                    : 'bg-white/[0.02] text-white/46 border-white/[0.07] hover:bg-white/[0.055] hover:text-white/72 hover:border-white/[0.12]'
                 }
               `}
               style={
                 isActive
                   ? {
-                      background: `linear-gradient(135deg, ${lineColor}28, ${lineColor}12 50%, ${lineColor}08)`,
-                      borderColor: 'transparent',
-                      boxShadow: `
-                        0 0 36px ${lineColor}30,
-                        0 0 14px ${lineColor}18,
-                        0 0 5px ${lineColor}45,
-                        0 2px 10px rgba(0,0,0,0.22),
-                        inset 0 1px 0 ${lineColor}28,
-                        inset 0 0 20px ${lineColor}0c`,
-                      textShadow: `0 0 18px ${lineColor}40, 0 0 40px ${lineColor}15`,
+                      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 1px ${lineColor}18`,
                     }
                   : undefined
               }
@@ -83,64 +81,30 @@ export default function ProjectFilter({
               initial={{ opacity: 0, y: 20, scale: 0.90 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
-                duration: 0.5,
-                delay: filterIdx * 0.055,
+                duration: 0.35,
+                delay: filterIdx * 0.035,
                 ease: [0.16, 1, 0.3, 1],
               }}
             >
-              <span className="text-base leading-none">{filter.emoji}</span>
+              <span
+                className="font-mono text-[10px] uppercase tracking-[0.18em]"
+                style={{ color: isActive ? lineColor : undefined }}
+              >
+                {code}
+              </span>
               <span>{displayLabel}</span>
 
-              {/* Active indicator pill with layered glow */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 rounded-full"
+                  className="pointer-events-none absolute inset-x-2 -bottom-px h-px"
                   layoutId="activeFilterGlow"
                   style={{
-                    border: `1.5px solid ${lineColor}60`,
-                    boxShadow: `
-                      0 0 30px ${lineColor}35,
-                      0 0 60px ${lineColor}15,
-                      0 0 100px ${lineColor}08,
-                      inset 0 0 16px ${lineColor}0c`,
+                    background: `linear-gradient(90deg, transparent, ${lineColor}, transparent)`,
                   }}
                   transition={{
                     type: 'spring',
                     stiffness: 400,
                     damping: 28,
-                  }}
-                />
-              )}
-
-              {/* Active dot indicator with premium pulse */}
-              {isActive && (
-                <motion.span
-                  layoutId="activeDot"
-                  className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full"
-                  style={{
-                    background: `radial-gradient(circle, ${lineColor}, ${lineColor}cc)`,
-                    boxShadow: `0 0 12px ${lineColor}b0, 0 0 5px ${lineColor}, 0 0 20px ${lineColor}35`,
-                  }}
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [1, 0.8, 1],
-                  }}
-                  transition={{
-                    scale: {
-                      duration: 2.4,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    },
-                    opacity: {
-                      duration: 2.4,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    },
-                    layout: {
-                      type: 'spring',
-                      stiffness: 500,
-                      damping: 32,
-                    },
                   }}
                 />
               )}

@@ -28,7 +28,7 @@ function generateNodes(): NodeData[] {
   return nodes;
 }
 
-function generateConnections(nodes: NodeData[]): [number, number][] {
+function generateConnections(): [number, number][] {
   const connections: [number, number][] = [];
   let offset = 0;
   for (let layer = 0; layer < LAYER_CONFIG.length - 1; layer++) {
@@ -151,7 +151,7 @@ function PulseParticles({ nodes, connections }: { nodes: NodeData[]; connections
 export default function NeuralNetwork() {
   const groupRef = useRef<THREE.Group>(null);
   const nodes = useMemo(() => generateNodes(), []);
-  const connections = useMemo(() => generateConnections(nodes), [nodes]);
+  const connections = useMemo(() => generateConnections(), []);
 
   useFrame((_, delta) => {
     if (groupRef.current) {

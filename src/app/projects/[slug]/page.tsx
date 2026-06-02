@@ -1,7 +1,14 @@
 import { Metadata } from 'next';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { notFound } from 'next/navigation';
 import { allProjects, getAllSlugs } from '@/data/projects';
 import ProjectDetailClient from './ProjectDetailClient';
+
+function publicAssetExists(src: string): boolean {
+  if (!src.startsWith('/')) return false;
+  return existsSync(join(process.cwd(), 'public', src));
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -30,5 +37,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return <ProjectDetailClient project={project} />;
+  const screenshots = project.screenshots.map((src) => ({
+    src,
+    exists: publicAssetExists(src),
+  }));
+
+  return <ProjectDetailClient project={project} screenshots={screenshots} />;
 }

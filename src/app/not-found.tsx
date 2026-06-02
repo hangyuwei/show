@@ -1,12 +1,38 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, type Variants, type Transition } from 'framer-motion';
+import usePrefersReducedMotion from '@/components/usePrefersReducedMotion';
 
-const EASE_OUT_SMOOTH: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const EASE_SPRING_OUT: [number, number, number, number] = [0.18, 1, 0.25, 1];
+
+const STAR_PARTICLES = Array.from({ length: 22 }, (_, i) => {
+  const n = i + 1;
+  return {
+    id: i,
+    x: 5 + ((n * 37) % 90),
+    y: 5 + ((n * 53) % 90),
+    size: 1 + ((n * 19) % 20) / 10,
+    duration: 8 + ((n * 29) % 120) / 10,
+    delay: ((n * 17) % 40) / 10,
+    drift: 6 + ((n * 31) % 140) / 10,
+    opacity: 0.1 + ((n * 23) % 20) / 100,
+  };
+});
+
+const CONSTELLATION_LINES = Array.from({ length: 6 }, (_, i) => {
+  const n = i + 1;
+  return {
+    id: i,
+    x1: 10 + ((n * 41) % 80),
+    y1: 10 + ((n * 59) % 80),
+    x2: 10 + ((n * 67) % 80),
+    y2: 10 + ((n * 73) % 80),
+    delay: ((n * 11) % 30) / 10,
+  };
+});
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -139,24 +165,11 @@ function FloatingOrb({
 
 /* ── Star particles with depth-based parallax drift ── */
 function StarParticles({ reduced }: { reduced: boolean }) {
-  const starsRef = useRef(
-    Array.from({ length: 22 }, (_, i) => ({
-      id: i,
-      x: 5 + Math.random() * 90,
-      y: 5 + Math.random() * 90,
-      size: 1 + Math.random() * 2,
-      duration: 8 + Math.random() * 12,
-      delay: Math.random() * 4,
-      drift: 6 + Math.random() * 14,
-      opacity: 0.1 + Math.random() * 0.2,
-    })),
-  );
-
   if (reduced) return null;
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-      {starsRef.current.map((s) => (
+      {STAR_PARTICLES.map((s) => (
         <motion.div
           key={s.id}
           className="absolute rounded-full"
@@ -216,17 +229,6 @@ function CoordinateReadout() {
 
 /* ── Constellation line pattern for extra depth ── */
 function ConstellationLines({ reduced }: { reduced: boolean }) {
-  const lines = useRef(
-    Array.from({ length: 6 }, (_, i) => ({
-      id: i,
-      x1: 10 + Math.random() * 80,
-      y1: 10 + Math.random() * 80,
-      x2: 10 + Math.random() * 80,
-      y2: 10 + Math.random() * 80,
-      delay: Math.random() * 3,
-    })),
-  );
-
   if (reduced) return null;
 
   return (
@@ -235,7 +237,7 @@ function ConstellationLines({ reduced }: { reduced: boolean }) {
       aria-hidden="true"
       style={{ opacity: 0.05 }}
     >
-      {lines.current.map((l) => (
+      {CONSTELLATION_LINES.map((l) => (
         <motion.line
           key={l.id}
           x1={`${l.x1}%`}
@@ -286,7 +288,7 @@ function useMouseParallax(intensity: number = 0.02) {
 }
 
 /* ── Radial glow behind 404 text ── */
-function BackgroundGlow({ reduced }: { reduced: boolean }) {
+function BackgroundGlow() {
   const parallax = useMouseParallax(0.015);
 
   return (
@@ -316,17 +318,7 @@ function BackgroundGlow({ reduced }: { reduced: boolean }) {
 }
 
 export default function NotFound() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  const reduced = prefersReducedMotion;
+  const reduced = usePrefersReducedMotion();
   const router = useRouter();
 
   /* Keyboard navigation: Backspace or H to go home */
@@ -360,7 +352,7 @@ export default function NotFound() {
       />
 
       {/* Radial background glow with parallax */}
-      <BackgroundGlow reduced={reduced} />
+      <BackgroundGlow />
 
       {/* Constellation lines for depth */}
       <ConstellationLines reduced={reduced} />

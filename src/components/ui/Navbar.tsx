@@ -20,16 +20,15 @@ const NAV_LINKS: NavLink[] = [
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuPathname, setMenuPathname] = useState(pathname);
   const [scrollProgress, setScrollProgress] = useState(0);
   const tickingRef = useRef(false);
   const navRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
+  const isMobileMenuOpen = mobileMenuOpen && menuPathname === pathname;
 
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -37,7 +36,7 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [mobileMenuOpen]);
+  }, [isMobileMenuOpen]);
 
   const handleScroll = useCallback(() => {
     if (!tickingRef.current) {
@@ -68,7 +67,7 @@ export default function Navbar() {
   // ── Premium glass effect interpolation ──
   // Deeper color range with richer indigo undertone, smoother opacity ramp
   const glassBgOpacity = 0.01 + scrollProgress * 0.32;
-  const glassBorderOpacity = 0.03 + scrollProgress * 0.24;
+  const glassBorderOpacity = 0.025 + scrollProgress * 0.12;
   const glassBlur = 14 + scrollProgress * 28;
   const glassSaturation = 1.2 + scrollProgress * 0.7;
 
@@ -118,9 +117,9 @@ export default function Navbar() {
             borderStyle: 'solid',
             borderTopWidth: '0px',
             borderBottomWidth: '1px',
-            borderLeftColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.35})`,
-            borderRightColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.35})`,
-            borderBottomColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.7})`,
+            borderLeftColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.22})`,
+            borderRightColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.22})`,
+            borderBottomColor: `rgba(255, 255, 255, ${glassBorderOpacity * 0.45})`,
             borderBottomLeftRadius: '1rem',
             borderBottomRightRadius: '1rem',
             backdropFilter: `blur(${glassBlur}px) saturate(${glassSaturation})`,
@@ -140,16 +139,15 @@ export default function Navbar() {
             ].join(', '),
           }}
         >
-          {/* ── Conic rotating gradient border ── */}
+          {/* ── Soft glass edge wash ── */}
           <div
             className="pointer-events-none absolute inset-0 rounded-b-2xl overflow-hidden"
-            style={{ opacity: 0.25 + scrollProgress * 0.75 }}
+            style={{ opacity: 0.06 + scrollProgress * 0.16 }}
           >
             <div
               className="absolute -inset-[100%]"
               style={{
-                background: `conic-gradient(from 0deg, rgba(59,130,246,0.18), rgba(99,102,241,0.22), rgba(139,92,246,0.28), rgba(168,85,247,0.22), rgba(20,184,166,0.18), rgba(6,182,212,0.15), rgba(59,130,246,0.18))`,
-                animation: 'navbar-conic-spin 8s linear infinite',
+                background: `conic-gradient(from 0deg, rgba(59,130,246,0.08), rgba(99,102,241,0.09), rgba(139,92,246,0.10), rgba(168,85,247,0.08), rgba(20,184,166,0.08), rgba(6,182,212,0.06), rgba(59,130,246,0.08))`,
               }}
             />
             <div
@@ -197,43 +195,39 @@ export default function Navbar() {
             }}
           />
 
-          {/* ── Animated gradient border bottom — quad-layer with prismatic flow ── */}
+          {/* ── Subtle bottom hairline ── */}
           <div
             className="pointer-events-none absolute bottom-0 left-0 right-0 rounded-b-2xl overflow-hidden"
-            style={{ height: '2px' }}
+            style={{ height: '1px', opacity: 0.22 + scrollProgress * 0.24 }}
           >
-            {/* Primary rotating gradient — expanded color palette with indigo bridge */}
             <div
               className="absolute inset-0"
               style={{
-                background: `linear-gradient(90deg, #3b82f6 0%, #6366f1 12%, #8b5cf6 25%, #a855f7 37%, #14b8a6 50%, #06b6d4 62%, #3b82f6 75%, #6366f1 87%, #8b5cf6 100%)`,
+                background: `linear-gradient(90deg, transparent 0%, rgba(148,163,184,0.18) 18%, rgba(96,165,250,0.22) 42%, rgba(20,184,166,0.18) 58%, rgba(148,163,184,0.14) 82%, transparent 100%)`,
                 backgroundSize: '300% 100%',
                 animation: 'navbar-border-flow 6s linear infinite',
               }}
             />
-            {/* Fade mask — refined center fade for edge emphasis */}
             <div
               className="absolute inset-0"
               style={{
-                background: `linear-gradient(90deg, transparent 0%, rgba(4,6,15,0.20) 8%, rgba(4,6,15,0.50) 30%, rgba(4,6,15,0.60) 50%, rgba(4,6,15,0.50) 70%, rgba(4,6,15,0.20) 92%, transparent 100%)`,
+                background: `linear-gradient(90deg, rgba(4,6,15,0.88), rgba(4,6,15,0.22) 35%, rgba(4,6,15,0.16) 50%, rgba(4,6,15,0.22) 65%, rgba(4,6,15,0.88))`,
               }}
             />
-            {/* Traveling shimmer highlight — wider spread with softer core */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(90deg, transparent 0%, transparent 20%, rgba(255,255,255,0.50) 40%, rgba(255,255,255,0.65) 50%, rgba(255,255,255,0.50) 60%, transparent 80%, transparent 100%)',
+                  'linear-gradient(90deg, transparent 0%, transparent 25%, rgba(255,255,255,0.16) 48%, rgba(255,255,255,0.20) 50%, rgba(255,255,255,0.16) 52%, transparent 75%, transparent 100%)',
                 animation: 'navbar-shimmer 8s ease-in-out infinite',
               }}
             />
-            {/* Fourth layer: slow color-pulsing ambient band for depth shimmer */}
             <div
               className="absolute inset-0"
               style={{
-                background: `linear-gradient(90deg, transparent, rgba(99,102,241,0.12) 25%, rgba(139,92,246,0.18) 50%, rgba(99,102,241,0.12) 75%, transparent)`,
+                background: `linear-gradient(90deg, transparent, rgba(99,102,241,0.05) 30%, rgba(139,92,246,0.06) 50%, rgba(99,102,241,0.05) 70%, transparent)`,
                 animation: 'navbar-border-flow 12s linear infinite reverse',
-                opacity: 0.4 + scrollProgress * 0.6,
+                opacity: 0.18 + scrollProgress * 0.24,
               }}
             />
           </div>
@@ -418,7 +412,10 @@ export default function Navbar() {
           <button
             type="button"
             className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:text-white transition-colors duration-300"
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            onClick={() => {
+              setMenuPathname(pathname);
+              setMobileMenuOpen((prev) => !(prev && menuPathname === pathname));
+            }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLElement;
               el.style.background = 'rgba(255,255,255,0.05)';
@@ -429,31 +426,31 @@ export default function Navbar() {
               el.style.background = 'transparent';
               el.style.boxShadow = 'none';
             }}
-            aria-expanded={mobileMenuOpen}
+            aria-expanded={isMobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
             <div className="w-5 h-5 relative flex flex-col items-center justify-center">
               <motion.span
                 className="absolute block w-5 h-[1.5px] bg-current rounded-full origin-center"
                 animate={{
-                  rotate: mobileMenuOpen ? 45 : 0,
-                  y: mobileMenuOpen ? 0 : -5,
+                  rotate: isMobileMenuOpen ? 45 : 0,
+                  y: isMobileMenuOpen ? 0 : -5,
                 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               />
               <motion.span
                 className="absolute block w-5 h-[1.5px] bg-current rounded-full origin-center"
                 animate={{
-                  opacity: mobileMenuOpen ? 0 : 1,
-                  scaleX: mobileMenuOpen ? 0.3 : 1,
+                  opacity: isMobileMenuOpen ? 0 : 1,
+                  scaleX: isMobileMenuOpen ? 0.3 : 1,
                 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               />
               <motion.span
                 className="absolute block w-5 h-[1.5px] bg-current rounded-full origin-center"
                 animate={{
-                  rotate: mobileMenuOpen ? -45 : 0,
-                  y: mobileMenuOpen ? 0 : 5,
+                  rotate: isMobileMenuOpen ? -45 : 0,
+                  y: isMobileMenuOpen ? 0 : 5,
                 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               />
@@ -461,7 +458,7 @@ export default function Navbar() {
 
             {/* Button tap feedback ring — dual-ring effect */}
             <AnimatePresence>
-              {mobileMenuOpen && (
+              {isMobileMenuOpen && (
                 <>
                   <motion.span
                     initial={{ scale: 0.8, opacity: 0.5 }}
@@ -491,7 +488,7 @@ export default function Navbar() {
 
         {/* ── Mobile Menu ── */}
         <AnimatePresence mode="wait">
-          {mobileMenuOpen && (
+          {isMobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0, scaleY: 0.95 }}
               animate={{ opacity: 1, height: 'auto', scaleY: 1 }}
@@ -513,9 +510,9 @@ export default function Navbar() {
                 borderTopWidth: '0px',
                 borderBottomLeftRadius: '1rem',
                 borderBottomRightRadius: '1rem',
-                borderLeftColor: `rgba(255,255,255,${glassBorderOpacity * 0.40})`,
-                borderRightColor: `rgba(255,255,255,${glassBorderOpacity * 0.40})`,
-                borderBottomColor: `rgba(255,255,255,${glassBorderOpacity * 0.75})`,
+                borderLeftColor: `rgba(255,255,255,${glassBorderOpacity * 0.25})`,
+                borderRightColor: `rgba(255,255,255,${glassBorderOpacity * 0.25})`,
+                borderBottomColor: `rgba(255,255,255,${glassBorderOpacity * 0.45})`,
                 boxShadow: [
                   `0 20px 56px rgba(0,0,0,0.42)`,
                   `0 8px 20px rgba(0,0,0,0.28)`,
@@ -536,15 +533,15 @@ export default function Navbar() {
                 }}
               />
 
-              {/* Animated bottom gradient border for mobile — matching prismatic palette */}
+              {/* Soft bottom hairline for mobile */}
               <div
                 className="pointer-events-none absolute bottom-0 left-0 right-0 rounded-b-2xl overflow-hidden"
-                style={{ height: '2px' }}
+                style={{ height: '1px', opacity: 0.34 }}
               >
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(90deg, #3b82f6 0%, #6366f1 12%, #8b5cf6 25%, #a855f7 37%, #14b8a6 50%, #06b6d4 62%, #3b82f6 75%, #6366f1 87%, #8b5cf6 100%)`,
+                    background: `linear-gradient(90deg, transparent 0%, rgba(148,163,184,0.18) 16%, rgba(96,165,250,0.22) 42%, rgba(20,184,166,0.18) 58%, rgba(148,163,184,0.14) 84%, transparent 100%)`,
                     backgroundSize: '300% 100%',
                     animation: 'navbar-border-flow 6s linear infinite',
                   }}
@@ -552,14 +549,14 @@ export default function Navbar() {
                 <div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(90deg, transparent 0%, rgba(4,6,15,0.25) 10%, rgba(4,6,15,0.55) 35%, rgba(4,6,15,0.60) 50%, rgba(4,6,15,0.55) 65%, rgba(4,6,15,0.25) 90%, transparent 100%)`,
+                    background: `linear-gradient(90deg, rgba(4,6,15,0.86), rgba(4,6,15,0.24) 35%, rgba(4,6,15,0.18) 50%, rgba(4,6,15,0.24) 65%, rgba(4,6,15,0.86))`,
                   }}
                 />
                 <div
                   className="absolute inset-0"
                   style={{
                     background:
-                      'linear-gradient(90deg, transparent 0%, transparent 20%, rgba(255,255,255,0.45) 40%, rgba(255,255,255,0.60) 50%, rgba(255,255,255,0.45) 60%, transparent 80%, transparent 100%)',
+                      'linear-gradient(90deg, transparent 0%, transparent 25%, rgba(255,255,255,0.12) 48%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0.12) 52%, transparent 75%, transparent 100%)',
                     animation: 'navbar-shimmer 8s ease-in-out infinite',
                   }}
                 />

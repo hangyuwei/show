@@ -3,13 +3,13 @@
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, type Variants, type Transition } from 'framer-motion';
 import { usePathname } from 'next/navigation';
+import usePrefersReducedMotion from './usePrefersReducedMotion';
 
 interface PageTransitionProps {
   children: ReactNode;
 }
 
 /* ── Shared easing curves ── */
-const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const EASE_OUT_SMOOTH: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const EASE_IN_QUAD: [number, number, number, number] = [0.55, 0.06, 0.68, 0.19];
 const EASE_SPRING_OUT: [number, number, number, number] = [0.18, 1, 0.25, 1];
@@ -246,15 +246,14 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   } = {},
 ) {
   const ref = useRef<T>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [isVisible, setIsVisible] = useState(() => Boolean(prefersReducedMotion));
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
-      setIsVisible(true);
+    if (prefersReducedMotion) {
       return;
     }
 
@@ -277,26 +276,17 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [options.threshold, options.rootMargin, options.triggerOnce]);
+  }, [options.threshold, options.rootMargin, options.triggerOnce, prefersReducedMotion]);
 
-  return { ref, isVisible };
+  return { ref, isVisible: prefersReducedMotion || isVisible };
 }
 
 export default function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
   const prevPathname = useRef(pathname);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  /* Detect reduced-motion preference */
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
 
   /* Detect route changes to trigger the loading bar */
   useEffect(() => {

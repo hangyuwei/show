@@ -82,7 +82,7 @@ function CentralSphere({ color }: { color: string }) {
     return () => { geo.dispose(); mat.dispose(); };
   }, [geo, mat]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (meshRef.current) {
       meshRef.current.rotation.x += 0.005;
       meshRef.current.rotation.y += 0.008;
