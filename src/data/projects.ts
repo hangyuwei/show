@@ -29,6 +29,7 @@ export interface Project {
   scene3d: string;
   thoughtChain: ThoughtChain;
   screenshots: string[];
+  demoVideo?: string;
   githubUrl?: string;
   demoUrl?: string;
   featured: boolean;
@@ -1199,6 +1200,7 @@ const creativeProjects: Project[] = [
         '完成了 3D 八音盒 Web 体验，覆盖模型、粒子、动画和音乐交互四个模块，适合作为 Web 3D 创意作品展示。',
     },
     screenshots: ['/projects/starry-music-box/screenshot1.png', '/projects/starry-music-box/screenshot2.png', '/projects/starry-music-box/screenshot3.png'],
+    demoVideo: '/projects/starry-music-box/demo-video.webm',
     githubUrl: 'https://github.com/hangyuwei/starry-music-box',
     featured: true,
     year: '2026',

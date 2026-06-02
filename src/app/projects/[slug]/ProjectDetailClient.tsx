@@ -1311,6 +1311,51 @@ function OutcomeShowcase({
       </div>
 
       <div className="relative grid gap-4">
+        {project.demoVideo && (
+          <figure className="group relative overflow-hidden rounded-2xl border border-cyan-100/12 bg-zinc-950/78 shadow-2xl shadow-black/22 ring-1 ring-white/[0.03] transition-all duration-500 hover:border-cyan-100/28 hover:shadow-cyan-500/[0.08] hover:ring-white/[0.07] hover:-translate-y-1">
+            <div className="relative bg-slate-100 p-1.5 sm:p-2">
+              <div className="mb-1.5 flex items-center justify-between gap-3 rounded-t-xl border border-slate-200 bg-white px-3 py-2 text-slate-500 sm:mb-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-500" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                </div>
+                <span className="hidden font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400 sm:inline">
+                  demo video
+                </span>
+                <span className="font-mono text-[10px] text-slate-400">▶</span>
+              </div>
+              <div className="relative overflow-hidden rounded-b-xl bg-black aspect-[16/9]">
+                <video
+                  src={project.demoVideo}
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-full w-full object-contain"
+                />
+              </div>
+            </div>
+            <figcaption className="border-t border-cyan-100/10 bg-zinc-950/88 px-4 py-4 sm:px-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-semibold text-zinc-50">
+                      演示视频
+                    </span>
+                    <span className="rounded-full border border-red-500/30 bg-red-500/[0.08] px-2 py-0.5 font-mono text-[10px] text-red-300/80">
+                      DEMO
+                    </span>
+                  </div>
+                  <p className="mb-0 mt-2 text-xs leading-5 text-zinc-400 sm:text-[13px]">
+                    {project.name} 交互演示，展示 3D 场景实时渲染效果。
+                  </p>
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        )}
         <OutcomeScreenshotCard
           key={primary.src}
           project={project}
