@@ -346,7 +346,7 @@ Hang's Portfolio — 个人项目作品集网站
 
 | ID | 项目名 | Slug | 技术栈 | 一句话描述 |
 |----|--------|------|--------|-----------|
-| 01 | 校园健康上报与疫情防控系统 | campus-health | Spring Boot/Vue3/Vant/MySQL/Redis/Docker | 企业级校园健康上报全栈系统，RBAC权限，13模块 |
+| 01 | 校园健康上报与疫情防控系统 | campus-health | Spring Boot 3/MyBatis-Plus/Sa-Token/Vue3/Element Plus/uni-app/MySQL/Redis/Docker | 区校两级健康上报与疫情监测统计平台，三端全栈，Sa-Token鉴权与school_id数据隔离，已上线 |
 | 02 | 400热线客服数据统计仪表板 | kefu-stats | Python/Streamlit/Pandas/Plotly | 3种客服系统数据标准化与可视化仪表板 |
 | 03 | 可研报告解析桌面软件 | feasibility-report | Python/MarkItDown/PyInstaller | 气象台站可研报告自动提取Windows桌面软件 |
 | 04 | 保健品产品海报制作 | product-poster | Python/HTML/AI图像生成 | 福寿大街品牌三产品线AI辅助海报设计 |
