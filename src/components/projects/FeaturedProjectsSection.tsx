@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import type { BusinessLine, Project } from '@/data/projects';
 import { businessLineLabels } from '@/data/projects';
+import { GlyphStreamBackdrop } from '@/components/threeui/backdrops';
+import HudFrame from '@/components/threeui/HudFrame';
 
 const BUSINESS_LINE_ORDER: BusinessLine[] = [
   'health',
@@ -187,7 +189,7 @@ function FeaturedProjectCard({
         </span>
         <span className="inline-flex items-center gap-2 text-xs font-semibold text-cyan-50 transition group-hover:text-cyan-200">
           查看案例
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={1.8}>
+          <svg aria-hidden="true" className="h-3.5 w-3.5" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={1.8}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 3l5 5-5 5" />
           </svg>
         </span>
@@ -246,7 +248,7 @@ function FeaturedLeadCard({ project }: { project: Project }) {
 
         <div className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full border border-cyan-100/20 bg-cyan-100/[0.06] px-5 text-sm font-semibold text-cyan-50 transition group-hover:border-cyan-100/36 group-hover:bg-cyan-100/[0.10]">
           查看案例
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={1.8}>
+          <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={1.8}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 3l5 5-5 5" />
           </svg>
         </div>
@@ -272,6 +274,8 @@ export default function FeaturedProjectsSection({
       id="featured-projects"
       className="relative overflow-hidden bg-[#02030a] px-4 py-12 text-[#e8f2ff] sm:px-6 sm:py-14 lg:px-8"
     >
+      <GlyphStreamBackdrop />
+      <HudFrame label="Selected Missions" meta="Evidence-First Index" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(101,216,255,0.026)_1px,transparent_1px),linear-gradient(90deg,rgba(101,216,255,0.018)_1px,transparent_1px)] bg-[size:72px_72px]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-100/28 to-transparent" />
       <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-[min(760px,90vw)] -translate-x-1/2 rounded-full bg-cyan-300/[0.045] blur-3xl" />
@@ -313,7 +317,7 @@ export default function FeaturedProjectsSection({
             className="inline-flex min-h-11 items-center gap-2 rounded-full border border-amber-200/18 bg-amber-200/[0.055] px-5 text-sm font-semibold text-amber-50/82 transition hover:border-amber-200/32 hover:bg-amber-200/[0.09]"
           >
             查看全部项目
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={1.8}>
+            <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 3l5 5-5 5" />
             </svg>
           </Link>

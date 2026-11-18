@@ -2,14 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-
-const ParticleBackground = dynamic(
-  () => import('@/components/three/ParticleBackground'),
-  {
-    ssr: false,
-  }
-);
+import { ContactAstrolabeBackdrop } from '@/components/threeui/backdrops';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,7 +31,7 @@ const socialLinks = [
     href: 'https://github.com/hangyuwei',
     label: 'github.com/hangyuwei',
     icon: (
-      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path
           fillRule="evenodd"
           d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
@@ -52,7 +45,7 @@ const socialLinks = [
     href: 'mailto:13811282241@163.com',
     label: '13811282241@163.com',
     icon: (
-      <svg
+      <svg aria-hidden="true"
         className="w-5 h-5"
         fill="none"
         viewBox="0 0 24 24"
@@ -84,26 +77,28 @@ export default function ContactContent() {
   };
 
   const inputWrapperClass = (field: string) =>
-    `relative rounded-2xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+    `relative rounded-2xl transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
       focused === field
         ? 'ring-1 ring-[var(--accent)]/20 shadow-[0_0_40px_rgba(45,140,240,0.14),0_0_80px_rgba(139,92,246,0.07),0_0_120px_rgba(20,184,166,0.03),0_8px_36px_rgba(0,0,0,0.30)]'
         : 'shadow-[0_2px_8px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.10)]'
     }`;
 
   const inputClass =
-    'relative w-full rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] px-4 py-3.5 text-sm text-white/90 placeholder-white/20 outline-none backdrop-blur-xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus:border-[var(--accent)]/30 focus:bg-[var(--glass-bg-hover)] focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_32px_rgba(45,140,240,0.04),inset_0_0_48px_rgba(139,92,246,0.02)]';
+    'relative w-full rounded-2xl bg-[var(--glass-bg)] border border-[var(--glass-border)] px-4 py-3.5 text-sm text-white/90 placeholder-white/20 outline-none backdrop-blur-xl transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus:border-[var(--accent)]/30 focus:bg-[var(--glass-bg-hover)] focus:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_32px_rgba(45,140,240,0.04),inset_0_0_48px_rgba(139,92,246,0.02)]';
 
   return (
     <>
-      <ParticleBackground />
+      <ContactAstrolabeBackdrop />
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12"
+        className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 py-12"
       >
-        <div className="w-full max-w-lg">
+        <div className="relative w-full max-w-lg">
+          {/* Readability scrim so the astrolabe reads as backdrop, not noise */}
+          <div className="pointer-events-none absolute -inset-x-14 -inset-y-16 rounded-[2.5rem] bg-[radial-gradient(ellipse_at_center,rgba(2,3,10,0.78)_0%,rgba(2,3,10,0.55)_55%,transparent_78%)]" />
           {/* Heading */}
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h1 className="text-3xl sm:text-4xl font-bold mb-3.5 tracking-heading accent-gradient-text">
@@ -255,9 +250,9 @@ export default function ContactContent() {
               {/* Inner top gradient for depth illusion */}
               <span className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none rounded-t-2xl" />
               {/* Ambient glow halo behind button */}
-              <span className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/8 group-hover:via-[var(--accent-purple)]/5 group-hover:to-[var(--color-accent-teal)]/7 blur-xl transition-all duration-800 -z-10" />
+              <span className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/8 group-hover:via-[var(--accent-purple)]/5 group-hover:to-[var(--color-accent-teal)]/7 blur-xl transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-800 -z-10" />
               <span className="relative z-10 flex items-center justify-center gap-2">
-                <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg aria-hidden="true" className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
                 发送消息
@@ -292,14 +287,14 @@ export default function ContactContent() {
                 }
                 whileHover={{ scale: 1.03, y: -3 }}
                 whileTap={{ scale: 0.97 }}
-                className="group relative flex items-center gap-3.5 rounded-2xl px-6 py-3.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[var(--accent)]/22 hover:bg-[var(--glass-bg-hover)] hover:shadow-[0_0_36px_rgba(45,140,240,0.10),0_0_72px_rgba(139,92,246,0.05),0_16px_44px_rgba(0,0,0,0.28)]"
+                className="group relative flex items-center gap-3.5 rounded-2xl px-6 py-3.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-xl transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[var(--accent)]/22 hover:bg-[var(--glass-bg-hover)] hover:shadow-[0_0_36px_rgba(45,140,240,0.10),0_0_72px_rgba(139,92,246,0.05),0_16px_44px_rgba(0,0,0,0.28)]"
               >
                 {/* Ambient glow halo on hover */}
-                <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/7 group-hover:via-[var(--accent-purple)]/4 group-hover:to-[var(--color-accent-teal)]/5 blur-xl transition-all duration-700 pointer-events-none" />
+                <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent-purple)]/0 to-[var(--color-accent-teal)]/0 group-hover:from-[var(--accent)]/7 group-hover:via-[var(--accent-purple)]/4 group-hover:to-[var(--color-accent-teal)]/5 blur-xl transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 pointer-events-none" />
                 {/* Top-edge light bar on hover */}
-                <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/35 transition-all duration-700" />
+                <div className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/0 to-transparent group-hover:via-[var(--accent)]/35 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700" />
                 {/* Bottom gradient underline accent on hover */}
-                <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-teal)]/0 to-transparent group-hover:via-[var(--color-accent-teal)]/40 transition-all duration-700" />
+                <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-teal)]/0 to-transparent group-hover:via-[var(--color-accent-teal)]/40 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700" />
                 {/* Soft inner glow on hover */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.025] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                 {/* Icon color with glow */}

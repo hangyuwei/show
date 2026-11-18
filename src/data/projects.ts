@@ -88,41 +88,45 @@ const healthProjects: Project[] = [
     name: '校园健康上报与疫情防控系统',
     nameEn: 'Campus Health Reporting & Epidemic Control System',
     businessLine: 'health',
-    tagline: '面向校园健康填报与统计的管理系统',
+    tagline: '区校两级健康上报与疫情监测统计平台',
     description:
-      '面向高校场景的健康填报系统，支持学生端每日上报、异常状态标记、按院系统计和报表导出。项目重点是把分散的健康信息收集流程整理成可查询、可汇总的数字化台账。\n\n前端采用 Vue3 + Vant 实现移动端界面，后端使用 Spring Boot 构建 RESTful API，MySQL 存储业务数据，Redis 用于缓存部分统计结果，Docker 用于统一本地开发和部署环境。',
-    techStack: ['Spring Boot', 'Vue3', 'Vant', 'MySQL', 'Redis', 'Docker'],
+      '面向 K12 校园场景的健康上报与疫情/缺勤监测平台，覆盖区级管理员、学校管理员、审核员、教师与学生/家长、校医等多类角色，把分散在纸质表和微信群的健康信息整理成可上报、可审核、可统计、可导出的数字化台账。\n\n管理后台使用 Vue3 + Vite + Element Plus，移动端填报走 uni-app 的 H5 方案，统一后端基于 Spring Boot 3 + MyBatis-Plus 构建 RESTful API，Sa-Token 负责鉴权，MySQL 存储业务数据，Redis 缓存高频统计，EasyExcel 处理导入导出，Docker + Nginx 统一部署。',
+    techStack: ['Spring Boot 3', 'MyBatis-Plus', 'Sa-Token', 'Vue3', 'Element Plus', 'uni-app', 'MySQL', 'Redis', 'EasyExcel', 'Docker'],
     scene3d: 'building',
     thoughtChain: {
-      problem: '高校疫情防控期间，传统纸质或微信群上报方式效率低下，数据分散难以统计汇总，无法实现实时监控和预警。',
+      problem:
+        '区级教育和学校在疫情防控与日常缺勤管理期间，长期依赖纸质表格或微信群收集健康信息，数据分散、口径不一，区级无法快速汇总辖区学校的上报进度，审核过程没有留痕，统计报表靠人工拼接，难以做到实时、准确、可追溯。',
       analysis:
-        '需要把学生填报、辅导员查看、异常记录和数据导出串成一个清晰流程，同时适配移动端，让日常填报和后续统计都更容易维护。',
+        '需要把"上报—审核—统计—导出"串成一条清晰闭环：学生与教职工通过移动端每日填报，学校审核员对待审记录做通过或驳回并留痕，区级管理员跨校查看上报完成率与异常人数，所有角色按数据范围严格隔离。非功能性上要求字典不硬编码、逻辑删除可追溯、统计口径统一只算审核通过数据，并支持 Excel 批量导入导出。',
       design:
-        '后端选择 Spring Boot 与 MyBatis-Plus 处理常规业务接口和数据访问，前端 Vue3 + Vant 负责移动端表单与列表体验。Redis 缓存部分高频统计数据，Docker 统一运行环境。',
+        '后端选 Spring Boot 3 + MyBatis-Plus 处理业务接口与数据访问，鉴权用 Sa-Token 而非 Spring Security，便于做多角色权限注解与 token 管理；管理后台用 Vue3 + Element Plus 搭建列表、表单与审核工作台，移动端填报用 uni-app 的 H5 方案兼顾多端；Redis 缓存高频统计结果，EasyExcel 负责导入导出，Docker + Nginx 统一部署。',
       development:
-        '采用前后端分离架构，定义 RESTful API。权限系统区分管理员、辅导员、学生角色。数据导出使用 Apache POI 生成 Excel 报表，定时任务用于汇总当日填报状态和提醒列表。',
+        '采用前后端分离与分层架构（Controller→Service→Mapper），统一返回结构与全局异常拦截。健康上报主表用 person_type 区分学生与教职工、共用一套上报逻辑，审核状态快照存主表、完整流水写入独立的 health_report_audit 表；所有业务表带 school_id 做数据隔离，含唯一键的表用 deleted + delete_version 实现逻辑删除；疾病、症状、缺课类型等走字典接口不硬编码。',
       challenges: [
         {
-          title: '高并发填报场景',
-          description: '每日集中时段（早8点）大量学生同时填报，数据库写入压力大。',
+          title: '区校两级数据隔离与多角色鉴权',
+          description:
+            '同一套接口要同时服务区级管理员（看辖区全部学校）、学校管理员（只看本校）、班主任（只看本班）和普通上报账号（只看自己提交的记录），任何一层越权都会泄露其他学校或班级的敏感健康数据。',
           solution:
-            '引入 Redis 缓存层，先写入 Redis 再异步批量同步到 MySQL；前端增加请求节流和本地缓存避免重复提交。',
+            '以 Sa-Token 做多角色 RBAC，所有业务查询在 SQL 层按当前用户的 school_id 与数据范围强制过滤，审核操作额外校验当前用户是否属于该记录的审核层级；统计只纳入审核通过的数据，草稿、待审、驳回与逻辑删除记录一律排除。',
         },
         {
-          title: '数据权限隔离',
-          description: '不同院系辅导员只能看到本院系学生数据，校级管理员可看全局。',
+          title: '公网无法拉镜像的服务器部署',
+          description:
+            '目标服务器无法访问公网镜像源，docker hub 直连与加速器均断流，本地开发机的容器虚拟机 DNS 又全面失效，常规 docker pull 与 buildx 流程在两端都走不通。',
           solution:
-            '基于 RBAC 模型设计多级权限体系，SQL 层面通过数据范围过滤实现行级权限控制。',
+            '改用宿主机 skopeo 直接拉取基础镜像为 OCI layout，应用产物在宿主机原生构建（Maven 走阿里云 mirror、前端 Vite 指定子路径构建），再用 buildx 的 oci-layout 本地文件源交叉构建 amd64 镜像，docker save 后 scp 导入服务器加载，全程不依赖服务器与虚拟机的公网拉取。',
         },
       ],
       outcome:
-        '实现了校园健康填报、异常标记、统计汇总和 Excel 导出等核心模块，适合作为校园健康管理场景的系统化实践。',
+        '完成了上报、审核、统计与导出的三端 MVP 闭环（管理后台、H5 填报、统一后端），已部署上线并配置 HTTPS，覆盖约 5 万行代码、13 个业务模块与 6 类角色的权限隔离。',
     },
     screenshots: ['/projects/campus-health/screenshot1.png', '/projects/campus-health/screenshot2.png', '/projects/campus-health/screenshot3.png'],
     githubUrl: 'https://github.com/hangyuwei/campus-health',
+    demoUrl: 'https://health.studywithclaudeai.xyz',
     featured: true,
     year: '2026',
-    status: 'completed',
+    status: 'active',
   },
   {
     id: 2,

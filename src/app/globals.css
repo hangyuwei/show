@@ -726,6 +726,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -740,7 +741,7 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-base);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ── Headings — system-font type hierarchy with optical sizing ── */
@@ -2281,4 +2282,164 @@ canvas {
 .text-oldstyle {
   font-feature-settings: 'onum' on, 'pnum' on, 'ss01' on;
   font-variant-numeric: oldstyle-nums proportional-nums;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ThreeUI Community layer (https://github.com/MengTo/threeui — MIT)
+   Base classes for the copy-adapted WebGL components in
+   src/components/threeui/. Fragment Mono is SIL OFL 1.1
+   (https://github.com/weiweihuanghuang/fragment-mono).
+   ══════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'ThreeUI Fragment Mono';
+  src: url('/fonts/fragment-mono.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.threeui-background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.threeui-background > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Typography vortex — interactive ring-text canvas (404 page) */
+.typography-vortex-component {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  container-type: inline-size;
+  touch-action: none;
+  cursor: crosshair;
+  background: #02030a;
+}
+
+.typography-vortex-component > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.typography-vortex-component--light {
+  background: #eef1f6;
+}
+
+.typography-vortex-component__hint {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(140, 190, 230, 0.42);
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typography-vortex-component {
+    cursor: default;
+  }
+  .typography-vortex-component__hint {
+    display: none;
+  }
+}
+
+
+/* Universe explorer: on touch devices the live solar system keeps auto-rotating
+   but ignores touches, so a full-screen canvas never becomes a scroll trap */
+@media (pointer: coarse) {
+  .universe-explorer canvas {
+    pointer-events: none;
+  }
+}
+
+/* Planet chart annotations inside the live solar system — never intercept
+   pointer events so planet hover/click passes through to the 3D meshes */
+.planet-label-wrapper {
+  pointer-events: none !important;
+}
+
+/* Target-lock warp transition (universe explorer) */
+.universe-warp-streaks {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(101, 216, 255, 0.17) 0deg 1.1deg,
+    transparent 1.1deg 6.5deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 16%, black 74%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 16%, black 74%);
+  animation: universe-warp-pulse 0.95s ease-in forwards;
+}
+
+@keyframes universe-warp-pulse {
+  from { opacity: 0; transform: scale(1.4); }
+  55% { opacity: 1; }
+  to { opacity: 0.92; transform: scale(1); }
+}
+
+@keyframes universe-lock-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* HudFrame scanline sweep */
+@keyframes hud-scan {
+  0% { transform: translateY(0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Accessibility layer (Hallmark lint pass — Round 8, 2026-11-18)
+   Focus visibility · disabled states · reduced motion
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Keyboard focus ring — cyan anchor (#00e5ff) ≥3:1 on dark surfaces */
+:focus-visible {
+  outline: 2px solid var(--accent-end);
+  outline-offset: 2px;
+}
+
+/* Disabled / inert controls must never look active */
+button:disabled,
+a[aria-disabled='true'],
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: saturate(0.6);
+}
+
+/* Reduced motion — CSS animations/transitions off.
+   JS-driven motion (framer-motion) is handled by
+   <MotionConfig reducedMotion="user"> in src/app/layout.tsx. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -58,7 +58,7 @@ export default function ProjectFilter({
               className={`
                 relative flex items-center gap-2 whitespace-nowrap rounded-lg
                 px-3.5 py-2 text-sm font-medium
-                border transition-all duration-300
+                border transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300
                 ${
                   isActive
                     ? 'border-white/[0.16] bg-white/[0.08] text-white'

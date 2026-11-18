@@ -200,7 +200,7 @@ function ImageSkeleton({ reduced }: { reduced: boolean }) {
         />
         {/* Image icon placeholder */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <svg
+          <svg aria-hidden="true"
             className="w-10 h-10 text-white/10"
             fill="none"
             viewBox="0 0 24 24"

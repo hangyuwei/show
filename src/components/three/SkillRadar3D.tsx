@@ -63,11 +63,11 @@ function RadarGrid() {
   }, []);
 
   const ringMaterial = useMemo(
-    () => new THREE.LineBasicMaterial({ color: '#4a90d9', transparent: true, opacity: 0.25 }),
+    () => new THREE.LineBasicMaterial({ color: '#65d8ff', transparent: true, opacity: 0.4 }),
     [],
   );
   const spokeMaterial = useMemo(
-    () => new THREE.LineBasicMaterial({ color: '#4a90d9', transparent: true, opacity: 0.2 }),
+    () => new THREE.LineBasicMaterial({ color: '#65d8ff', transparent: true, opacity: 0.32 }),
     [],
   );
 
@@ -129,7 +129,7 @@ function RadarFill() {
       new THREE.MeshBasicMaterial({
         color: '#4a90d9',
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.3,
         side: THREE.DoubleSide,
       }),
     [],
@@ -165,7 +165,7 @@ function RadarGlowEdge() {
   }, []);
 
   const edgeMat = useMemo(
-    () => new THREE.LineBasicMaterial({ color: '#6cb4ee', transparent: true, opacity: 0.9, linewidth: 2 }),
+    () => new THREE.LineBasicMaterial({ color: '#9fe8ff', transparent: true, opacity: 1, linewidth: 2 }),
     [],
   );
 

@@ -23,9 +23,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = allProjects.find((p) => p.slug === slug);
   if (!project) return { title: 'Project Not Found' };
 
+  const title = project.name;
+  const description = project.description;
+
   return {
-    title: `${project.name} | Portfolio`,
-    description: project.description,
+    title,
+    description,
+    alternates: {
+      canonical: `/projects/${project.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/projects/${project.slug}`,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   };
 }
 

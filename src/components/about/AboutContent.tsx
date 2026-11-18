@@ -248,10 +248,10 @@ export default function AboutContent() {
         dangerouslySetInnerHTML={{
           __html: `
             @keyframes timeline-light {
-              0% { top: -12px; opacity: 0; }
+              0% { transform: translateY(-60px); opacity: 0; }
               10% { opacity: 0.7; }
               90% { opacity: 0.7; }
-              100% { top: calc(100% + 12px); opacity: 0; }
+              100% { transform: translateY(calc(100% + 12px)); opacity: 0; }
             }
           `,
         }}
@@ -290,7 +290,7 @@ export default function AboutContent() {
             className="relative inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.035] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-[#65d8ff]/70 mb-4"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#65d8ff]/70" />
-            ABOUT
+            ABOUT HANG
           </motion.span>
 
           {/* Main title with enhanced gradient and glow */}
@@ -310,17 +310,27 @@ export default function AboutContent() {
                 filter: 'drop-shadow(0 0 14px rgba(101,216,255,0.14))',
               }}
             >
-              关于我
+              我是杭
             </span>
           </motion.h1>
 
-          {/* Subtitle line with refined spacing */}
+          {/* Identity-first intro copy */}
           <motion.p
             variants={heroSubtitleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-sm sm:text-base text-white/42 max-w-xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/62 max-w-2xl mx-auto leading-8"
+          >
+            一名把全栈工程、AI 应用和大健康行业经验连接起来的独立开发者。
+          </motion.p>
+
+          <motion.p
+            variants={heroSubtitleVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mt-3 text-xs sm:text-sm text-white/36 max-w-xl mx-auto leading-relaxed"
           >
             全栈开发 / 大健康技术 / AI 应用 / 创意可视化
           </motion.p>
@@ -367,7 +377,7 @@ export default function AboutContent() {
         <SectionTitle subtitle="跨领域复合能力全景 — 涵盖工程、设计、数据与 AI">能力雷达</SectionTitle>
 
         <div
-          className="relative w-full max-w-xl mx-auto h-[340px] sm:h-[420px] rounded-xl overflow-hidden border border-white/[0.055] group/panel transition-all duration-500 hover:border-white/[0.10]"
+          className="relative w-full max-w-xl mx-auto h-[340px] sm:h-[420px] rounded-xl overflow-hidden border border-white/[0.055] group/panel transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 hover:border-white/[0.10]"
           style={{
             background: 'rgba(7, 17, 31, 0.68)',
             boxShadow: '0 12px 34px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.04)',
@@ -441,7 +451,7 @@ export default function AboutContent() {
             }}
           />
           <div
-            className="relative rounded-2xl p-6 sm:p-10 transition-all duration-700 group-hover:shadow-[0_12px_48px_rgba(0,0,0,0.3),0_0_40px_rgba(139,92,246,0.06)]"
+            className="relative rounded-2xl p-6 sm:p-10 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 group-hover:shadow-[0_12px_48px_rgba(0,0,0,0.3),0_0_40px_rgba(139,92,246,0.06)]"
             style={{
               background: 'var(--glass-bg)',
               boxShadow: '0 2px 16px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.04), 0 0 20px rgba(139,92,246,0.03)',
@@ -528,14 +538,14 @@ export default function AboutContent() {
                       filter: 'drop-shadow(0 0 12px rgba(33,150,255,0.2))',
                     }}
                   >
-                    Hang
+                    杭 / Hang
                   </span>
                 </h3>
 
                 {/* Location + availability line */}
                 <div className="flex items-center gap-3 mb-4 text-xs text-white/28">
                   <span className="inline-flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <svg aria-hidden="true" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                     </svg>
@@ -551,28 +561,28 @@ export default function AboutContent() {
                 {/* Role tags with enhanced glow hover */}
                 <div className="flex flex-wrap gap-2 mb-5">
                   <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-accent-blue border border-accent-blue/25 transition-all duration-300 hover:border-accent-blue/50 hover:shadow-[0_0_14px_rgba(33,150,255,0.18)]"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-accent-blue border border-accent-blue/25 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 hover:border-accent-blue/50 hover:shadow-[0_0_14px_rgba(33,150,255,0.18)]"
                     style={{ background: 'rgba(33, 150, 255, 0.06)' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-blue shadow-[0_0_4px_rgba(33,150,255,0.4)]" />
                     全栈开发
                   </span>
                   <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-teal/25 transition-all duration-300 hover:border-accent-teal/50 hover:shadow-[0_0_14px_rgba(20,184,166,0.18)]"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-teal/25 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 hover:border-accent-teal/50 hover:shadow-[0_0_14px_rgba(20,184,166,0.18)]"
                     style={{ background: 'rgba(20, 184, 166, 0.06)', color: '#14b8a6' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-teal shadow-[0_0_4px_rgba(20,184,166,0.4)]" />
                     大健康行业
                   </span>
                   <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-purple/25 transition-all duration-300 hover:border-accent-purple/50 hover:shadow-[0_0_14px_rgba(139,92,246,0.18)]"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-purple/25 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 hover:border-accent-purple/50 hover:shadow-[0_0_14px_rgba(139,92,246,0.18)]"
                     style={{ background: 'rgba(139, 92, 246, 0.06)', color: '#8b5cf6' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-purple shadow-[0_0_4px_rgba(139,92,246,0.4)]" />
                     AI 应用
                   </span>
                   <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-warm/25 transition-all duration-300 hover:border-accent-warm/50 hover:shadow-[0_0_14px_rgba(245,158,11,0.18)]"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-accent-warm/25 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 hover:border-accent-warm/50 hover:shadow-[0_0_14px_rgba(245,158,11,0.18)]"
                     style={{ background: 'rgba(245, 158, 11, 0.06)', color: '#eab308' }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shadow-[0_0_4px_rgba(245,158,11,0.4)]" />
@@ -621,10 +631,10 @@ export default function AboutContent() {
                     href="https://github.com/hangyuwei"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 text-sm text-white/35 hover:text-accent-blue transition-all duration-300 group/link"
+                    className="inline-flex items-center gap-2.5 text-sm text-white/35 hover:text-accent-blue transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 group/link"
                   >
                     <span
-                      className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/8 group-hover/link:border-accent-blue/25 group-hover/link:bg-accent-blue/8 group-hover/link:shadow-[0_0_12px_rgba(33,150,255,0.12)] transition-all duration-300"
+                      className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/8 group-hover/link:border-accent-blue/25 group-hover/link:bg-accent-blue/8 group-hover/link:shadow-[0_0_12px_rgba(33,150,255,0.12)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300"
                     >
                       <svg
                         className="w-4 h-4"
@@ -640,8 +650,8 @@ export default function AboutContent() {
                       </svg>
                     </span>
                     <span className="font-mono text-xs">github.com/hangyuwei</span>
-                    <svg
-                      className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300"
+                    <svg aria-hidden="true"
+                      className="w-3 h-3 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -689,7 +699,7 @@ export default function AboutContent() {
         <SectionTitle subtitle="拖拽旋转探索我的技术版图 — 从前端到后端、从数据到 AI">技术栈</SectionTitle>
 
         <div
-          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-all duration-700 hover:border-white/[0.12]"
+          className="relative w-full max-w-xl mx-auto h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border border-white/[0.06] group/panel transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 hover:border-white/[0.12]"
           style={{
             background: 'var(--glass-bg)',
             boxShadow: '0 4px 24px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(139,92,246,0.04), 0 0 80px rgba(33,150,255,0.02)',
@@ -713,10 +723,10 @@ export default function AboutContent() {
           />
 
           {/* Corner accents with enhanced hover glow — purple/blue themed */}
-          <div className="absolute top-0 left-0 w-14 h-14 border-t border-l border-accent-purple/20 rounded-tl-2xl group-hover/panel:border-accent-purple/40 group-hover/panel:shadow-[-2px_-2px_12px_rgba(139,92,246,0.08)] transition-all duration-500" />
-          <div className="absolute top-0 right-0 w-14 h-14 border-t border-r border-accent-blue/20 rounded-tr-2xl group-hover/panel:border-accent-blue/40 group-hover/panel:shadow-[2px_-2px_12px_rgba(33,150,255,0.08)] transition-all duration-500" />
-          <div className="absolute bottom-0 left-0 w-14 h-14 border-b border-l border-accent-blue/20 rounded-bl-2xl group-hover/panel:border-accent-blue/40 group-hover/panel:shadow-[-2px_2px_12px_rgba(33,150,255,0.08)] transition-all duration-500" />
-          <div className="absolute bottom-0 right-0 w-14 h-14 border-b border-r border-accent-purple/20 rounded-br-2xl group-hover/panel:border-accent-purple/40 group-hover/panel:shadow-[2px_2px_12px_rgba(139,92,246,0.08)] transition-all duration-500" />
+          <div className="absolute top-0 left-0 w-14 h-14 border-t border-l border-accent-purple/20 rounded-tl-2xl group-hover/panel:border-accent-purple/40 group-hover/panel:shadow-[-2px_-2px_12px_rgba(139,92,246,0.08)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500" />
+          <div className="absolute top-0 right-0 w-14 h-14 border-t border-r border-accent-blue/20 rounded-tr-2xl group-hover/panel:border-accent-blue/40 group-hover/panel:shadow-[2px_-2px_12px_rgba(33,150,255,0.08)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500" />
+          <div className="absolute bottom-0 left-0 w-14 h-14 border-b border-l border-accent-blue/20 rounded-bl-2xl group-hover/panel:border-accent-blue/40 group-hover/panel:shadow-[-2px_2px_12px_rgba(33,150,255,0.08)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500" />
+          <div className="absolute bottom-0 right-0 w-14 h-14 border-b border-r border-accent-purple/20 rounded-br-2xl group-hover/panel:border-accent-purple/40 group-hover/panel:shadow-[2px_2px_12px_rgba(139,92,246,0.08)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500" />
 
           {/* Top border shimmer — traveling light */}
           <div className="absolute top-0 left-0 right-0 h-px overflow-hidden pointer-events-none">
@@ -790,15 +800,19 @@ export default function AboutContent() {
             <div className="absolute inset-0 w-1.5 -translate-x-0.25 bg-gradient-to-b from-accent-blue/30 via-accent-purple/25 to-accent-teal/25 blur-sm" />
             {/* Main crisp line */}
             <div className="absolute inset-0 bg-gradient-to-b from-accent-blue via-accent-purple to-accent-teal opacity-30" />
-            {/* Traveling light along the line */}
+            {/* Traveling light along the line — animated on transform, not top */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <div
-                className="absolute left-1/2 -translate-x-1/2 w-3 h-12 rounded-full"
-                style={{
-                  background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 70%)',
-                  animation: 'timeline-light 4s ease-in-out infinite',
-                }}
-              />
+                className="absolute inset-0"
+                style={{ animation: 'timeline-light 4s ease-in-out infinite' }}
+              >
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 top-0 w-3 h-12 rounded-full"
+                  style={{
+                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 70%)',
+                  }}
+                />
+              </div>
             </div>
             {/* Start cap — enhanced triple glow for premium feel */}
             <div
@@ -901,7 +915,7 @@ export default function AboutContent() {
 
                   {/* Card with enhanced shadow and border shimmer */}
                   <div
-                    className="relative rounded-xl overflow-hidden group transition-all duration-600"
+                    className="relative rounded-xl overflow-hidden group transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-600"
                     style={{
                       background: 'var(--glass-bg)',
                       border: '1px solid var(--glass-border)',
@@ -916,7 +930,7 @@ export default function AboutContent() {
                   >
                     {/* Left accent bar with gradient fade — wider on hover */}
                     <div
-                      className="absolute left-0 top-0 bottom-0 w-0.5 opacity-50 group-hover:opacity-90 group-hover:w-1 transition-all duration-500"
+                      className="absolute left-0 top-0 bottom-0 w-0.5 opacity-50 group-hover:opacity-90 group-hover:w-1 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500"
                       style={{
                         background: `linear-gradient(180deg, ${color.bg}, ${color.bg}50, ${color.bg}10)`,
                       }}
@@ -953,10 +967,10 @@ export default function AboutContent() {
                       <div className="flex items-start justify-between gap-3 mb-2.5">
                         <div className="flex items-center gap-2.5">
                           <span
-                            className="flex items-center justify-center w-7 h-7 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_10px_var(--ring-color)]"
+                            className="flex items-center justify-center w-7 h-7 rounded-lg transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 group-hover:scale-110 group-hover:shadow-[0_0_10px_var(--ring-color)]"
                             style={{ backgroundColor: `${color.bg}12`, '--ring-color': color.ring } as React.CSSProperties}
                           >
-                            <svg
+                            <svg aria-hidden="true"
                               className="w-3.5 h-3.5"
                               fill="none"
                               viewBox="0 0 24 24"

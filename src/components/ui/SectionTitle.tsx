@@ -55,13 +55,13 @@ export default function SectionTitle({
       {/* Decorative accent bar — 5-layer premium glow with animated shimmer */}
       <div className="relative h-[3px] w-28 overflow-hidden rounded-full">
         {/* Layer 1: Rich base gradient */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-accent-blue via-accent-teal to-accent-blue-end" />
         {/* Layer 2: Soft glow bloom */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 blur-md opacity-60" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-accent-blue via-accent-teal to-accent-blue-end blur-md opacity-60" />
         {/* Layer 3: Outer ambient glow */}
-        <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-indigo-500/25 via-violet-500/20 to-cyan-400/25 blur-xl opacity-40" />
+        <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-accent-blue/25 via-accent-teal/20 to-accent-blue-end/25 blur-xl opacity-40" />
         {/* Layer 4: Deep scatter halo */}
-        <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-indigo-500/10 via-violet-500/8 to-cyan-400/10 blur-2xl opacity-30" />
+        <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-accent-blue/10 via-accent-teal/8 to-accent-blue-end/10 blur-2xl opacity-30" />
         {/* Shimmer sweep */}
         <motion.div
           className="absolute inset-y-0 w-16 rounded-full bg-gradient-to-r from-transparent via-white/35 to-transparent"

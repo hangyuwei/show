@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 import usePrefersReducedMotion from './usePrefersReducedMotion';
+import HudFrame from './threeui/HudFrame';
 
 type ScrollScrubHeroProps = {
   mp4Src: string;
@@ -31,7 +32,7 @@ export default function ScrollScrubHero({
   const sectionRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const frameRef = useRef<number | null>(null);
-  const lastTimeRef = useRef(-1);
+  const lastTargetTimeRef = useRef(-1);
   const [metadataReady, setMetadataReady] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -53,13 +54,16 @@ export default function ScrollScrubHero({
       return;
     }
 
-    if (Math.abs(nextTime - lastTimeRef.current) < 0.025) {
+    if (
+      Math.abs(nextTime - video.currentTime) < 0.025 ||
+      Math.abs(nextTime - lastTargetTimeRef.current) < 0.025
+    ) {
       return;
     }
 
     try {
       video.currentTime = clamp(nextTime, 0, scrubDuration);
-      lastTimeRef.current = nextTime;
+      lastTargetTimeRef.current = nextTime;
     } catch {
       // Browsers can reject seeks before metadata is fully ready. The next
       // scroll/resize frame will retry after loadedmetadata fires.
@@ -95,7 +99,7 @@ export default function ScrollScrubHero({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[150vh] bg-[#02030a]"
+      className="relative min-h-[250dvh] bg-[#02030a]"
       aria-label="Cosmic astrolabe portfolio hero"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
@@ -112,15 +116,15 @@ export default function ScrollScrubHero({
             poster={posterSrc}
             muted
             playsInline
-            preload="metadata"
+            preload="auto"
             aria-hidden="true"
             onLoadedMetadata={() => {
               videoRef.current?.pause();
               setMetadataReady(true);
             }}
           >
-            <source src={webmSrc} type="video/webm" />
             <source src={mp4Src} type="video/mp4" />
+            <source src={webmSrc} type="video/webm" />
           </video>
         )}
 
@@ -140,15 +144,7 @@ export default function ScrollScrubHero({
           }}
         />
 
-        <div className="pointer-events-none absolute inset-x-4 top-4 z-10 hidden justify-between font-mono text-[10px] uppercase tracking-[0.28em] text-cyan-100/38 sm:flex">
-          <span>Portfolio Atlas / 00.31 AU</span>
-          <span>Scroll-Scrub Timeline</span>
-        </div>
-
-        <div className="pointer-events-none absolute inset-x-4 bottom-4 z-10 hidden justify-between font-mono text-[10px] uppercase tracking-[0.28em] text-cyan-100/30 md:flex">
-          <span>GSAP Multi-Camera Render</span>
-          <span>Reduced Runtime WebGL: Off</span>
-        </div>
+        <HudFrame label="Scroll-Scrub Timeline" meta="GSAP Multi-Camera Render" sideTicks />
 
         <div className="relative z-20 flex h-full items-center justify-center px-5 py-24 text-center">
           {children}

@@ -247,7 +247,7 @@ export default function Navbar() {
 
             {/* Logo outer ring — containment glow on hover with inner shimmer */}
             <span
-              className="absolute -inset-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:scale-[1.03]"
+              className="absolute -inset-2 rounded-xl opacity-0 group-hover:opacity-100 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-700 ease-out group-hover:scale-[1.03]"
               style={{
                 border: '1px solid rgba(99,102,241,0.14)',
                 background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.05) 0%, rgba(139,92,246,0.03) 40%, transparent 70%)',
@@ -273,7 +273,7 @@ export default function Navbar() {
 
             {/* "Hang" text — expanded gradient with richer color stops */}
             <span
-              className="relative text-lg font-bold tracking-wide transition-all duration-500 ease-out group-hover:scale-[1.04] group-hover:tracking-wider"
+              className="relative text-lg font-bold tracking-wide transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-out group-hover:scale-[1.04] group-hover:tracking-wider"
               style={{
                 background: 'linear-gradient(135deg, #60a5fa 0%, #818cf8 12%, #a78bfa 24%, #c084fc 36%, #e879f9 48%, #c084fc 60%, #a78bfa 72%, #818cf8 84%, #60a5fa 100%)',
                 backgroundSize: '400% 400%',
@@ -289,7 +289,7 @@ export default function Navbar() {
 
             {/* Separator dot — slightly larger, with layered glow */}
             <span
-              className="relative w-[3.5px] h-[3.5px] rounded-full opacity-40 group-hover:opacity-90 transition-all duration-500 group-hover:scale-125"
+              className="relative w-[3.5px] h-[3.5px] rounded-full opacity-40 group-hover:opacity-90 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 group-hover:scale-125"
               style={{
                 background: 'linear-gradient(135deg, #818cf8, #3b82f6)',
                 boxShadow: '0 0 5px rgba(99,102,241,0.40), 0 0 10px rgba(45,140,240,0.18)',
@@ -314,7 +314,7 @@ export default function Navbar() {
 
             {/* Hover underline accent — wider gradient sweep with color depth */}
             <span
-              className="absolute -bottom-1.5 left-0 h-[1.5px] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out"
+              className="absolute -bottom-1.5 left-0 h-[1.5px] rounded-full opacity-0 group-hover:opacity-100 transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-out"
               style={{
                 width: '100%',
                 background: 'linear-gradient(90deg, rgba(20,184,166,0.12), rgba(99,102,241,0.30), rgba(139,92,246,0.40), rgba(59,130,246,0.45), rgba(139,92,246,0.40), rgba(99,102,241,0.30), rgba(20,184,166,0.12))',
@@ -331,7 +331,7 @@ export default function Navbar() {
                 <li key={link.href} className="relative group/nav">
                   <Link
                     href={link.href}
-                    className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out ${
+                    className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 ease-out ${
                       active
                         ? 'text-white'
                         : 'text-gray-400 hover:text-gray-200'
@@ -371,7 +371,7 @@ export default function Navbar() {
 
                     {/* Underline — active: triple-glow gradient; hover: gentle prismatic */}
                     <span
-                      className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-[2px] rounded-full transition-all duration-300 ease-out ${
+                      className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-[2px] rounded-full transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 ease-out ${
                         active ? 'w-5' : 'w-0 group-hover/nav:w-4'
                       }`}
                       style={
@@ -587,7 +587,7 @@ export default function Navbar() {
                     >
                       <Link
                         href={link.href}
-                        className={`relative block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ease-out ${
+                        className={`relative block px-4 py-3 rounded-lg text-sm font-medium transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300 ease-out ${
                           active
                             ? 'text-white'
                             : 'text-gray-400 hover:text-white'

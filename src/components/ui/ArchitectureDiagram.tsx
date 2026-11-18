@@ -36,7 +36,7 @@ const GLOW_COLORS = [
 
 function ArrowIcon() {
   return (
-    <svg
+    <svg aria-hidden="true"
       className="w-6 h-6 text-text-secondary flex-shrink-0"
       fill="none"
       viewBox="0 0 24 24"
@@ -50,7 +50,7 @@ function ArrowIcon() {
 
 function ArrowDownIcon() {
   return (
-    <svg
+    <svg aria-hidden="true"
       className="w-6 h-6 text-text-secondary flex-shrink-0 rotate-90"
       fill="none"
       viewBox="0 0 24 24"

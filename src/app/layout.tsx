@@ -4,10 +4,35 @@ import StarFieldWrapper from '@/components/three/StarFieldWrapper';
 import Navbar from '@/components/ui/Navbar';
 import Footer from '@/components/ui/Footer';
 import PageTransition from '@/components/PageTransition';
+import { MotionConfig } from 'framer-motion';
+
+const siteUrl = 'https://hang-show.vercel.app';
+const siteDescription =
+  '探索Hang的项目宇宙：涵盖大健康、AI应用、Web开发、创意设计与学术研究五大业务线。全栈开发 · AI应用 · 大健康行业。';
 
 export const metadata: Metadata = {
-  title: "Hang's Portfolio",
-  description: '全栈开发 · AI应用 · 大健康行业 - 探索项目宇宙',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Hang's Portfolio - 全栈开发 · AI应用 · 大健康",
+    template: "%s | Hang's Portfolio",
+  },
+  description: siteDescription,
+  openGraph: {
+    type: 'website',
+    locale: 'zh_CN',
+    url: siteUrl,
+    siteName: "Hang's Portfolio",
+    title: "Hang's Portfolio - 全栈开发 · AI应用 · 大健康",
+    description: siteDescription,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Hang's Portfolio - 全栈开发 · AI应用 · 大健康",
+    description: siteDescription,
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export const viewport: Viewport = {
@@ -25,16 +50,18 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className="h-full antialiased scroll-smooth"
+      className="h-full antialiased scroll-smooth overflow-x-clip"
     >
       <body
-        className="min-h-full flex flex-col overflow-x-hidden"
+        className="min-h-full flex flex-col overflow-x-clip"
         suppressHydrationWarning
       >
         <StarFieldWrapper />
         <Navbar />
         <main className="flex-1 pt-14 sm:pt-16 md:pt-18">
-          <PageTransition>{children}</PageTransition>
+          <MotionConfig reducedMotion="user">
+            <PageTransition>{children}</PageTransition>
+          </MotionConfig>
         </main>
         <Footer />
         {/* Scroll-triggered reveal utility — applied globally, respects reduced-motion */}

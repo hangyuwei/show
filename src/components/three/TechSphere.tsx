@@ -53,10 +53,10 @@ function WireframeSphere() {
   const material = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: '#1a3a5c',
+        color: '#2e7fb8',
         wireframe: true,
         transparent: true,
-        opacity: 0.1,
+        opacity: 0.28,
       }),
     [],
   );

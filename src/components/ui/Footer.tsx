@@ -52,7 +52,7 @@ export default function Footer() {
                 href="https://github.com/hangyuwei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
+                className="group text-xs text-white/28 hover:text-[var(--accent)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
               >
                 <svg
                   className="w-3.5 h-3.5 transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_6px_rgba(45,140,240,0.28)]"
@@ -68,7 +68,7 @@ export default function Footer() {
                 </svg>
                 <span className="relative">
                   GitHub
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/55 to-[var(--color-accent-teal)] transition-all duration-600 group-hover:w-full" />
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/55 to-[var(--color-accent-teal)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-600 group-hover:w-full" />
                 </span>
               </a>
 
@@ -77,9 +77,9 @@ export default function Footer() {
 
               <a
                 href="mailto:13811282241@163.com"
-                className="group text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
+                className="group text-xs text-white/28 hover:text-[var(--accent)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-2 relative"
               >
-                <svg
+                <svg aria-hidden="true"
                   className="w-3.5 h-3.5 transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_6px_rgba(45,140,240,0.28)]"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -94,7 +94,7 @@ export default function Footer() {
                 </svg>
                 <span className="relative">
                   Email
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/55 to-[var(--color-accent-teal)] transition-all duration-600 group-hover:w-full" />
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/55 to-[var(--color-accent-teal)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-600 group-hover:w-full" />
                 </span>
               </a>
             </nav>
@@ -105,7 +105,7 @@ export default function Footer() {
                 href="https://github.com/hangyuwei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
+                className="text-xs text-white/28 hover:text-[var(--accent)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
               >
                 <svg
                   className="w-3.5 h-3.5"
@@ -124,9 +124,9 @@ export default function Footer() {
               <span className="w-px h-3 bg-gradient-to-b from-transparent via-white/8 to-transparent" />
               <a
                 href="mailto:13811282241@163.com"
-                className="text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
+                className="text-xs text-white/28 hover:text-[var(--accent)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5"
               >
-                <svg
+                <svg aria-hidden="true"
                   className="w-3.5 h-3.5"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -149,9 +149,9 @@ export default function Footer() {
               onClick={scrollToTop}
               whileHover={{ y: -3 }}
               whileTap={{ y: 0 }}
-              className="group/btn text-xs text-white/28 hover:text-[var(--accent)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5 relative"
+              className="group/btn text-xs text-white/28 hover:text-[var(--accent)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center gap-1.5 relative"
             >
-              <svg
+              <svg aria-hidden="true"
                 className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:-translate-y-1 group-hover/btn:drop-shadow-[0_0_8px_rgba(45,140,240,0.30)]"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -166,7 +166,7 @@ export default function Footer() {
               </svg>
               <span className="relative">
                 顶部
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/45 to-[var(--color-accent-teal)] transition-all duration-600 group-hover/btn:w-full" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[var(--accent)] via-[var(--accent-purple)]/45 to-[var(--color-accent-teal)] transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-600 group-hover/btn:w-full" />
               </span>
             </motion.button>
           </div>

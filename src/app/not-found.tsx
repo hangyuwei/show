@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, type Variants, type Transition } from 'framer-motion';
 import usePrefersReducedMotion from '@/components/usePrefersReducedMotion';
+import { NotFoundVortexBackdrop } from '@/components/threeui/backdrops';
 
 const EASE_SPRING_OUT: [number, number, number, number] = [0.18, 1, 0.25, 1];
 
@@ -338,7 +339,11 @@ export default function NotFound() {
   }, [handleKeyDown]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[80vh] md:min-h-[85vh] bg-bg-primary overflow-hidden px-5 sm:px-6 md:px-8">
+    <div className="relative flex flex-col items-center justify-center min-h-[85dvh] sm:min-h-[80dvh] md:min-h-[85dvh] bg-bg-primary overflow-hidden px-5 sm:px-6 md:px-8">
+      {/* Interactive typography vortex — hover dissolves the ring text, click sucks it in
+          (ThreeUI Community); paints its own deep-space base and sits under every other layer */}
+      <NotFoundVortexBackdrop />
+
       {/* Dot-grid background pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
@@ -440,7 +445,7 @@ export default function NotFound() {
               px-7 py-3.5 sm:px-6 sm:py-3 rounded-xl text-sm font-medium
               bg-glow/20 text-white border border-glow/30
               hover:bg-glow/30 hover:border-glow/50 hover:scale-[1.03] active:scale-[0.98]
-              transition-all duration-300
+              transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-glow/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             style={{
               boxShadow:
@@ -453,7 +458,7 @@ export default function NotFound() {
                 background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.08) 0%, transparent 70%)',
               }}
             />
-            <svg
+            <svg aria-hidden="true"
               className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5 relative z-10"
               fill="none"
               viewBox="0 0 24 24"
@@ -475,10 +480,10 @@ export default function NotFound() {
               px-7 py-3.5 sm:px-6 sm:py-3 rounded-xl text-sm font-medium
               text-text-secondary border border-white/10
               hover:text-white hover:border-white/20 hover:bg-white/5 hover:scale-[1.03] active:scale-[0.98]
-              transition-all duration-300
+              transition-[color,background-color,border-color,box-shadow,transform,opacity,filter] duration-300
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
           >
-            <svg
+            <svg aria-hidden="true"
               className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
               fill="none"
               viewBox="0 0 24 24"
